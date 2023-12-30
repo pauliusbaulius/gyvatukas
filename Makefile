@@ -27,7 +27,7 @@ test: install
 .PHONY: docs
 docs: install
 	@echo "♻️ generating docs"
-	$(VENV_PY) -m pdoc --html --force gyvatukas
+	$(VENV_PY) -m pdoc --html --force --output-dir docs gyvatukas
 
 .PHONY: lint
 lint:
