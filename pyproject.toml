@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "gyvatukas"
+version = "7"
+description = "collection of utils by/for paulius."
+authors = ["Paulius Gerve <gerve@paulius.xyz>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+requests = "^2.31.0"
+json-repair = "^0.4.3"
+email-validator = "^2.1.0.post1"
+pdoc3 = "^0.10.0"
+pydantic = "^2.5.3"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.3"
+black = "^23.12.1"
+ruff = "^0.1.9"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+markers = [
+    "integration: slow tests that require external resources",
+]
