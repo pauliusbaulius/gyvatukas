@@ -24,12 +24,7 @@ v5
 v3 
 - Email validation logic using https://github.com/JoshData/python-email-validator.
 
-v2 
-- Bug fixes, etc. Additional fs/json utils.
-
-v1 
-- Initial release with first utils. Not usable.
-
+v2 and v1 were test versions.
 
 ## publishing a package to pypi w. poetry
 1. make pypi account
