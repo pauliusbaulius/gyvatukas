@@ -1,7 +1,6 @@
 [tool.poetry]
 name = "gyvatukas"
 version = "7"
-description = "collection of utils by/for paulius."
 authors = ["Paulius <dev@paulius.xyz>"]
 readme = "README.md"
 documentation = "https://pauliusbaulius.github.io/gyvatukas/gyvatukas/"
