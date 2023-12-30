@@ -2,8 +2,10 @@
 name = "gyvatukas"
 version = "7"
 description = "collection of utils by/for paulius."
-authors = ["Paulius Gerve <gerve@paulius.xyz>"]
+authors = ["Paulius <dev@paulius.xyz>"]
 readme = "README.md"
+documentation = "https://pauliusbaulius.github.io/gyvatukas/gyvatukas/"
+repository = "https://github.com/pauliusbaulius/gyvatukas"
 
 [tool.poetry.dependencies]
 python = "^3.10"
