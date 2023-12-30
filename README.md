@@ -1,7 +1,7 @@
 # gyvatukas
-collection of python utils i've been rewriting in each project most of the time. i am getting 
-older and i am getting tired of rewriting the same stuff over and over again. 
-🚨 if definitely full of bugs, do not recommend using if you are not me.
+collection of python utils, slowly conglomerating into a single python package from various projects.
+do not recommend using this package, not responsible for shitty untested code that might break 
+your prod environment.
 
 ## changelog
 v7
@@ -31,7 +31,7 @@ v1
 - Initial release with first utils. Not usable.
 
 
-## publishing a package to pypi
+## publishing a package to pypi w. poetry
 1. make pypi account
 2. generate api token
 3. run `poetry config pypi-token.pypi <token>`
