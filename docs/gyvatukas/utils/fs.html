@@ -201,7 +201,7 @@ def scan_dir(path: pathlib.Path) -&gt; list[ScanResultSchema]:
 </details>
 </dd>
 <dt id="gyvatukas.utils.fs.write_file"><code class="name flex">
-<span>def <span class="ident">write_file</span></span>(<span>path: pathlib.Path, content: str | bytes, override: bool = False) ‑> bool</span>
+<span>def <span class="ident">write_file</span></span>(<span>path: pathlib.Path, content: Union[str, bytes], override: bool = False) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Write content to file. Return True if file was written, False otherwise.</p></div>

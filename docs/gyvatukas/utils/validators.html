@@ -26,17 +26,14 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">import datetime
-import logging
-from typing import Literal
+<pre><code class="python">import logging
 
-import pydantic
 from email_validator import validate_email, EmailNotValidError
 
 _logger = logging.getLogger(&#34;gyvatukas&#34;)
 
 
-def is_email_valid(email: str, check_deliverability: bool = False) -&gt; tuple[bool, str]:
+def is_email_valid(email: str, perform_dns_check: bool = False) -&gt; tuple[bool, str]:
     &#34;&#34;&#34;Check if email is valid. If check_deliverability is True, will also check if email is deliverable.
     If email is valid, returns normalized email, otherwise returns the original email.
 
@@ -47,121 +44,13 @@ def is_email_valid(email: str, check_deliverability: bool = False) -&gt; tuple[b
     _logger.debug(&#34;validating email `%s&#34;, email)
     try:
         validation_result = validate_email(
-            email, check_deliverability=check_deliverability
+            email, check_deliverability=perform_dns_check,
         )
     except EmailNotValidError:
         _logger.exception(f&#34;email `{email}` validation failed!&#34;)
         return False, email
 
-    return True, validation_result.normalized
-
-
-class LithuanianPersonalCodeSchema(pydantic.BaseModel):
-    &#34;&#34;&#34;Lithuanian personal identification code &#34;asmens kodas&#34; schema.&#34;&#34;&#34;
-
-    gender: Literal[&#34;male&#34;, &#34;female&#34;] | None
-    birth_year: int
-    birth_month: int | None
-    birth_day: int | None
-    identifier_number: str
-    is_edge_case: bool
-    checksum: int | None = None
-
-    @property
-    def birth_date(self) -&gt; datetime.date | None:
-        &#34;&#34;&#34;Return birthdate as dt object if is not an edge case (has no 0 in month/day).&#34;&#34;&#34;
-        if not self.is_edge_case:
-            return datetime.date(self.birth_year, self.birth_month, self.birth_day)
-
-
-def _calculate_lt_id_checksum(pid: str) -&gt; int:
-    &#34;&#34;&#34;Calculate Lithuanian personal identification code &#34;asmens kodas&#34; checksum.
-    See: https://lt.wikipedia.org/wiki/Asmens_kodas
-    &#34;&#34;&#34;
-    weights_a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 1]
-    weights_b = [3, 4, 5, 6, 7, 8, 9, 1, 2, 3]
-
-    checksum_a = sum([int(pid[i]) * weights_a[i] for i in range(10)])
-    checksum_a = checksum_a % 11
-
-    if checksum_a != 10:
-        return checksum_a
-
-    checksum_b = sum([int(pid[i]) * weights_b[i] for i in range(10)])
-    checksum_b = checksum_b % 11
-
-    if checksum_b != 10:
-        return checksum_b
-
-    return 0
-
-
-def validate_lt_id(pid: str) -&gt; LithuanianPersonalCodeSchema:
-    &#34;&#34;&#34;Validate Lithuanian personal identification code &#34;asmens kodas&#34;.
-    See: https://lt.wikipedia.org/wiki/Asmens_kodas
-
-    🚨 Does not check if it makes sense, e.g. birthdate is in the future or identifier number is valid.
-    &#34;&#34;&#34;
-    is_edge_case = False
-
-    if len(pid) != 11:
-        raise Exception(&#34;PID should be 11 characters long!&#34;)
-
-    gender_number = int(pid[0])
-    birth_year = int(pid[1:3])
-    birth_month = int(pid[3:5])
-    birth_day = int(pid[5:7])
-
-    # Wikipedia:
-    # Asmens kodai, suteikiami vyresnio amžiaus žmonėms neprisimenantiems savo gimimo mėnesio ar dienos.
-    # Tokiuose koduose vietoje mėnesio ar dienos skaitmenų įrašomi 0. Tai labai reta išimtis.
-    if birth_month == 0:
-        is_edge_case = True
-        birth_month = None
-
-    if birth_day == 0:
-        is_edge_case = True
-        birth_day = None
-
-    identifier_number = pid[7:]
-
-    # Validate first digit aka sex.
-    if gender_number in [1, 3, 5]:
-        gender = &#34;male&#34;
-    elif gender_number in [2, 4, 6]:
-        gender = &#34;female&#34;
-    elif gender_number == 9:
-        gender = None
-        is_edge_case = True
-    else:
-        raise Exception(
-            f&#34;Invalid first number of PID `{gender_number}`, must be one of `1,2,3,4,5,6,9`!&#34;
-        )
-
-    # Set base birth year.
-    birth_base = 0
-    if gender_number in [1, 2]:
-        birth_base = 1800
-    elif gender_number in [3, 4]:
-        birth_base = 1900
-    elif gender_number in [5, 6]:
-        birth_base = 2000
-
-    birth_year = birth_base + birth_year
-
-    checksum = None
-    if not is_edge_case:
-        checksum = _calculate_lt_id_checksum(pid=pid)
-
-    return LithuanianPersonalCodeSchema(
-        gender=gender,
-        birth_year=birth_year,
-        birth_month=birth_month,
-        birth_day=birth_day,
-        identifier_number=identifier_number,
-        is_edge_case=is_edge_case,
-        checksum=checksum,
-    )</code></pre>
+    return True, validation_result.normalized</code></pre>
 </details>
 </section>
 <section>
@@ -172,7 +61,7 @@ def validate_lt_id(pid: str) -&gt; LithuanianPersonalCodeSchema:
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="gyvatukas.utils.validators.is_email_valid"><code class="name flex">
-<span>def <span class="ident">is_email_valid</span></span>(<span>email: str, check_deliverability: bool = False) ‑> tuple[bool, str]</span>
+<span>def <span class="ident">is_email_valid</span></span>(<span>email: str, perform_dns_check: bool = False) ‑> tuple[bool, str]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Check if email is valid. If check_deliverability is True, will also check if email is deliverable.
@@ -183,7 +72,7 @@ If email is valid, returns normalized email, otherwise returns the original emai
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def is_email_valid(email: str, check_deliverability: bool = False) -&gt; tuple[bool, str]:
+<pre><code class="python">def is_email_valid(email: str, perform_dns_check: bool = False) -&gt; tuple[bool, str]:
     &#34;&#34;&#34;Check if email is valid. If check_deliverability is True, will also check if email is deliverable.
     If email is valid, returns normalized email, otherwise returns the original email.
 
@@ -194,7 +83,7 @@ If email is valid, returns normalized email, otherwise returns the original emai
     _logger.debug(&#34;validating email `%s&#34;, email)
     try:
         validation_result = validate_email(
-            email, check_deliverability=check_deliverability
+            email, check_deliverability=perform_dns_check,
         )
     except EmailNotValidError:
         _logger.exception(f&#34;email `{email}` validation failed!&#34;)
@@ -203,184 +92,9 @@ If email is valid, returns normalized email, otherwise returns the original emai
     return True, validation_result.normalized</code></pre>
 </details>
 </dd>
-<dt id="gyvatukas.utils.validators.validate_lt_id"><code class="name flex">
-<span>def <span class="ident">validate_lt_id</span></span>(<span>pid: str) ‑> <a title="gyvatukas.utils.validators.LithuanianPersonalCodeSchema" href="#gyvatukas.utils.validators.LithuanianPersonalCodeSchema">LithuanianPersonalCodeSchema</a></span>
-</code></dt>
-<dd>
-<div class="desc"><p>Validate Lithuanian personal identification code "asmens kodas".
-See: <a href="https://lt.wikipedia.org/wiki/Asmens_kodas">https://lt.wikipedia.org/wiki/Asmens_kodas</a></p>
-<p>🚨 Does not check if it makes sense, e.g. birthdate is in the future or identifier number is valid.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def validate_lt_id(pid: str) -&gt; LithuanianPersonalCodeSchema:
-    &#34;&#34;&#34;Validate Lithuanian personal identification code &#34;asmens kodas&#34;.
-    See: https://lt.wikipedia.org/wiki/Asmens_kodas
-
-    🚨 Does not check if it makes sense, e.g. birthdate is in the future or identifier number is valid.
-    &#34;&#34;&#34;
-    is_edge_case = False
-
-    if len(pid) != 11:
-        raise Exception(&#34;PID should be 11 characters long!&#34;)
-
-    gender_number = int(pid[0])
-    birth_year = int(pid[1:3])
-    birth_month = int(pid[3:5])
-    birth_day = int(pid[5:7])
-
-    # Wikipedia:
-    # Asmens kodai, suteikiami vyresnio amžiaus žmonėms neprisimenantiems savo gimimo mėnesio ar dienos.
-    # Tokiuose koduose vietoje mėnesio ar dienos skaitmenų įrašomi 0. Tai labai reta išimtis.
-    if birth_month == 0:
-        is_edge_case = True
-        birth_month = None
-
-    if birth_day == 0:
-        is_edge_case = True
-        birth_day = None
-
-    identifier_number = pid[7:]
-
-    # Validate first digit aka sex.
-    if gender_number in [1, 3, 5]:
-        gender = &#34;male&#34;
-    elif gender_number in [2, 4, 6]:
-        gender = &#34;female&#34;
-    elif gender_number == 9:
-        gender = None
-        is_edge_case = True
-    else:
-        raise Exception(
-            f&#34;Invalid first number of PID `{gender_number}`, must be one of `1,2,3,4,5,6,9`!&#34;
-        )
-
-    # Set base birth year.
-    birth_base = 0
-    if gender_number in [1, 2]:
-        birth_base = 1800
-    elif gender_number in [3, 4]:
-        birth_base = 1900
-    elif gender_number in [5, 6]:
-        birth_base = 2000
-
-    birth_year = birth_base + birth_year
-
-    checksum = None
-    if not is_edge_case:
-        checksum = _calculate_lt_id_checksum(pid=pid)
-
-    return LithuanianPersonalCodeSchema(
-        gender=gender,
-        birth_year=birth_year,
-        birth_month=birth_month,
-        birth_day=birth_day,
-        identifier_number=identifier_number,
-        is_edge_case=is_edge_case,
-        checksum=checksum,
-    )</code></pre>
-</details>
-</dd>
 </dl>
 </section>
 <section>
-<h2 class="section-title" id="header-classes">Classes</h2>
-<dl>
-<dt id="gyvatukas.utils.validators.LithuanianPersonalCodeSchema"><code class="flex name class">
-<span>class <span class="ident">LithuanianPersonalCodeSchema</span></span>
-<span>(</span><span>**data: Any)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Lithuanian personal identification code "asmens kodas" schema.</p>
-<p>Create a new model by parsing and validating input data from keyword arguments.</p>
-<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
-validated to form a valid model.</p>
-<p><code>__init__</code> uses <code>__pydantic_self__</code> instead of the more common <code>self</code> for the first arg to
-allow <code>self</code> as a field name.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class LithuanianPersonalCodeSchema(pydantic.BaseModel):
-    &#34;&#34;&#34;Lithuanian personal identification code &#34;asmens kodas&#34; schema.&#34;&#34;&#34;
-
-    gender: Literal[&#34;male&#34;, &#34;female&#34;] | None
-    birth_year: int
-    birth_month: int | None
-    birth_day: int | None
-    identifier_number: str
-    is_edge_case: bool
-    checksum: int | None = None
-
-    @property
-    def birth_date(self) -&gt; datetime.date | None:
-        &#34;&#34;&#34;Return birthdate as dt object if is not an edge case (has no 0 in month/day).&#34;&#34;&#34;
-        if not self.is_edge_case:
-            return datetime.date(self.birth_year, self.birth_month, self.birth_day)</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>pydantic.main.BaseModel</li>
-</ul>
-<h3>Class variables</h3>
-<dl>
-<dt id="gyvatukas.utils.validators.LithuanianPersonalCodeSchema.birth_day"><code class="name">var <span class="ident">birth_day</span> : int | None</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="gyvatukas.utils.validators.LithuanianPersonalCodeSchema.birth_month"><code class="name">var <span class="ident">birth_month</span> : int | None</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="gyvatukas.utils.validators.LithuanianPersonalCodeSchema.birth_year"><code class="name">var <span class="ident">birth_year</span> : int</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="gyvatukas.utils.validators.LithuanianPersonalCodeSchema.checksum"><code class="name">var <span class="ident">checksum</span> : int | None</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="gyvatukas.utils.validators.LithuanianPersonalCodeSchema.gender"><code class="name">var <span class="ident">gender</span> : Optional[Literal['male', 'female']]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="gyvatukas.utils.validators.LithuanianPersonalCodeSchema.identifier_number"><code class="name">var <span class="ident">identifier_number</span> : str</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="gyvatukas.utils.validators.LithuanianPersonalCodeSchema.is_edge_case"><code class="name">var <span class="ident">is_edge_case</span> : bool</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="gyvatukas.utils.validators.LithuanianPersonalCodeSchema.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="gyvatukas.utils.validators.LithuanianPersonalCodeSchema.model_fields"><code class="name">var <span class="ident">model_fields</span></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-</dl>
-<h3>Instance variables</h3>
-<dl>
-<dt id="gyvatukas.utils.validators.LithuanianPersonalCodeSchema.birth_date"><code class="name">var <span class="ident">birth_date</span> : datetime.date | None</code></dt>
-<dd>
-<div class="desc"><p>Return birthdate as dt object if is not an edge case (has no 0 in month/day).</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def birth_date(self) -&gt; datetime.date | None:
-    &#34;&#34;&#34;Return birthdate as dt object if is not an edge case (has no 0 in month/day).&#34;&#34;&#34;
-    if not self.is_edge_case:
-        return datetime.date(self.birth_year, self.birth_month, self.birth_day)</code></pre>
-</details>
-</dd>
-</dl>
-</dd>
-</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -397,26 +111,6 @@ def birth_date(self) -&gt; datetime.date | None:
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
 <li><code><a title="gyvatukas.utils.validators.is_email_valid" href="#gyvatukas.utils.validators.is_email_valid">is_email_valid</a></code></li>
-<li><code><a title="gyvatukas.utils.validators.validate_lt_id" href="#gyvatukas.utils.validators.validate_lt_id">validate_lt_id</a></code></li>
-</ul>
-</li>
-<li><h3><a href="#header-classes">Classes</a></h3>
-<ul>
-<li>
-<h4><code><a title="gyvatukas.utils.validators.LithuanianPersonalCodeSchema" href="#gyvatukas.utils.validators.LithuanianPersonalCodeSchema">LithuanianPersonalCodeSchema</a></code></h4>
-<ul class="two-column">
-<li><code><a title="gyvatukas.utils.validators.LithuanianPersonalCodeSchema.birth_date" href="#gyvatukas.utils.validators.LithuanianPersonalCodeSchema.birth_date">birth_date</a></code></li>
-<li><code><a title="gyvatukas.utils.validators.LithuanianPersonalCodeSchema.birth_day" href="#gyvatukas.utils.validators.LithuanianPersonalCodeSchema.birth_day">birth_day</a></code></li>
-<li><code><a title="gyvatukas.utils.validators.LithuanianPersonalCodeSchema.birth_month" href="#gyvatukas.utils.validators.LithuanianPersonalCodeSchema.birth_month">birth_month</a></code></li>
-<li><code><a title="gyvatukas.utils.validators.LithuanianPersonalCodeSchema.birth_year" href="#gyvatukas.utils.validators.LithuanianPersonalCodeSchema.birth_year">birth_year</a></code></li>
-<li><code><a title="gyvatukas.utils.validators.LithuanianPersonalCodeSchema.checksum" href="#gyvatukas.utils.validators.LithuanianPersonalCodeSchema.checksum">checksum</a></code></li>
-<li><code><a title="gyvatukas.utils.validators.LithuanianPersonalCodeSchema.gender" href="#gyvatukas.utils.validators.LithuanianPersonalCodeSchema.gender">gender</a></code></li>
-<li><code><a title="gyvatukas.utils.validators.LithuanianPersonalCodeSchema.identifier_number" href="#gyvatukas.utils.validators.LithuanianPersonalCodeSchema.identifier_number">identifier_number</a></code></li>
-<li><code><a title="gyvatukas.utils.validators.LithuanianPersonalCodeSchema.is_edge_case" href="#gyvatukas.utils.validators.LithuanianPersonalCodeSchema.is_edge_case">is_edge_case</a></code></li>
-<li><code><a title="gyvatukas.utils.validators.LithuanianPersonalCodeSchema.model_config" href="#gyvatukas.utils.validators.LithuanianPersonalCodeSchema.model_config">model_config</a></code></li>
-<li><code><a title="gyvatukas.utils.validators.LithuanianPersonalCodeSchema.model_fields" href="#gyvatukas.utils.validators.LithuanianPersonalCodeSchema.model_fields">model_fields</a></code></li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>

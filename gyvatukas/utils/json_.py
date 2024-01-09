@@ -16,7 +16,7 @@ def get_pretty_json(data: dict | list) -> str:
     return result
 
 
-def read_json(path: pathlib.Path, default: Any = None) -> dict:
+def read_json(path: pathlib.Path, default: Any = None) -> dict | list:
     """Read json from file. Return empty dict if not found or invalid json."""
     data = read_file(path=path)
     if data:
@@ -24,7 +24,9 @@ def read_json(path: pathlib.Path, default: Any = None) -> dict:
             return json.loads(data)
         except json.JSONDecodeError:
             pass
-    return default or {}
+    if default is not None:
+        return default
+    return {}
 
 
 def write_json(
@@ -45,11 +47,19 @@ def load_json(data: str) -> dict | list | None:
 
     🚨 Tries to fix invalid json using https://github.com/mangiucugna/json_repair lib.
     """
-    # TODO: Handle the case when ' instead of " is used for strings.
     result = None
     try:
         result = json_repair.loads(data)
     except Exception:  # noqa: Expected from json_repair lib.
         _logger.warning("failed to load json from string!")
+
+        # Try to fix case when keys and values are single quoted.
+        # TODO: Naive approach also replaces value/key content if it contains single quotes!
+        data = data.replace("'", '"')
+        try:
+            result = json_repair.loads(data)
+        except Exception:
+            _logger.warning("failed to load json from string even after replacing ' with \"!")
+            pass
     finally:
         return result
