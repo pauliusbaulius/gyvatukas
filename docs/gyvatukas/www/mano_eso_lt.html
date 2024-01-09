@@ -64,7 +64,11 @@ class FormParser(HTMLParser):
     def handle_input_tag(self, attrs: tuple) -&gt; None:
         attributes = dict(attrs)
 
-        if &#34;name&#34; in attributes and attributes[&#34;name&#34;] in [&#34;form_token&#34;, &#34;form_build_id&#34;, &#34;form_id&#34;]:
+        if &#34;name&#34; in attributes and attributes[&#34;name&#34;] in [
+            &#34;form_token&#34;,
+            &#34;form_build_id&#34;,
+            &#34;form_id&#34;,
+        ]:
             self.form[attributes[&#34;name&#34;]] = attributes[&#34;value&#34;]
 
 
@@ -87,16 +91,14 @@ class ManoEsoLt:
     Kai moki daxuja+1 už perdavimą ir etc, pastato naują skaitliuką, bet jo duomenys tik per web&#39;ą
     arba mokamą API ale verslui. Ačiū jums, kad esate, ESO.
     &#34;&#34;&#34;
+
     # TODO: Custom exceptions.
     URL_LOGIN = &#34;https://mano.eso.lt/?destination=/consumption&#34;
-    URL_CONSUMPTION_DATA = &#34;https://mano.eso.lt/consumption?ajax_form=1&amp;_wrapper_format=drupal_ajax&#34;
+    URL_CONSUMPTION_DATA = (
+        &#34;https://mano.eso.lt/consumption?ajax_form=1&amp;_wrapper_format=drupal_ajax&#34;
+    )
 
-    def __init__(
-            self,
-            username: str,
-            password: str,
-            persist_session: bool = True
-    ):
+    def __init__(self, username: str, password: str, persist_session: bool = True):
         # TODO: Check if session exists, load it if username matches.
         #  Also log that!
         self.username: str = username
@@ -134,14 +136,13 @@ class ManoEsoLt:
                 &#34;name&#34;: self.username,
                 &#34;pass&#34;: self.password,
                 &#34;login_type&#34;: 1,
-                &#34;form_id&#34;: &#34;user_login_form&#34;
+                &#34;form_id&#34;: &#34;user_login_form&#34;,
             },
             allow_redirects=True,
             timeout=30,
         ) as response:
-
             if response.status_code != 200:
-                raise GyvatukasException(f&#34;Failed mano.eso.lt login!&#34;)
+                raise GyvatukasException(&#34;Failed mano.eso.lt login!&#34;)
 
             self.cookies = requests.utils.dict_from_cookiejar(response.cookies)
             self._extract_special_fields(response.text)
@@ -149,11 +150,15 @@ class ManoEsoLt:
             if self.persist_session:
                 self._save_session()
 
-    def get_day_stats(self, eso_object_id: str, date: datetime.date | datetime.datetime) -&gt; list[ConsumptionDataset]:
+    def get_day_stats(
+        self, eso_object_id: str, date: datetime.date | datetime.datetime
+    ) -&gt; list[ConsumptionDataset]:
         &#34;&#34;&#34;Return daily consumption stats.&#34;&#34;&#34;
         raise NotImplementedError()
 
-    def get_week_stats(self, eso_object_id: str, date: datetime.date | datetime.datetime) -&gt; list[ConsumptionDataset]:
+    def get_week_stats(
+        self, eso_object_id: str, date: datetime.date | datetime.datetime
+    ) -&gt; list[ConsumptionDataset]:
         &#34;&#34;&#34;Return weekly consumption stats.
 
         🚨 Will always return date - 1 stats.
@@ -174,24 +179,24 @@ class ManoEsoLt:
         }
 
         data = {
-                &#34;objects[]&#34;: eso_object_id,
-                &#34;objects_mock&#34;: &#34;&#34;,
-                &#34;display_type&#34;: &#34;hourly&#34;,
-                &#34;period&#34;: &#34;week&#34;,
-                # day_period, other_start, other_end
-                &#34;energy_type&#34;: &#34;general&#34;,
-                &#34;scales&#34;: &#34;total&#34;,
-                &#34;active_date_value&#34;: date.strftime(&#34;%Y-%m-%d+00:00&#34;),
-                &#34;made_energy_status&#34;: 1,
-                # back_button_value, next_button_value
-                &#34;visible_scales_field&#34;: 0,
-                &#34;visible_last_year_comparison_field&#34;: 0,
-                &#34;last_year_comparison&#34;: 1,
-                &#34;total_monthly_consumption&#34;: 1,
-                &#34;_drupal_ajax&#34;: &#34;1&#34;,
-                &#34;_triggering_element_name&#34;: &#34;display_type&#34;,
-                **self.special_fields,
-            }
+            &#34;objects[]&#34;: eso_object_id,
+            &#34;objects_mock&#34;: &#34;&#34;,
+            &#34;display_type&#34;: &#34;hourly&#34;,
+            &#34;period&#34;: &#34;week&#34;,
+            # day_period, other_start, other_end
+            &#34;energy_type&#34;: &#34;general&#34;,
+            &#34;scales&#34;: &#34;total&#34;,
+            &#34;active_date_value&#34;: date.strftime(&#34;%Y-%m-%d+00:00&#34;),
+            &#34;made_energy_status&#34;: 1,
+            # back_button_value, next_button_value
+            &#34;visible_scales_field&#34;: 0,
+            &#34;visible_last_year_comparison_field&#34;: 0,
+            &#34;last_year_comparison&#34;: 1,
+            &#34;total_monthly_consumption&#34;: 1,
+            &#34;_drupal_ajax&#34;: &#34;1&#34;,
+            &#34;_triggering_element_name&#34;: &#34;display_type&#34;,
+            **self.special_fields,
+        }
 
         with requests.post(
             url=self.URL_CONSUMPTION_DATA,
@@ -202,7 +207,7 @@ class ManoEsoLt:
             timeout=90,
         ) as response:
             if response.status_code != 200:
-                raise GyvatukasException(f&#34;Failed mano.eso.lt consumption data request!&#34;)
+                raise GyvatukasException(&#34;Failed mano.eso.lt consumption data request!&#34;)
 
             data = response.json()
 
@@ -210,7 +215,9 @@ class ManoEsoLt:
             wanted_data = None
             for d in data:
                 try:
-                    wanted_data = d[&#34;settings&#34;][&#34;eso_consumption_history_form&#34;][&#34;graphics_data&#34;]
+                    wanted_data = d[&#34;settings&#34;][&#34;eso_consumption_history_form&#34;][
+                        &#34;graphics_data&#34;
+                    ]
                 except (KeyError, TypeError):
                     continue
 
@@ -220,9 +227,13 @@ class ManoEsoLt:
                 parsed_records = []
 
                 for record in dataset[&#34;record&#34;]:
-                    ts = datetime.datetime.strptime(record[&#34;date&#34;],&#34;%Y%m%d%H%M%S&#34;)
+                    ts = datetime.datetime.strptime(record[&#34;date&#34;], &#34;%Y%m%d%H%M%S&#34;)
                     # TODO: Set tz to lithuania.
-                    kwh = abs(float(record[&#34;value&#34;])) if record[&#34;value&#34;] is not None else 0.0
+                    kwh = (
+                        abs(float(record[&#34;value&#34;]))
+                        if record[&#34;value&#34;] is not None
+                        else 0.0
+                    )
                     parsed_records.append(
                         ConsumptionRecord(
                             dt=ts,
@@ -232,7 +243,9 @@ class ManoEsoLt:
 
                 # Group records by day and create consumption dataset for each day.
                 parsed_records.sort(key=lambda x: x.dt.date())
-                grouped_parsed_records = groupby(parsed_records, key=lambda x: x.dt.date())
+                grouped_parsed_records = groupby(
+                    parsed_records, key=lambda x: x.dt.date()
+                )
 
                 for key, group in grouped_parsed_records:
                     day_records = []
@@ -493,7 +506,11 @@ are automatically converted to the corresponding Unicode characters.</p></div>
     def handle_input_tag(self, attrs: tuple) -&gt; None:
         attributes = dict(attrs)
 
-        if &#34;name&#34; in attributes and attributes[&#34;name&#34;] in [&#34;form_token&#34;, &#34;form_build_id&#34;, &#34;form_id&#34;]:
+        if &#34;name&#34; in attributes and attributes[&#34;name&#34;] in [
+            &#34;form_token&#34;,
+            &#34;form_build_id&#34;,
+            &#34;form_id&#34;,
+        ]:
             self.form[attributes[&#34;name&#34;]] = attributes[&#34;value&#34;]</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -538,7 +555,11 @@ are automatically converted to the corresponding Unicode characters.</p></div>
 <pre><code class="python">def handle_input_tag(self, attrs: tuple) -&gt; None:
     attributes = dict(attrs)
 
-    if &#34;name&#34; in attributes and attributes[&#34;name&#34;] in [&#34;form_token&#34;, &#34;form_build_id&#34;, &#34;form_id&#34;]:
+    if &#34;name&#34; in attributes and attributes[&#34;name&#34;] in [
+        &#34;form_token&#34;,
+        &#34;form_build_id&#34;,
+        &#34;form_id&#34;,
+    ]:
         self.form[attributes[&#34;name&#34;]] = attributes[&#34;value&#34;]</code></pre>
 </details>
 </dd>
@@ -591,16 +612,14 @@ arba mokamą API ale verslui. Ačiū jums, kad esate, ESO.</p></div>
     Kai moki daxuja+1 už perdavimą ir etc, pastato naują skaitliuką, bet jo duomenys tik per web&#39;ą
     arba mokamą API ale verslui. Ačiū jums, kad esate, ESO.
     &#34;&#34;&#34;
+
     # TODO: Custom exceptions.
     URL_LOGIN = &#34;https://mano.eso.lt/?destination=/consumption&#34;
-    URL_CONSUMPTION_DATA = &#34;https://mano.eso.lt/consumption?ajax_form=1&amp;_wrapper_format=drupal_ajax&#34;
+    URL_CONSUMPTION_DATA = (
+        &#34;https://mano.eso.lt/consumption?ajax_form=1&amp;_wrapper_format=drupal_ajax&#34;
+    )
 
-    def __init__(
-            self,
-            username: str,
-            password: str,
-            persist_session: bool = True
-    ):
+    def __init__(self, username: str, password: str, persist_session: bool = True):
         # TODO: Check if session exists, load it if username matches.
         #  Also log that!
         self.username: str = username
@@ -638,14 +657,13 @@ arba mokamą API ale verslui. Ačiū jums, kad esate, ESO.</p></div>
                 &#34;name&#34;: self.username,
                 &#34;pass&#34;: self.password,
                 &#34;login_type&#34;: 1,
-                &#34;form_id&#34;: &#34;user_login_form&#34;
+                &#34;form_id&#34;: &#34;user_login_form&#34;,
             },
             allow_redirects=True,
             timeout=30,
         ) as response:
-
             if response.status_code != 200:
-                raise GyvatukasException(f&#34;Failed mano.eso.lt login!&#34;)
+                raise GyvatukasException(&#34;Failed mano.eso.lt login!&#34;)
 
             self.cookies = requests.utils.dict_from_cookiejar(response.cookies)
             self._extract_special_fields(response.text)
@@ -653,11 +671,15 @@ arba mokamą API ale verslui. Ačiū jums, kad esate, ESO.</p></div>
             if self.persist_session:
                 self._save_session()
 
-    def get_day_stats(self, eso_object_id: str, date: datetime.date | datetime.datetime) -&gt; list[ConsumptionDataset]:
+    def get_day_stats(
+        self, eso_object_id: str, date: datetime.date | datetime.datetime
+    ) -&gt; list[ConsumptionDataset]:
         &#34;&#34;&#34;Return daily consumption stats.&#34;&#34;&#34;
         raise NotImplementedError()
 
-    def get_week_stats(self, eso_object_id: str, date: datetime.date | datetime.datetime) -&gt; list[ConsumptionDataset]:
+    def get_week_stats(
+        self, eso_object_id: str, date: datetime.date | datetime.datetime
+    ) -&gt; list[ConsumptionDataset]:
         &#34;&#34;&#34;Return weekly consumption stats.
 
         🚨 Will always return date - 1 stats.
@@ -678,24 +700,24 @@ arba mokamą API ale verslui. Ačiū jums, kad esate, ESO.</p></div>
         }
 
         data = {
-                &#34;objects[]&#34;: eso_object_id,
-                &#34;objects_mock&#34;: &#34;&#34;,
-                &#34;display_type&#34;: &#34;hourly&#34;,
-                &#34;period&#34;: &#34;week&#34;,
-                # day_period, other_start, other_end
-                &#34;energy_type&#34;: &#34;general&#34;,
-                &#34;scales&#34;: &#34;total&#34;,
-                &#34;active_date_value&#34;: date.strftime(&#34;%Y-%m-%d+00:00&#34;),
-                &#34;made_energy_status&#34;: 1,
-                # back_button_value, next_button_value
-                &#34;visible_scales_field&#34;: 0,
-                &#34;visible_last_year_comparison_field&#34;: 0,
-                &#34;last_year_comparison&#34;: 1,
-                &#34;total_monthly_consumption&#34;: 1,
-                &#34;_drupal_ajax&#34;: &#34;1&#34;,
-                &#34;_triggering_element_name&#34;: &#34;display_type&#34;,
-                **self.special_fields,
-            }
+            &#34;objects[]&#34;: eso_object_id,
+            &#34;objects_mock&#34;: &#34;&#34;,
+            &#34;display_type&#34;: &#34;hourly&#34;,
+            &#34;period&#34;: &#34;week&#34;,
+            # day_period, other_start, other_end
+            &#34;energy_type&#34;: &#34;general&#34;,
+            &#34;scales&#34;: &#34;total&#34;,
+            &#34;active_date_value&#34;: date.strftime(&#34;%Y-%m-%d+00:00&#34;),
+            &#34;made_energy_status&#34;: 1,
+            # back_button_value, next_button_value
+            &#34;visible_scales_field&#34;: 0,
+            &#34;visible_last_year_comparison_field&#34;: 0,
+            &#34;last_year_comparison&#34;: 1,
+            &#34;total_monthly_consumption&#34;: 1,
+            &#34;_drupal_ajax&#34;: &#34;1&#34;,
+            &#34;_triggering_element_name&#34;: &#34;display_type&#34;,
+            **self.special_fields,
+        }
 
         with requests.post(
             url=self.URL_CONSUMPTION_DATA,
@@ -706,7 +728,7 @@ arba mokamą API ale verslui. Ačiū jums, kad esate, ESO.</p></div>
             timeout=90,
         ) as response:
             if response.status_code != 200:
-                raise GyvatukasException(f&#34;Failed mano.eso.lt consumption data request!&#34;)
+                raise GyvatukasException(&#34;Failed mano.eso.lt consumption data request!&#34;)
 
             data = response.json()
 
@@ -714,7 +736,9 @@ arba mokamą API ale verslui. Ačiū jums, kad esate, ESO.</p></div>
             wanted_data = None
             for d in data:
                 try:
-                    wanted_data = d[&#34;settings&#34;][&#34;eso_consumption_history_form&#34;][&#34;graphics_data&#34;]
+                    wanted_data = d[&#34;settings&#34;][&#34;eso_consumption_history_form&#34;][
+                        &#34;graphics_data&#34;
+                    ]
                 except (KeyError, TypeError):
                     continue
 
@@ -724,9 +748,13 @@ arba mokamą API ale verslui. Ačiū jums, kad esate, ESO.</p></div>
                 parsed_records = []
 
                 for record in dataset[&#34;record&#34;]:
-                    ts = datetime.datetime.strptime(record[&#34;date&#34;],&#34;%Y%m%d%H%M%S&#34;)
+                    ts = datetime.datetime.strptime(record[&#34;date&#34;], &#34;%Y%m%d%H%M%S&#34;)
                     # TODO: Set tz to lithuania.
-                    kwh = abs(float(record[&#34;value&#34;])) if record[&#34;value&#34;] is not None else 0.0
+                    kwh = (
+                        abs(float(record[&#34;value&#34;]))
+                        if record[&#34;value&#34;] is not None
+                        else 0.0
+                    )
                     parsed_records.append(
                         ConsumptionRecord(
                             dt=ts,
@@ -736,7 +764,9 @@ arba mokamą API ale verslui. Ačiū jums, kad esate, ESO.</p></div>
 
                 # Group records by day and create consumption dataset for each day.
                 parsed_records.sort(key=lambda x: x.dt.date())
-                grouped_parsed_records = groupby(parsed_records, key=lambda x: x.dt.date())
+                grouped_parsed_records = groupby(
+                    parsed_records, key=lambda x: x.dt.date()
+                )
 
                 for key, group in grouped_parsed_records:
                     day_records = []
@@ -778,7 +808,9 @@ arba mokamą API ale verslui. Ačiū jums, kad esate, ESO.</p></div>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_day_stats(self, eso_object_id: str, date: datetime.date | datetime.datetime) -&gt; list[ConsumptionDataset]:
+<pre><code class="python">def get_day_stats(
+    self, eso_object_id: str, date: datetime.date | datetime.datetime
+) -&gt; list[ConsumptionDataset]:
     &#34;&#34;&#34;Return daily consumption stats.&#34;&#34;&#34;
     raise NotImplementedError()</code></pre>
 </details>
@@ -793,7 +825,9 @@ arba mokamą API ale verslui. Ačiū jums, kad esate, ESO.</p></div>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_week_stats(self, eso_object_id: str, date: datetime.date | datetime.datetime) -&gt; list[ConsumptionDataset]:
+<pre><code class="python">def get_week_stats(
+    self, eso_object_id: str, date: datetime.date | datetime.datetime
+) -&gt; list[ConsumptionDataset]:
     &#34;&#34;&#34;Return weekly consumption stats.
 
     🚨 Will always return date - 1 stats.
@@ -814,24 +848,24 @@ arba mokamą API ale verslui. Ačiū jums, kad esate, ESO.</p></div>
     }
 
     data = {
-            &#34;objects[]&#34;: eso_object_id,
-            &#34;objects_mock&#34;: &#34;&#34;,
-            &#34;display_type&#34;: &#34;hourly&#34;,
-            &#34;period&#34;: &#34;week&#34;,
-            # day_period, other_start, other_end
-            &#34;energy_type&#34;: &#34;general&#34;,
-            &#34;scales&#34;: &#34;total&#34;,
-            &#34;active_date_value&#34;: date.strftime(&#34;%Y-%m-%d+00:00&#34;),
-            &#34;made_energy_status&#34;: 1,
-            # back_button_value, next_button_value
-            &#34;visible_scales_field&#34;: 0,
-            &#34;visible_last_year_comparison_field&#34;: 0,
-            &#34;last_year_comparison&#34;: 1,
-            &#34;total_monthly_consumption&#34;: 1,
-            &#34;_drupal_ajax&#34;: &#34;1&#34;,
-            &#34;_triggering_element_name&#34;: &#34;display_type&#34;,
-            **self.special_fields,
-        }
+        &#34;objects[]&#34;: eso_object_id,
+        &#34;objects_mock&#34;: &#34;&#34;,
+        &#34;display_type&#34;: &#34;hourly&#34;,
+        &#34;period&#34;: &#34;week&#34;,
+        # day_period, other_start, other_end
+        &#34;energy_type&#34;: &#34;general&#34;,
+        &#34;scales&#34;: &#34;total&#34;,
+        &#34;active_date_value&#34;: date.strftime(&#34;%Y-%m-%d+00:00&#34;),
+        &#34;made_energy_status&#34;: 1,
+        # back_button_value, next_button_value
+        &#34;visible_scales_field&#34;: 0,
+        &#34;visible_last_year_comparison_field&#34;: 0,
+        &#34;last_year_comparison&#34;: 1,
+        &#34;total_monthly_consumption&#34;: 1,
+        &#34;_drupal_ajax&#34;: &#34;1&#34;,
+        &#34;_triggering_element_name&#34;: &#34;display_type&#34;,
+        **self.special_fields,
+    }
 
     with requests.post(
         url=self.URL_CONSUMPTION_DATA,
@@ -842,7 +876,7 @@ arba mokamą API ale verslui. Ačiū jums, kad esate, ESO.</p></div>
         timeout=90,
     ) as response:
         if response.status_code != 200:
-            raise GyvatukasException(f&#34;Failed mano.eso.lt consumption data request!&#34;)
+            raise GyvatukasException(&#34;Failed mano.eso.lt consumption data request!&#34;)
 
         data = response.json()
 
@@ -850,7 +884,9 @@ arba mokamą API ale verslui. Ačiū jums, kad esate, ESO.</p></div>
         wanted_data = None
         for d in data:
             try:
-                wanted_data = d[&#34;settings&#34;][&#34;eso_consumption_history_form&#34;][&#34;graphics_data&#34;]
+                wanted_data = d[&#34;settings&#34;][&#34;eso_consumption_history_form&#34;][
+                    &#34;graphics_data&#34;
+                ]
             except (KeyError, TypeError):
                 continue
 
@@ -860,9 +896,13 @@ arba mokamą API ale verslui. Ačiū jums, kad esate, ESO.</p></div>
             parsed_records = []
 
             for record in dataset[&#34;record&#34;]:
-                ts = datetime.datetime.strptime(record[&#34;date&#34;],&#34;%Y%m%d%H%M%S&#34;)
+                ts = datetime.datetime.strptime(record[&#34;date&#34;], &#34;%Y%m%d%H%M%S&#34;)
                 # TODO: Set tz to lithuania.
-                kwh = abs(float(record[&#34;value&#34;])) if record[&#34;value&#34;] is not None else 0.0
+                kwh = (
+                    abs(float(record[&#34;value&#34;]))
+                    if record[&#34;value&#34;] is not None
+                    else 0.0
+                )
                 parsed_records.append(
                     ConsumptionRecord(
                         dt=ts,
@@ -872,7 +912,9 @@ arba mokamą API ale verslui. Ačiū jums, kad esate, ESO.</p></div>
 
             # Group records by day and create consumption dataset for each day.
             parsed_records.sort(key=lambda x: x.dt.date())
-            grouped_parsed_records = groupby(parsed_records, key=lambda x: x.dt.date())
+            grouped_parsed_records = groupby(
+                parsed_records, key=lambda x: x.dt.date()
+            )
 
             for key, group in grouped_parsed_records:
                 day_records = []
@@ -909,14 +951,13 @@ arba mokamą API ale verslui. Ačiū jums, kad esate, ESO.</p></div>
             &#34;name&#34;: self.username,
             &#34;pass&#34;: self.password,
             &#34;login_type&#34;: 1,
-            &#34;form_id&#34;: &#34;user_login_form&#34;
+            &#34;form_id&#34;: &#34;user_login_form&#34;,
         },
         allow_redirects=True,
         timeout=30,
     ) as response:
-
         if response.status_code != 200:
-            raise GyvatukasException(f&#34;Failed mano.eso.lt login!&#34;)
+            raise GyvatukasException(&#34;Failed mano.eso.lt login!&#34;)
 
         self.cookies = requests.utils.dict_from_cookiejar(response.cookies)
         self._extract_special_fields(response.text)

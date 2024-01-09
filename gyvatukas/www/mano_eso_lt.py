@@ -36,7 +36,11 @@ class FormParser(HTMLParser):
     def handle_input_tag(self, attrs: tuple) -> None:
         attributes = dict(attrs)
 
-        if "name" in attributes and attributes["name"] in ["form_token", "form_build_id", "form_id"]:
+        if "name" in attributes and attributes["name"] in [
+            "form_token",
+            "form_build_id",
+            "form_id",
+        ]:
             self.form[attributes["name"]] = attributes["value"]
 
 
@@ -59,16 +63,14 @@ class ManoEsoLt:
     Kai moki daxuja+1 už perdavimą ir etc, pastato naują skaitliuką, bet jo duomenys tik per web'ą
     arba mokamą API ale verslui. Ačiū jums, kad esate, ESO.
     """
+
     # TODO: Custom exceptions.
     URL_LOGIN = "https://mano.eso.lt/?destination=/consumption"
-    URL_CONSUMPTION_DATA = "https://mano.eso.lt/consumption?ajax_form=1&_wrapper_format=drupal_ajax"
+    URL_CONSUMPTION_DATA = (
+        "https://mano.eso.lt/consumption?ajax_form=1&_wrapper_format=drupal_ajax"
+    )
 
-    def __init__(
-            self,
-            username: str,
-            password: str,
-            persist_session: bool = True
-    ):
+    def __init__(self, username: str, password: str, persist_session: bool = True):
         # TODO: Check if session exists, load it if username matches.
         #  Also log that!
         self.username: str = username
@@ -106,12 +108,11 @@ class ManoEsoLt:
                 "name": self.username,
                 "pass": self.password,
                 "login_type": 1,
-                "form_id": "user_login_form"
+                "form_id": "user_login_form",
             },
             allow_redirects=True,
             timeout=30,
         ) as response:
-
             if response.status_code != 200:
                 raise GyvatukasException("Failed mano.eso.lt login!")
 
@@ -121,11 +122,15 @@ class ManoEsoLt:
             if self.persist_session:
                 self._save_session()
 
-    def get_day_stats(self, eso_object_id: str, date: datetime.date | datetime.datetime) -> list[ConsumptionDataset]:
+    def get_day_stats(
+        self, eso_object_id: str, date: datetime.date | datetime.datetime
+    ) -> list[ConsumptionDataset]:
         """Return daily consumption stats."""
         raise NotImplementedError()
 
-    def get_week_stats(self, eso_object_id: str, date: datetime.date | datetime.datetime) -> list[ConsumptionDataset]:
+    def get_week_stats(
+        self, eso_object_id: str, date: datetime.date | datetime.datetime
+    ) -> list[ConsumptionDataset]:
         """Return weekly consumption stats.
 
         🚨 Will always return date - 1 stats.
@@ -146,24 +151,24 @@ class ManoEsoLt:
         }
 
         data = {
-                "objects[]": eso_object_id,
-                "objects_mock": "",
-                "display_type": "hourly",
-                "period": "week",
-                # day_period, other_start, other_end
-                "energy_type": "general",
-                "scales": "total",
-                "active_date_value": date.strftime("%Y-%m-%d+00:00"),
-                "made_energy_status": 1,
-                # back_button_value, next_button_value
-                "visible_scales_field": 0,
-                "visible_last_year_comparison_field": 0,
-                "last_year_comparison": 1,
-                "total_monthly_consumption": 1,
-                "_drupal_ajax": "1",
-                "_triggering_element_name": "display_type",
-                **self.special_fields,
-            }
+            "objects[]": eso_object_id,
+            "objects_mock": "",
+            "display_type": "hourly",
+            "period": "week",
+            # day_period, other_start, other_end
+            "energy_type": "general",
+            "scales": "total",
+            "active_date_value": date.strftime("%Y-%m-%d+00:00"),
+            "made_energy_status": 1,
+            # back_button_value, next_button_value
+            "visible_scales_field": 0,
+            "visible_last_year_comparison_field": 0,
+            "last_year_comparison": 1,
+            "total_monthly_consumption": 1,
+            "_drupal_ajax": "1",
+            "_triggering_element_name": "display_type",
+            **self.special_fields,
+        }
 
         with requests.post(
             url=self.URL_CONSUMPTION_DATA,
@@ -182,7 +187,9 @@ class ManoEsoLt:
             wanted_data = None
             for d in data:
                 try:
-                    wanted_data = d["settings"]["eso_consumption_history_form"]["graphics_data"]
+                    wanted_data = d["settings"]["eso_consumption_history_form"][
+                        "graphics_data"
+                    ]
                 except (KeyError, TypeError):
                     continue
 
@@ -192,9 +199,13 @@ class ManoEsoLt:
                 parsed_records = []
 
                 for record in dataset["record"]:
-                    ts = datetime.datetime.strptime(record["date"],"%Y%m%d%H%M%S")
+                    ts = datetime.datetime.strptime(record["date"], "%Y%m%d%H%M%S")
                     # TODO: Set tz to lithuania.
-                    kwh = abs(float(record["value"])) if record["value"] is not None else 0.0
+                    kwh = (
+                        abs(float(record["value"]))
+                        if record["value"] is not None
+                        else 0.0
+                    )
                     parsed_records.append(
                         ConsumptionRecord(
                             dt=ts,
@@ -204,7 +215,9 @@ class ManoEsoLt:
 
                 # Group records by day and create consumption dataset for each day.
                 parsed_records.sort(key=lambda x: x.dt.date())
-                grouped_parsed_records = groupby(parsed_records, key=lambda x: x.dt.date())
+                grouped_parsed_records = groupby(
+                    parsed_records, key=lambda x: x.dt.date()
+                )
 
                 for key, group in grouped_parsed_records:
                     day_records = []
@@ -223,4 +236,3 @@ class ManoEsoLt:
                     result.append(cd)
 
             return result
-

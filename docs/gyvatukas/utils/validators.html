@@ -44,7 +44,8 @@ def is_email_valid(email: str, perform_dns_check: bool = False) -&gt; tuple[bool
     _logger.debug(&#34;validating email `%s&#34;, email)
     try:
         validation_result = validate_email(
-            email, check_deliverability=perform_dns_check,
+            email,
+            check_deliverability=perform_dns_check,
         )
     except EmailNotValidError:
         _logger.exception(f&#34;email `{email}` validation failed!&#34;)
@@ -83,7 +84,8 @@ If email is valid, returns normalized email, otherwise returns the original emai
     _logger.debug(&#34;validating email `%s&#34;, email)
     try:
         validation_result = validate_email(
-            email, check_deliverability=perform_dns_check,
+            email,
+            check_deliverability=perform_dns_check,
         )
     except EmailNotValidError:
         _logger.exception(f&#34;email `{email}` validation failed!&#34;)

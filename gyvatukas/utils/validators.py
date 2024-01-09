@@ -16,7 +16,8 @@ def is_email_valid(email: str, perform_dns_check: bool = False) -> tuple[bool, s
     _logger.debug("validating email `%s", email)
     try:
         validation_result = validate_email(
-            email, check_deliverability=perform_dns_check,
+            email,
+            check_deliverability=perform_dns_check,
         )
     except EmailNotValidError:
         _logger.exception(f"email `{email}` validation failed!")

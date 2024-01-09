@@ -39,7 +39,9 @@ class PowerHitRadioLt:
 
         Returns parsed result, original response is stored in `_raw` key.
         &#34;&#34;&#34;
-        with requests.post(url=self.URL_CURRENTLY_PLAYING, data={&#34;action&#34;: &#34;getsong&#34;}) as response:
+        with requests.post(
+            url=self.URL_CURRENTLY_PLAYING, data={&#34;action&#34;: &#34;getsong&#34;}
+        ) as response:
             data = response.json()
             if data.get(&#34;song&#34;) == &#34;song&#34;:
                 return {
@@ -84,7 +86,9 @@ class PowerHitRadioLt:
 
         Returns parsed result, original response is stored in `_raw` key.
         &#34;&#34;&#34;
-        with requests.post(url=self.URL_CURRENTLY_PLAYING, data={&#34;action&#34;: &#34;getsong&#34;}) as response:
+        with requests.post(
+            url=self.URL_CURRENTLY_PLAYING, data={&#34;action&#34;: &#34;getsong&#34;}
+        ) as response:
             data = response.json()
             if data.get(&#34;song&#34;) == &#34;song&#34;:
                 return {
@@ -126,7 +130,9 @@ class PowerHitRadioLt:
 
     Returns parsed result, original response is stored in `_raw` key.
     &#34;&#34;&#34;
-    with requests.post(url=self.URL_CURRENTLY_PLAYING, data={&#34;action&#34;: &#34;getsong&#34;}) as response:
+    with requests.post(
+        url=self.URL_CURRENTLY_PLAYING, data={&#34;action&#34;: &#34;getsong&#34;}
+    ) as response:
         data = response.json()
         if data.get(&#34;song&#34;) == &#34;song&#34;:
             return {

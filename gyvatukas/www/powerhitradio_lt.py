@@ -11,7 +11,9 @@ class PowerHitRadioLt:
 
         Returns parsed result, original response is stored in `_raw` key.
         """
-        with requests.post(url=self.URL_CURRENTLY_PLAYING, data={"action": "getsong"}) as response:
+        with requests.post(
+            url=self.URL_CURRENTLY_PLAYING, data={"action": "getsong"}
+        ) as response:
             data = response.json()
             if data.get("song") == "song":
                 return {

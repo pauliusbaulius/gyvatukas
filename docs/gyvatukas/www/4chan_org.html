@@ -43,9 +43,7 @@ class FourChanOrg:
         url = f&#34;https://a.4cdn.org/c/thread/{thread_id}.json&#34;
         with requests.get(url=url, timeout=15) as response:
             if response.status_code != 200:
-                raise GyvatukasException(f&#34;Failed to get thread data!&#34;)
-
-            thread_data = response.json()</code></pre>
+                raise GyvatukasException(&#34;Failed to get thread data!&#34;)</code></pre>
 </details>
 </section>
 <section>
@@ -76,9 +74,7 @@ class FourChanOrg:
         url = f&#34;https://a.4cdn.org/c/thread/{thread_id}.json&#34;
         with requests.get(url=url, timeout=15) as response:
             if response.status_code != 200:
-                raise GyvatukasException(f&#34;Failed to get thread data!&#34;)
-
-            thread_data = response.json()</code></pre>
+                raise GyvatukasException(&#34;Failed to get thread data!&#34;)</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -101,9 +97,7 @@ If output dir already contains data, will not re-download it.</p></div>
     url = f&#34;https://a.4cdn.org/c/thread/{thread_id}.json&#34;
     with requests.get(url=url, timeout=15) as response:
         if response.status_code != 200:
-            raise GyvatukasException(f&#34;Failed to get thread data!&#34;)
-
-        thread_data = response.json()</code></pre>
+            raise GyvatukasException(&#34;Failed to get thread data!&#34;)</code></pre>
 </details>
 </dd>
 </dl>

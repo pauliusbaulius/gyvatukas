@@ -31,14 +31,19 @@
 
 def get_hashed_salted_password(password: str) -&gt; str:
     &#34;&#34;&#34;Return hashed password using `bcrypt`.&#34;&#34;&#34;
-    hashed_password = bcrypt.hashpw(password=password.encode(&#39;utf-8&#39;), salt=bcrypt.gensalt())
-    r = hashed_password.decode(&#39;utf-8&#39;)
+    hashed_password = bcrypt.hashpw(
+        password=password.encode(&#34;utf-8&#34;), salt=bcrypt.gensalt()
+    )
+    r = hashed_password.decode(&#34;utf-8&#34;)
     return r
 
 
 def is_psw_correct(password: str, hashed_password: str) -&gt; bool:
     &#34;&#34;&#34;Verify password against hashed password using `bcrypt`.&#34;&#34;&#34;
-    r = bcrypt.checkpw(password=password.encode(&#39;utf-8&#39;), hashed_password=hashed_password.encode(&#39;utf-8&#39;))
+    r = bcrypt.checkpw(
+        password=password.encode(&#34;utf-8&#34;),
+        hashed_password=hashed_password.encode(&#34;utf-8&#34;),
+    )
     return r</code></pre>
 </details>
 </section>
@@ -60,8 +65,10 @@ def is_psw_correct(password: str, hashed_password: str) -&gt; bool:
 </summary>
 <pre><code class="python">def get_hashed_salted_password(password: str) -&gt; str:
     &#34;&#34;&#34;Return hashed password using `bcrypt`.&#34;&#34;&#34;
-    hashed_password = bcrypt.hashpw(password=password.encode(&#39;utf-8&#39;), salt=bcrypt.gensalt())
-    r = hashed_password.decode(&#39;utf-8&#39;)
+    hashed_password = bcrypt.hashpw(
+        password=password.encode(&#34;utf-8&#34;), salt=bcrypt.gensalt()
+    )
+    r = hashed_password.decode(&#34;utf-8&#34;)
     return r</code></pre>
 </details>
 </dd>
@@ -76,7 +83,10 @@ def is_psw_correct(password: str, hashed_password: str) -&gt; bool:
 </summary>
 <pre><code class="python">def is_psw_correct(password: str, hashed_password: str) -&gt; bool:
     &#34;&#34;&#34;Verify password against hashed password using `bcrypt`.&#34;&#34;&#34;
-    r = bcrypt.checkpw(password=password.encode(&#39;utf-8&#39;), hashed_password=hashed_password.encode(&#39;utf-8&#39;))
+    r = bcrypt.checkpw(
+        password=password.encode(&#34;utf-8&#34;),
+        hashed_password=hashed_password.encode(&#34;utf-8&#34;),
+    )
     return r</code></pre>
 </details>
 </dd>

@@ -59,7 +59,9 @@ def load_json(data: str) -> dict | list | None:
         try:
             result = json_repair.loads(data)
         except Exception:
-            _logger.warning("failed to load json from string even after replacing ' with \"!")
+            _logger.warning(
+                "failed to load json from string even after replacing ' with \"!"
+            )
             pass
     finally:
         return result

@@ -43,6 +43,7 @@ class GithubCom:
 
     See: https://docs.github.com/en/rest?apiVersion=2022-11-28
     &#34;&#34;&#34;
+
     GITHUB_API_VERSION = &#34;2022-11-28&#34;  # Latest as of 2024-01.
     URL_API_MARKDOWN_CONVERT = &#34;https://api.github.com/markdown&#34;
 
@@ -66,7 +67,6 @@ class GithubCom:
                 &#34;Authorization&#34;: f&#34;Bearer {self.api_token}&#34;,
             }
         return {}
-
 
     def convert_md_to_html(self, text: str, fancy_gfm_mode: bool = False) -&gt; str:
         &#34;&#34;&#34;Convert markdown to HTML using Github API.
@@ -93,7 +93,7 @@ class GithubCom:
                 return response.text
 
             _logger.error(
-                f&#34;Failed to convert markdown to HTML!&#34;,
+                &#34;Failed to convert markdown to HTML!&#34;,
                 extra={
                     &#34;text&#34;: text,
                     &#34;fancy_gfm_mode&#34;: fancy_gfm_mode,
@@ -101,7 +101,7 @@ class GithubCom:
                     &#34;response_text&#34;: response.text,
                 },
             )
-            raise GyvatukasException(f&#34;Failed to convert markdown to HTML!&#34;)</code></pre>
+            raise GyvatukasException(&#34;Failed to convert markdown to HTML!&#34;)</code></pre>
 </details>
 </section>
 <section>
@@ -134,6 +134,7 @@ See: <a href="https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for
 
     See: https://docs.github.com/en/rest?apiVersion=2022-11-28
     &#34;&#34;&#34;
+
     GITHUB_API_VERSION = &#34;2022-11-28&#34;  # Latest as of 2024-01.
     URL_API_MARKDOWN_CONVERT = &#34;https://api.github.com/markdown&#34;
 
@@ -157,7 +158,6 @@ See: <a href="https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for
                 &#34;Authorization&#34;: f&#34;Bearer {self.api_token}&#34;,
             }
         return {}
-
 
     def convert_md_to_html(self, text: str, fancy_gfm_mode: bool = False) -&gt; str:
         &#34;&#34;&#34;Convert markdown to HTML using Github API.
@@ -184,7 +184,7 @@ See: <a href="https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for
                 return response.text
 
             _logger.error(
-                f&#34;Failed to convert markdown to HTML!&#34;,
+                &#34;Failed to convert markdown to HTML!&#34;,
                 extra={
                     &#34;text&#34;: text,
                     &#34;fancy_gfm_mode&#34;: fancy_gfm_mode,
@@ -192,7 +192,7 @@ See: <a href="https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for
                     &#34;response_text&#34;: response.text,
                 },
             )
-            raise GyvatukasException(f&#34;Failed to convert markdown to HTML!&#34;)</code></pre>
+            raise GyvatukasException(&#34;Failed to convert markdown to HTML!&#34;)</code></pre>
 </details>
 <h3>Class variables</h3>
 <dl>
@@ -244,7 +244,7 @@ mostly bot traffic anyway.</p>
             return response.text
 
         _logger.error(
-            f&#34;Failed to convert markdown to HTML!&#34;,
+            &#34;Failed to convert markdown to HTML!&#34;,
             extra={
                 &#34;text&#34;: text,
                 &#34;fancy_gfm_mode&#34;: fancy_gfm_mode,
@@ -252,7 +252,7 @@ mostly bot traffic anyway.</p>
                 &#34;response_text&#34;: response.text,
             },
         )
-        raise GyvatukasException(f&#34;Failed to convert markdown to HTML!&#34;)</code></pre>
+        raise GyvatukasException(&#34;Failed to convert markdown to HTML!&#34;)</code></pre>
 </details>
 </dd>
 </dl>

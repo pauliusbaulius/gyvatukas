@@ -96,13 +96,11 @@ class ScanResultSchema(pydantic.BaseModel):
     is_symlink: bool
 
 
-@NotImplementedError
 def scan_dir(path: pathlib.Path) -&gt; list[ScanResultSchema]:
     &#34;&#34;&#34;Scan directory for files and return list of paths.&#34;&#34;&#34;
     # TODO: Tree of files/dirs in given path. Recursive. Flag to calculate size of each file/dir, etc.
     #  Return as pydantic instance. Parse fname, ext, parent, size, etc.
-
-    return []</code></pre>
+    raise NotImplementedError()</code></pre>
 </details>
 </section>
 <section>
@@ -198,6 +196,22 @@ def scan_dir(path: pathlib.Path) -&gt; list[ScanResultSchema]:
         return content
 
     return None</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.utils.fs.scan_dir"><code class="name flex">
+<span>def <span class="ident">scan_dir</span></span>(<span>path: pathlib.Path) ‑> list[<a title="gyvatukas.utils.fs.ScanResultSchema" href="#gyvatukas.utils.fs.ScanResultSchema">ScanResultSchema</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Scan directory for files and return list of paths.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def scan_dir(path: pathlib.Path) -&gt; list[ScanResultSchema]:
+    &#34;&#34;&#34;Scan directory for files and return list of paths.&#34;&#34;&#34;
+    # TODO: Tree of files/dirs in given path. Recursive. Flag to calculate size of each file/dir, etc.
+    #  Return as pydantic instance. Parse fname, ext, parent, size, etc.
+    raise NotImplementedError()</code></pre>
 </details>
 </dd>
 <dt id="gyvatukas.utils.fs.write_file"><code class="name flex">
@@ -323,6 +337,7 @@ allow <code>self</code> as a field name.</p></div>
 <li><code><a title="gyvatukas.utils.fs.path_filename" href="#gyvatukas.utils.fs.path_filename">path_filename</a></code></li>
 <li><code><a title="gyvatukas.utils.fs.path_without_filename" href="#gyvatukas.utils.fs.path_without_filename">path_without_filename</a></code></li>
 <li><code><a title="gyvatukas.utils.fs.read_file" href="#gyvatukas.utils.fs.read_file">read_file</a></code></li>
+<li><code><a title="gyvatukas.utils.fs.scan_dir" href="#gyvatukas.utils.fs.scan_dir">scan_dir</a></code></li>
 <li><code><a title="gyvatukas.utils.fs.write_file" href="#gyvatukas.utils.fs.write_file">write_file</a></code></li>
 </ul>
 </li>

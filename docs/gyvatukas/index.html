@@ -46,8 +46,17 @@ from .utils.crypto import is_psw_correct, get_hashed_salted_password
 from .utils.dict_ import dict_remove_matching_values
 from .utils.dt import get_dt_utc_now
 from .utils.env import get_env
-from .utils.fs import (path_without_filename, path_extension, path_filename, dir_exists,
-                       file_exists, write_file, read_file, ScanResultSchema, scan_dir)
+from .utils.fs import (
+    path_without_filename,
+    path_extension,
+    path_filename,
+    dir_exists,
+    file_exists,
+    write_file,
+    read_file,
+    ScanResultSchema,
+    scan_dir,
+)
 from .utils.generators import get_random_secure_string
 from .utils.ip import get_my_ipv4, get_ipv4_meta, get_ip_country
 from .utils.json_ import get_pretty_json, read_json, write_json, load_json
@@ -270,8 +279,10 @@ required: Fail if not found in environment? Useful for things like database port
 </summary>
 <pre><code class="python">def get_hashed_salted_password(password: str) -&gt; str:
     &#34;&#34;&#34;Return hashed password using `bcrypt`.&#34;&#34;&#34;
-    hashed_password = bcrypt.hashpw(password=password.encode(&#39;utf-8&#39;), salt=bcrypt.gensalt())
-    r = hashed_password.decode(&#39;utf-8&#39;)
+    hashed_password = bcrypt.hashpw(
+        password=password.encode(&#34;utf-8&#34;), salt=bcrypt.gensalt()
+    )
+    r = hashed_password.decode(&#34;utf-8&#34;)
     return r</code></pre>
 </details>
 </dd>
@@ -404,7 +415,8 @@ If email is valid, returns normalized email, otherwise returns the original emai
     _logger.debug(&#34;validating email `%s&#34;, email)
     try:
         validation_result = validate_email(
-            email, check_deliverability=perform_dns_check,
+            email,
+            check_deliverability=perform_dns_check,
         )
     except EmailNotValidError:
         _logger.exception(f&#34;email `{email}` validation failed!&#34;)
@@ -424,7 +436,10 @@ If email is valid, returns normalized email, otherwise returns the original emai
 </summary>
 <pre><code class="python">def is_psw_correct(password: str, hashed_password: str) -&gt; bool:
     &#34;&#34;&#34;Verify password against hashed password using `bcrypt`.&#34;&#34;&#34;
-    r = bcrypt.checkpw(password=password.encode(&#39;utf-8&#39;), hashed_password=hashed_password.encode(&#39;utf-8&#39;))
+    r = bcrypt.checkpw(
+        password=password.encode(&#34;utf-8&#34;),
+        hashed_password=hashed_password.encode(&#34;utf-8&#34;),
+    )
     return r</code></pre>
 </details>
 </dd>
@@ -468,7 +483,9 @@ If email is valid, returns normalized email, otherwise returns the original emai
         try:
             result = json_repair.loads(data)
         except Exception:
-            _logger.warning(&#34;failed to load json from string even after replacing &#39; with \&#34;!&#34;)
+            _logger.warning(
+                &#34;failed to load json from string even after replacing &#39; with \&#34;!&#34;
+            )
             pass
     finally:
         return result</code></pre>
@@ -554,6 +571,22 @@ If email is valid, returns normalized email, otherwise returns the original emai
     if default is not None:
         return default
     return {}</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.scan_dir"><code class="name flex">
+<span>def <span class="ident">scan_dir</span></span>(<span>path: pathlib.Path) ‑> list[<a title="gyvatukas.utils.fs.ScanResultSchema" href="utils/fs.html#gyvatukas.utils.fs.ScanResultSchema">ScanResultSchema</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Scan directory for files and return list of paths.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def scan_dir(path: pathlib.Path) -&gt; list[ScanResultSchema]:
+    &#34;&#34;&#34;Scan directory for files and return list of paths.&#34;&#34;&#34;
+    # TODO: Tree of files/dirs in given path. Recursive. Flag to calculate size of each file/dir, etc.
+    #  Return as pydantic instance. Parse fname, ext, parent, size, etc.
+    raise NotImplementedError()</code></pre>
 </details>
 </dd>
 <dt id="gyvatukas.validate_email"><code class="name flex">
@@ -1057,6 +1090,7 @@ allow <code>self</code> as a field name.</p></div>
 <li><code><a title="gyvatukas.path_without_filename" href="#gyvatukas.path_without_filename">path_without_filename</a></code></li>
 <li><code><a title="gyvatukas.read_file" href="#gyvatukas.read_file">read_file</a></code></li>
 <li><code><a title="gyvatukas.read_json" href="#gyvatukas.read_json">read_json</a></code></li>
+<li><code><a title="gyvatukas.scan_dir" href="#gyvatukas.scan_dir">scan_dir</a></code></li>
 <li><code><a title="gyvatukas.validate_email" href="#gyvatukas.validate_email">validate_email</a></code></li>
 <li><code><a title="gyvatukas.validate_lt_id" href="#gyvatukas.validate_lt_id">validate_lt_id</a></code></li>
 <li><code><a title="gyvatukas.value_to_bool" href="#gyvatukas.value_to_bool">value_to_bool</a></code></li>

@@ -30,7 +30,6 @@
 import datetime
 
 import pydantic
-import requests
 
 
 class LithuanianPersonalCodeSchema(pydantic.BaseModel):
@@ -141,11 +140,6 @@ def validate_lt_id(pid: str) -&gt; LithuanianPersonalCodeSchema:
     )
 
 
-def search_lt_post_code(address: str) -&gt; str | None:
-    &#34;&#34;&#34;Try to resolve Lithuanian address to a post code.&#34;&#34;&#34;
-    raise NotImplementedError
-
-
 def get_lt_nearby_pashtomatas_by_address(address: str) -&gt; list[str]:
     &#34;&#34;&#34;Get nearby &#39;paštomatai&#39; by an address.
 
@@ -202,20 +196,6 @@ def get_lt_nearby_pashtomatas_by_lat_lon(lat: float, lon: float) -&gt; list[str]
 
     🚨 Lat/lon should be in Lithuania.
     &#34;&#34;&#34;
-    raise NotImplementedError</code></pre>
-</details>
-</dd>
-<dt id="gyvatukas.utils.lithuania.search_lt_post_code"><code class="name flex">
-<span>def <span class="ident">search_lt_post_code</span></span>(<span>address: str) ‑> str | None</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Try to resolve Lithuanian address to a post code.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def search_lt_post_code(address: str) -&gt; str | None:
-    &#34;&#34;&#34;Try to resolve Lithuanian address to a post code.&#34;&#34;&#34;
     raise NotImplementedError</code></pre>
 </details>
 </dd>
@@ -414,7 +394,6 @@ def birth_date(self) -&gt; datetime.date | None:
 <ul class="">
 <li><code><a title="gyvatukas.utils.lithuania.get_lt_nearby_pashtomatas_by_address" href="#gyvatukas.utils.lithuania.get_lt_nearby_pashtomatas_by_address">get_lt_nearby_pashtomatas_by_address</a></code></li>
 <li><code><a title="gyvatukas.utils.lithuania.get_lt_nearby_pashtomatas_by_lat_lon" href="#gyvatukas.utils.lithuania.get_lt_nearby_pashtomatas_by_lat_lon">get_lt_nearby_pashtomatas_by_lat_lon</a></code></li>
-<li><code><a title="gyvatukas.utils.lithuania.search_lt_post_code" href="#gyvatukas.utils.lithuania.search_lt_post_code">search_lt_post_code</a></code></li>
 <li><code><a title="gyvatukas.utils.lithuania.validate_lt_id" href="#gyvatukas.utils.lithuania.validate_lt_id">validate_lt_id</a></code></li>
 </ul>
 </li>

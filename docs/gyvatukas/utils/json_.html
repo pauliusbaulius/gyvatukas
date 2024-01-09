@@ -87,7 +87,9 @@ def load_json(data: str) -&gt; dict | list | None:
         try:
             result = json_repair.loads(data)
         except Exception:
-            _logger.warning(&#34;failed to load json from string even after replacing &#39; with \&#34;!&#34;)
+            _logger.warning(
+                &#34;failed to load json from string even after replacing &#39; with \&#34;!&#34;
+            )
             pass
     finally:
         return result</code></pre>
@@ -142,7 +144,9 @@ def load_json(data: str) -&gt; dict | list | None:
         try:
             result = json_repair.loads(data)
         except Exception:
-            _logger.warning(&#34;failed to load json from string even after replacing &#39; with \&#34;!&#34;)
+            _logger.warning(
+                &#34;failed to load json from string even after replacing &#39; with \&#34;!&#34;
+            )
             pass
     finally:
         return result</code></pre>

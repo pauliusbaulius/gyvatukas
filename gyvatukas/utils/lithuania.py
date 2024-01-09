@@ -126,4 +126,3 @@ def get_lt_nearby_pashtomatas_by_lat_lon(lat: float, lon: float) -> list[str]:
     🚨 Lat/lon should be in Lithuania.
     """
     raise NotImplementedError
-

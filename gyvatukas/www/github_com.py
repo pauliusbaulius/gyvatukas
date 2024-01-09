@@ -15,6 +15,7 @@ class GithubCom:
 
     See: https://docs.github.com/en/rest?apiVersion=2022-11-28
     """
+
     GITHUB_API_VERSION = "2022-11-28"  # Latest as of 2024-01.
     URL_API_MARKDOWN_CONVERT = "https://api.github.com/markdown"
 
@@ -38,7 +39,6 @@ class GithubCom:
                 "Authorization": f"Bearer {self.api_token}",
             }
         return {}
-
 
     def convert_md_to_html(self, text: str, fancy_gfm_mode: bool = False) -> str:
         """Convert markdown to HTML using Github API.

@@ -9,6 +9,7 @@ class NominatimOrg:
     🚨 Do not abuse this API, max 1 req/s as stated in the usage policy.
     See: https://operations.osmfoundation.org/policies/nominatim/
     """
+
     def __init__(self, user_agent: str):
         self.user_agent = user_agent
 
@@ -54,5 +55,7 @@ class NominatimOrg:
         ) as r:
             data = r.json()
             if not data:
-                raise GyvatukasException(f"Failed to resolve address `{address}` to coords!")
+                raise GyvatukasException(
+                    f"Failed to resolve address `{address}` to coords!"
+                )
             return float(data[0]["lat"]), float(data[0]["lon"])
