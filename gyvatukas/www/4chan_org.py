@@ -15,6 +15,4 @@ class FourChanOrg:
         url = f"https://a.4cdn.org/c/thread/{thread_id}.json"
         with requests.get(url=url, timeout=15) as response:
             if response.status_code != 200:
-                raise GyvatukasException(f"Failed to get thread data!")
-
-            thread_data = response.json()
+                raise GyvatukasException("Failed to get thread data!")

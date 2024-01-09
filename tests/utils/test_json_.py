@@ -1,4 +1,3 @@
-import os
 import pytest
 from gyvatukas.utils.json_ import load_json
 

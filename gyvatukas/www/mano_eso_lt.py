@@ -113,7 +113,7 @@ class ManoEsoLt:
         ) as response:
 
             if response.status_code != 200:
-                raise GyvatukasException(f"Failed mano.eso.lt login!")
+                raise GyvatukasException("Failed mano.eso.lt login!")
 
             self.cookies = requests.utils.dict_from_cookiejar(response.cookies)
             self._extract_special_fields(response.text)
@@ -174,7 +174,7 @@ class ManoEsoLt:
             timeout=90,
         ) as response:
             if response.status_code != 200:
-                raise GyvatukasException(f"Failed mano.eso.lt consumption data request!")
+                raise GyvatukasException("Failed mano.eso.lt consumption data request!")
 
             data = response.json()
 

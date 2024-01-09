@@ -65,7 +65,7 @@ class GithubCom:
                 return response.text
 
             _logger.error(
-                f"Failed to convert markdown to HTML!",
+                "Failed to convert markdown to HTML!",
                 extra={
                     "text": text,
                     "fancy_gfm_mode": fancy_gfm_mode,
@@ -73,4 +73,4 @@ class GithubCom:
                     "response_text": response.text,
                 },
             )
-            raise GyvatukasException(f"Failed to convert markdown to HTML!")
+            raise GyvatukasException("Failed to convert markdown to HTML!")
