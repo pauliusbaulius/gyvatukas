@@ -65,10 +65,8 @@ class ScanResultSchema(pydantic.BaseModel):
     is_symlink: bool
 
 
-@NotImplementedError
 def scan_dir(path: pathlib.Path) -> list[ScanResultSchema]:
     """Scan directory for files and return list of paths."""
     # TODO: Tree of files/dirs in given path. Recursive. Flag to calculate size of each file/dir, etc.
     #  Return as pydantic instance. Parse fname, ext, parent, size, etc.
-
-    return []
+    raise NotImplementedError()

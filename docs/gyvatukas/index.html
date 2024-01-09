@@ -6,8 +6,9 @@
 <meta name="generator" content="pdoc 0.10.0" />
 <title>gyvatukas API documentation</title>
 <meta name="description" content="gyvatukas
-collection of python utils, slowly conglomerating into a single python package from various projects.
-do not recommend using this package, …" />
+collection of python utils and prototypes.
+it is public, but i would not advise to use it for any serious business. is more of a util
+…" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -25,51 +26,93 @@ do not recommend using this package, …" />
 </header>
 <section id="section-intro">
 <h1 id="gyvatukas">gyvatukas</h1>
-<p>collection of python utils, slowly conglomerating into a single python package from various projects.
-do not recommend using this package, not responsible for shitty untested code that might break
-your prod environment.</p>
-<h2 id="changelog">changelog</h2>
-<p>v7
-- 🚨 Rename modules <code>_dict</code> to <code>dict_</code> and <code>_json</code> to <code>json_</code>.
-- 🇱🇹 Lithuanian personal code validation logic.
-- Use <code>pathlib</code> instead of <code>os.path</code>.
-- New Makefile
-- New <code>generator.get_random_secure_string</code> function.
-- Documentation improvements.
-- Lint + format w. <code>ruff</code> and <code>black</code>.</p>
-<p>v6
-- Docs using pdoc3
-- Makefile improvements</p>
-<p>v5
-- Rename <code>read_json_or_return_empty_dict</code> to <code>read_json</code> which now takes default= parameter when
-value is not found.</p>
-<p>v3
-- Email validation logic using <a href="https://github.com/JoshData/python-email-validator.">https://github.com/JoshData/python-email-validator.</a></p>
-<p>v2
-- Bug fixes, etc. Additional fs/json utils.</p>
-<p>v1
-- Initial release with first utils. Not usable.</p>
-<h2 id="publishing-a-package-to-pypi-w-poetry">publishing a package to pypi w. poetry</h2>
-<ol>
-<li>make pypi account</li>
-<li>generate api token</li>
-<li>run <code>poetry config pypi-token.pypi &lt;token&gt;</code></li>
-<li><code>poetry build</code> and then <code>poetry publish</code></li>
-<li>profit 👍</li>
-</ol>
+<p>collection of python utils and prototypes.
+it is public, but i would not advise to use it for any serious business. is more of a util
+bundle and playground for new ideas.</p>
+<p>anyways, see docs page for more info.</p>
+<p>🚨 No changelog</p>
+<p>🚩 Frequently changing API</p>
+<p>🚨 Lack of tests</p>
+<p>🤠 Only fun</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;
 .. include:: ../README.md
-&#34;&#34;&#34;</code></pre>
+&#34;&#34;&#34;
+from .utils.bool import is_true, value_to_bool
+from .utils.crypto import is_psw_correct, get_hashed_salted_password
+from .utils.dict_ import dict_remove_matching_values
+from .utils.dt import get_dt_utc_now
+from .utils.env import get_env
+from .utils.fs import (path_without_filename, path_extension, path_filename, dir_exists,
+                       file_exists, write_file, read_file, ScanResultSchema, scan_dir)
+from .utils.generators import get_random_secure_string
+from .utils.ip import get_my_ipv4, get_ipv4_meta, get_ip_country
+from .utils.json_ import get_pretty_json, read_json, write_json, load_json
+from .utils.lithuania import LithuanianPersonalCodeSchema, validate_lt_id
+from .utils.validators import validate_email, is_email_valid
+
+__all__ = [
+    # bool.py
+    &#34;is_true&#34;,
+    &#34;value_to_bool&#34;,
+    # crypo.py
+    &#34;is_psw_correct&#34;,
+    &#34;get_hashed_salted_password&#34;,
+    # dict_.py
+    &#34;dict_remove_matching_values&#34;,
+    # dt.py
+    &#34;get_dt_utc_now&#34;,
+    # env.py
+    &#34;get_env&#34;,
+    # fs.py
+    &#34;path_without_filename&#34;,
+    &#34;path_extension&#34;,
+    &#34;path_filename&#34;,
+    &#34;dir_exists&#34;,
+    &#34;file_exists&#34;,
+    &#34;write_file&#34;,
+    &#34;read_file&#34;,
+    &#34;ScanResultSchema&#34;,
+    &#34;scan_dir&#34;,
+    # generators.py
+    &#34;get_random_secure_string&#34;,
+    # ip.py
+    &#34;get_my_ipv4&#34;,
+    &#34;get_ipv4_meta&#34;,
+    &#34;get_ip_country&#34;,
+    # json_.py
+    &#34;get_pretty_json&#34;,
+    &#34;read_json&#34;,
+    &#34;write_json&#34;,
+    &#34;load_json&#34;,
+    # lithuania.py
+    &#34;LithuanianPersonalCodeSchema&#34;,
+    &#34;validate_lt_id&#34;,
+    # validators.py
+    &#34;validate_email&#34;,
+    &#34;is_email_valid&#34;,
+]</code></pre>
 </details>
 </section>
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
+<dt><code class="name"><a title="gyvatukas.exceptions" href="exceptions.html">gyvatukas.exceptions</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="gyvatukas.internal" href="internal.html">gyvatukas.internal</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt><code class="name"><a title="gyvatukas.utils" href="utils/index.html">gyvatukas.utils</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="gyvatukas.www" href="www/index.html">gyvatukas.www</a></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -78,25 +121,981 @@ value is not found.</p>
 <section>
 </section>
 <section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="gyvatukas.dict_remove_matching_values"><code class="name flex">
+<span>def <span class="ident">dict_remove_matching_values</span></span>(<span>d: dict, values: list) ‑> dict</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Remove all key-value pairs from dict where value is in values.
+Useful for removing None values from dict or empty strings when working with form data.</p>
+<p>Returns new dict.
+🐌 Creates a new dict, not recommended for large dicts.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def dict_remove_matching_values(d: dict, values: list) -&gt; dict:
+    &#34;&#34;&#34;Remove all key-value pairs from dict where value is in values.
+    Useful for removing None values from dict or empty strings when working with form data.
+
+    Returns new dict.
+    🐌 Creates a new dict, not recommended for large dicts.
+    &#34;&#34;&#34;
+    # TODO: Recursive iteration to remove deeply matched values? But as a separate function.
+    new_d = {}
+    for k, v in d.items():
+        if v not in values:
+            new_d[k] = v
+
+    return new_d</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.dir_exists"><code class="name flex">
+<span>def <span class="ident">dir_exists</span></span>(<span>path: pathlib.Path) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Check if directory exists.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def dir_exists(path: pathlib.Path) -&gt; bool:
+    &#34;&#34;&#34;Check if directory exists.&#34;&#34;&#34;
+    return path.exists() and path.is_dir()</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.file_exists"><code class="name flex">
+<span>def <span class="ident">file_exists</span></span>(<span>path: pathlib.Path) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Check if file exists.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def file_exists(path: pathlib.Path) -&gt; bool:
+    &#34;&#34;&#34;Check if file exists.&#34;&#34;&#34;
+    return path.exists()</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.get_dt_utc_now"><code class="name flex">
+<span>def <span class="ident">get_dt_utc_now</span></span>(<span>) ‑> datetime.datetime</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_dt_utc_now() -&gt; datetime.datetime:
+    # Python devs decided to deprecate datetime.datetime.utcnow() since is naive datetime.
+    # https://blog.miguelgrinberg.com/post/it-s-time-for-a-change-datetime-utcnow-is-now-deprecated
+    return datetime.datetime.now(tz=datetime.timezone.utc)</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.get_env"><code class="name flex">
+<span>def <span class="ident">get_env</span></span>(<span>name: str, type: {<class 'bool'>, <class 'str'>, <class 'float'>, <class 'int'>, <class 'dict'>, <class 'list'>}, default: {<class 'bool'>, <class 'str'>, <class 'float'>, <class 'int'>, <class 'dict'>, <class 'list'>} = None, required: bool = False) ‑> {<class 'bool'>, <class 'str'>, <class 'float'>, <class 'int'>, <class 'dict'>, <class 'list'>}</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Try to parse environment variable as given type.</p>
+<p>🚩 Does not load environment variables. Use <code>python-dotenv</code> for that.</p>
+<p>type: Output type, will split "a,b,c" into ["a", "b", "c"] if type=list.
+default: Default value if given name does not exist in environ
+required: Fail if not found in environment? Useful for things like database port :)</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_env(
+    name: str,
+    type: SUPPORTED_ENV_TYPES,
+    default: SUPPORTED_ENV_TYPES = None,
+    required: bool = False,
+) -&gt; SUPPORTED_ENV_TYPES:
+    &#34;&#34;&#34;Try to parse environment variable as given type.
+
+    🚩 Does not load environment variables. Use `python-dotenv` for that.
+
+    type: Output type, will split &#34;a,b,c&#34; into [&#34;a&#34;, &#34;b&#34;, &#34;c&#34;] if type=list.
+    default: Default value if given name does not exist in environ
+    required: Fail if not found in environment? Useful for things like database port :)
+    &#34;&#34;&#34;
+    truthy = (&#34;true&#34;, &#34;1&#34;, &#34;yes&#34;)
+    falsy = (&#34;false&#34;, &#34;0&#34;, &#34;no&#34;)
+    value: Union[None, str] = os.getenv(name, None)
+
+    if value is None or value == &#34;&#34;:
+        if required:
+            raise ValueError(
+                f&#34;Value `{value}` is required but not found in environment!&#34;
+            )
+        return default
+
+    if type == bool:
+        if value.lower() not in truthy + falsy:
+            raise ValueError(
+                f&#34;Invalid value `{value}` for variable `{name}`. Cannot be parsed as bool...&#34;
+            )
+        return value in truthy
+
+    if type == list:
+        return value.split(&#34;,&#34;)
+
+    if type == int:
+        return int(value)
+
+    if type == float:
+        return float(value)
+
+    if type == dict:
+        try:
+            return json.loads(value)
+        except json.JSONDecodeError:
+            raise ValueError(
+                f&#34;Invalid value `{value}` for variable `{name}`. Cannot be parsed as dict...&#34;
+            )
+
+    return str(value)</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.get_hashed_salted_password"><code class="name flex">
+<span>def <span class="ident">get_hashed_salted_password</span></span>(<span>password: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Return hashed password using <code>bcrypt</code>.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_hashed_salted_password(password: str) -&gt; str:
+    &#34;&#34;&#34;Return hashed password using `bcrypt`.&#34;&#34;&#34;
+    hashed_password = bcrypt.hashpw(password=password.encode(&#39;utf-8&#39;), salt=bcrypt.gensalt())
+    r = hashed_password.decode(&#39;utf-8&#39;)
+    return r</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.get_ip_country"><code class="name flex">
+<span>def <span class="ident">get_ip_country</span></span>(<span>ip: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get country for given ip address or "Unknown" if not found.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_ip_country(ip: str) -&gt; str:
+    &#34;&#34;&#34;Get country for given ip address or &#34;Unknown&#34; if not found.&#34;&#34;&#34;
+    data = get_ipv4_meta(ip)
+    if data is None:
+        return &#34;Unknown&#34;
+    return data.get(&#34;country&#34;, &#34;Unknown&#34;)</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.get_ipv4_meta"><code class="name flex">
+<span>def <span class="ident">get_ipv4_meta</span></span>(<span>ip: str) ‑> dict | None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Lookup ipv4 information. Uses <a href="https://wasab.is.">https://wasab.is.</a></p>
+<p>🚨 Performs external request.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_ipv4_meta(ip: str) -&gt; dict | None:
+    &#34;&#34;&#34;Lookup ipv4 information. Uses https://wasab.is.
+
+    🚨 Performs external request.
+    &#34;&#34;&#34;
+    _logger.debug(&#34;performing ipv4 meta lookup for ip `%s`.&#34;, ip)
+    url = f&#34;https://wasab.is/json?ip={ip}&#34;
+
+    result = requests.get(url=url, timeout=5)
+
+    if result.status_code == 200:
+        result = result.json()
+    else:
+        result = None
+
+    _logger.debug(&#34;got ipv4 `%s` meta lookup json result `%s`.&#34;, ip, result)
+
+    return result</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.get_my_ipv4"><code class="name flex">
+<span>def <span class="ident">get_my_ipv4</span></span>(<span>with_meta: bool = False) ‑> dict | str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Lookup external ipv4 address. Uses <a href="https://ifconfig.me">https://ifconfig.me</a> or <a href="https://wasab.is.">https://wasab.is.</a></p>
+<p>🚨 Performs external request.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_my_ipv4(with_meta: bool = False) -&gt; dict | str:
+    &#34;&#34;&#34;Lookup external ipv4 address. Uses https://ifconfig.me or https://wasab.is.
+
+    🚨 Performs external request.
+    &#34;&#34;&#34;
+    _logger.debug(&#34;performing ipv4 lookup.&#34;)
+    url = &#34;https://ifconfig.me&#34; if with_meta else &#34;https://wasab.is/json&#34;
+
+    result = requests.get(url=url, timeout=5)
+
+    if with_meta:
+        result = result.json()
+    else:
+        result = result.text
+
+    _logger.debug(&#34;got ipv4 lookup json result `%s`.&#34;, result)
+
+    return result</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.get_pretty_json"><code class="name flex">
+<span>def <span class="ident">get_pretty_json</span></span>(<span>data: dict | list) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Return pretty json string.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_pretty_json(data: dict | list) -&gt; str:
+    &#34;&#34;&#34;Return pretty json string.&#34;&#34;&#34;
+    result = json.dumps(data, indent=4, default=str, ensure_ascii=False)
+    return result</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.get_random_secure_string"><code class="name flex">
+<span>def <span class="ident">get_random_secure_string</span></span>(<span>length: int) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get random secure string generated by <code>secrets</code> module.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_random_secure_string(length: int) -&gt; str:
+    &#34;&#34;&#34;Get random secure string generated by `secrets` module.&#34;&#34;&#34;
+    return secrets.token_urlsafe(length)</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.is_email_valid"><code class="name flex">
+<span>def <span class="ident">is_email_valid</span></span>(<span>email: str, perform_dns_check: bool = False) ‑> tuple[bool, str]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Check if email is valid. If check_deliverability is True, will also check if email is deliverable.
+If email is valid, returns normalized email, otherwise returns the original email.</p>
+<p>🚨 check_deliverability performs external request!</p>
+<p>Uses <a href="https://github.com/JoshData/python-email-validator">https://github.com/JoshData/python-email-validator</a> lib.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_email_valid(email: str, perform_dns_check: bool = False) -&gt; tuple[bool, str]:
+    &#34;&#34;&#34;Check if email is valid. If check_deliverability is True, will also check if email is deliverable.
+    If email is valid, returns normalized email, otherwise returns the original email.
+
+    🚨 check_deliverability performs external request!
+
+    Uses https://github.com/JoshData/python-email-validator lib.
+    &#34;&#34;&#34;
+    _logger.debug(&#34;validating email `%s&#34;, email)
+    try:
+        validation_result = validate_email(
+            email, check_deliverability=perform_dns_check,
+        )
+    except EmailNotValidError:
+        _logger.exception(f&#34;email `{email}` validation failed!&#34;)
+        return False, email
+
+    return True, validation_result.normalized</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.is_psw_correct"><code class="name flex">
+<span>def <span class="ident">is_psw_correct</span></span>(<span>password: str, hashed_password: str) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Verify password against hashed password using <code>bcrypt</code>.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_psw_correct(password: str, hashed_password: str) -&gt; bool:
+    &#34;&#34;&#34;Verify password against hashed password using `bcrypt`.&#34;&#34;&#34;
+    r = bcrypt.checkpw(password=password.encode(&#39;utf-8&#39;), hashed_password=hashed_password.encode(&#39;utf-8&#39;))
+    return r</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.is_true"><code class="name flex">
+<span>def <span class="ident">is_true</span></span>(<span>value: str) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_true(value: str) -&gt; bool:
+    return value.lower() in TRUE_VALUES</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.load_json"><code class="name flex">
+<span>def <span class="ident">load_json</span></span>(<span>data: str) ‑> dict | list | None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Load json from string. Return dict if valid, None if not.</p>
+<p>🚨 Tries to fix invalid json using <a href="https://github.com/mangiucugna/json_repair">https://github.com/mangiucugna/json_repair</a> lib.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def load_json(data: str) -&gt; dict | list | None:
+    &#34;&#34;&#34;Load json from string. Return dict if valid, None if not.
+
+    🚨 Tries to fix invalid json using https://github.com/mangiucugna/json_repair lib.
+    &#34;&#34;&#34;
+    result = None
+    try:
+        result = json_repair.loads(data)
+    except Exception:  # noqa: Expected from json_repair lib.
+        _logger.warning(&#34;failed to load json from string!&#34;)
+
+        # Try to fix case when keys and values are single quoted.
+        # TODO: Naive approach also replaces value/key content if it contains single quotes!
+        data = data.replace(&#34;&#39;&#34;, &#39;&#34;&#39;)
+        try:
+            result = json_repair.loads(data)
+        except Exception:
+            _logger.warning(&#34;failed to load json from string even after replacing &#39; with \&#34;!&#34;)
+            pass
+    finally:
+        return result</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.path_extension"><code class="name flex">
+<span>def <span class="ident">path_extension</span></span>(<span>path: pathlib.Path) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Return file extension from path.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def path_extension(path: pathlib.Path) -&gt; str:
+    &#34;&#34;&#34;Return file extension from path.&#34;&#34;&#34;
+    return path.suffix</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.path_filename"><code class="name flex">
+<span>def <span class="ident">path_filename</span></span>(<span>path: pathlib.Path) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Return filename from path.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def path_filename(path: pathlib.Path) -&gt; str:
+    &#34;&#34;&#34;Return filename from path.&#34;&#34;&#34;
+    return path.name</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.path_without_filename"><code class="name flex">
+<span>def <span class="ident">path_without_filename</span></span>(<span>path: pathlib.Path) ‑> pathlib.Path</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Return path without filename.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def path_without_filename(path: pathlib.Path) -&gt; pathlib.Path:
+    &#34;&#34;&#34;Return path without filename.&#34;&#34;&#34;
+    return path.parent</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.read_file"><code class="name flex">
+<span>def <span class="ident">read_file</span></span>(<span>path: pathlib.Path, read_bytes: bool = False) ‑> str | None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Read file contents. Return None if file does not exist or content is empty.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def read_file(path: pathlib.Path, read_bytes: bool = False) -&gt; str | None:
+    &#34;&#34;&#34;Read file contents. Return None if file does not exist or content is empty.&#34;&#34;&#34;
+    if file_exists(path):
+        content = path.read_bytes() if read_bytes else path.read_text()
+        return content
+
+    return None</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.read_json"><code class="name flex">
+<span>def <span class="ident">read_json</span></span>(<span>path: pathlib.Path, default: Any = None) ‑> dict | list</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Read json from file. Return empty dict if not found or invalid json.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def read_json(path: pathlib.Path, default: Any = None) -&gt; dict | list:
+    &#34;&#34;&#34;Read json from file. Return empty dict if not found or invalid json.&#34;&#34;&#34;
+    data = read_file(path=path)
+    if data:
+        try:
+            return json.loads(data)
+        except json.JSONDecodeError:
+            pass
+    if default is not None:
+        return default
+    return {}</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.validate_email"><code class="name flex">
+<span>def <span class="ident">validate_email</span></span>(<span>email: Union[str, bytes], /, *, allow_smtputf8: Optional[bool] = None, allow_empty_local: bool = False, allow_quoted_local: Optional[bool] = None, allow_domain_literal: Optional[bool] = None, check_deliverability: Optional[bool] = None, test_environment: Optional[bool] = None, globally_deliverable: Optional[bool] = None, timeout: Optional[int] = None, dns_resolver: Optional[object] = None) ‑> email_validator.exceptions_types.ValidatedEmail</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Given an email address, and some options, returns a ValidatedEmail instance
+with information about the address if it is valid or, if the address is not
+valid, raises an EmailNotValidError. This is the main function of the module.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def validate_email(
+    email: Union[str, bytes],
+    /,  # prior arguments are positional-only
+    *,  # subsequent arguments are keyword-only
+    allow_smtputf8: Optional[bool] = None,
+    allow_empty_local: bool = False,
+    allow_quoted_local: Optional[bool] = None,
+    allow_domain_literal: Optional[bool] = None,
+    check_deliverability: Optional[bool] = None,
+    test_environment: Optional[bool] = None,
+    globally_deliverable: Optional[bool] = None,
+    timeout: Optional[int] = None,
+    dns_resolver: Optional[object] = None
+) -&gt; ValidatedEmail:
+    &#34;&#34;&#34;
+    Given an email address, and some options, returns a ValidatedEmail instance
+    with information about the address if it is valid or, if the address is not
+    valid, raises an EmailNotValidError. This is the main function of the module.
+    &#34;&#34;&#34;
+
+    # Fill in default values of arguments.
+    from . import ALLOW_SMTPUTF8, ALLOW_QUOTED_LOCAL, ALLOW_DOMAIN_LITERAL, \
+        GLOBALLY_DELIVERABLE, CHECK_DELIVERABILITY, TEST_ENVIRONMENT, DEFAULT_TIMEOUT
+    if allow_smtputf8 is None:
+        allow_smtputf8 = ALLOW_SMTPUTF8
+    if allow_quoted_local is None:
+        allow_quoted_local = ALLOW_QUOTED_LOCAL
+    if allow_domain_literal is None:
+        allow_domain_literal = ALLOW_DOMAIN_LITERAL
+    if check_deliverability is None:
+        check_deliverability = CHECK_DELIVERABILITY
+    if test_environment is None:
+        test_environment = TEST_ENVIRONMENT
+    if globally_deliverable is None:
+        globally_deliverable = GLOBALLY_DELIVERABLE
+    if timeout is None and dns_resolver is None:
+        timeout = DEFAULT_TIMEOUT
+
+    # Allow email to be a str or bytes instance. If bytes,
+    # it must be ASCII because that&#39;s how the bytes work
+    # on the wire with SMTP.
+    if not isinstance(email, str):
+        try:
+            email = email.decode(&#34;ascii&#34;)
+        except ValueError:
+            raise EmailSyntaxError(&#34;The email address is not valid ASCII.&#34;)
+
+    # Split the address into the local part (before the @-sign)
+    # and the domain part (after the @-sign). Normally, there
+    # is only one @-sign. But the awkward &#34;quoted string&#34; local
+    # part form (RFC 5321 4.1.2) allows @-signs in the local
+    # part if the local part is quoted.
+    local_part, domain_part, is_quoted_local_part \
+        = split_email(email)
+
+    # Collect return values in this instance.
+    ret = ValidatedEmail()
+    ret.original = email
+
+    # Validate the email address&#39;s local part syntax and get a normalized form.
+    # If the original address was quoted and the decoded local part is a valid
+    # unquoted local part, then we&#39;ll get back a normalized (unescaped) local
+    # part.
+    local_part_info = validate_email_local_part(local_part,
+                                                allow_smtputf8=allow_smtputf8,
+                                                allow_empty_local=allow_empty_local,
+                                                quoted_local_part=is_quoted_local_part)
+    ret.local_part = local_part_info[&#34;local_part&#34;]
+    ret.ascii_local_part = local_part_info[&#34;ascii_local_part&#34;]
+    ret.smtputf8 = local_part_info[&#34;smtputf8&#34;]
+
+    # If a quoted local part isn&#39;t allowed but is present, now raise an exception.
+    # This is done after any exceptions raised by validate_email_local_part so
+    # that mandatory checks have highest precedence.
+    if is_quoted_local_part and not allow_quoted_local:
+        raise EmailSyntaxError(&#34;Quoting the part before the @-sign is not allowed here.&#34;)
+
+    # Some local parts are required to be case-insensitive, so we should normalize
+    # to lowercase.
+    # RFC 2142
+    if ret.ascii_local_part is not None \
+       and ret.ascii_local_part.lower() in CASE_INSENSITIVE_MAILBOX_NAMES \
+       and ret.local_part is not None:
+        ret.ascii_local_part = ret.ascii_local_part.lower()
+        ret.local_part = ret.local_part.lower()
+
+    # Validate the email address&#39;s domain part syntax and get a normalized form.
+    is_domain_literal = False
+    if len(domain_part) == 0:
+        raise EmailSyntaxError(&#34;There must be something after the @-sign.&#34;)
+
+    elif domain_part.startswith(&#34;[&#34;) and domain_part.endswith(&#34;]&#34;):
+        # Parse the address in the domain literal and get back a normalized domain.
+        domain_part_info = validate_email_domain_literal(domain_part[1:-1])
+        if not allow_domain_literal:
+            raise EmailSyntaxError(&#34;A bracketed IP address after the @-sign is not allowed here.&#34;)
+        ret.domain = domain_part_info[&#34;domain&#34;]
+        ret.ascii_domain = domain_part_info[&#34;domain&#34;]  # Domain literals are always ASCII.
+        ret.domain_address = domain_part_info[&#34;domain_address&#34;]
+        is_domain_literal = True  # Prevent deliverability checks.
+
+    else:
+        # Check the syntax of the domain and get back a normalized
+        # internationalized and ASCII form.
+        domain_part_info = validate_email_domain_name(domain_part, test_environment=test_environment, globally_deliverable=globally_deliverable)
+        ret.domain = domain_part_info[&#34;domain&#34;]
+        ret.ascii_domain = domain_part_info[&#34;ascii_domain&#34;]
+
+    # Construct the complete normalized form.
+    ret.normalized = ret.local_part + &#34;@&#34; + ret.domain
+
+    # If the email address has an ASCII form, add it.
+    if not ret.smtputf8:
+        if not ret.ascii_domain:
+            raise Exception(&#34;Missing ASCII domain.&#34;)
+        ret.ascii_email = (ret.ascii_local_part or &#34;&#34;) + &#34;@&#34; + ret.ascii_domain
+    else:
+        ret.ascii_email = None
+
+    # Check the length of the address.
+    validate_email_length(ret)
+
+    if check_deliverability and not test_environment:
+        # Validate the email address&#39;s deliverability using DNS
+        # and update the returned ValidatedEmail object with metadata.
+
+        if is_domain_literal:
+            # There is nothing to check --- skip deliverability checks.
+            return ret
+
+        # Lazy load `deliverability` as it is slow to import (due to dns.resolver)
+        from .deliverability import validate_email_deliverability
+        deliverability_info = validate_email_deliverability(
+            ret.ascii_domain, ret.domain, timeout, dns_resolver
+        )
+        for key, value in deliverability_info.items():
+            setattr(ret, key, value)
+
+    return ret</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.validate_lt_id"><code class="name flex">
+<span>def <span class="ident">validate_lt_id</span></span>(<span>pid: str) ‑> <a title="gyvatukas.utils.lithuania.LithuanianPersonalCodeSchema" href="utils/lithuania.html#gyvatukas.utils.lithuania.LithuanianPersonalCodeSchema">LithuanianPersonalCodeSchema</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Validate Lithuanian personal identification code "asmens kodas".
+See: <a href="https://lt.wikipedia.org/wiki/Asmens_kodas">https://lt.wikipedia.org/wiki/Asmens_kodas</a></p>
+<p>🚨 Does not check if it makes sense, e.g. birthdate is in the future or identifier number is valid.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def validate_lt_id(pid: str) -&gt; LithuanianPersonalCodeSchema:
+    &#34;&#34;&#34;Validate Lithuanian personal identification code &#34;asmens kodas&#34;.
+    See: https://lt.wikipedia.org/wiki/Asmens_kodas
+
+    🚨 Does not check if it makes sense, e.g. birthdate is in the future or identifier number is valid.
+    &#34;&#34;&#34;
+    is_edge_case = False
+
+    if len(pid) != 11:
+        raise Exception(&#34;PID should be 11 characters long!&#34;)
+
+    gender_number = int(pid[0])
+    birth_year = int(pid[1:3])
+    birth_month = int(pid[3:5])
+    birth_day = int(pid[5:7])
+
+    # Wikipedia:
+    # Asmens kodai, suteikiami vyresnio amžiaus žmonėms neprisimenantiems savo gimimo mėnesio ar dienos.
+    # Tokiuose koduose vietoje mėnesio ar dienos skaitmenų įrašomi 0. Tai labai reta išimtis.
+    if birth_month == 0:
+        is_edge_case = True
+        birth_month = None
+
+    if birth_day == 0:
+        is_edge_case = True
+        birth_day = None
+
+    identifier_number = pid[7:]
+
+    # Validate first digit aka sex.
+    if gender_number in [1, 3, 5]:
+        gender = &#34;male&#34;
+    elif gender_number in [2, 4, 6]:
+        gender = &#34;female&#34;
+    elif gender_number == 9:
+        gender = None
+        is_edge_case = True
+    else:
+        raise Exception(
+            f&#34;Invalid first number of PID `{gender_number}`, must be one of `1,2,3,4,5,6,9`!&#34;
+        )
+
+    # Set base birth year.
+    birth_base = 0
+    if gender_number in [1, 2]:
+        birth_base = 1800
+    elif gender_number in [3, 4]:
+        birth_base = 1900
+    elif gender_number in [5, 6]:
+        birth_base = 2000
+
+    birth_year = birth_base + birth_year
+
+    checksum = None
+    if not is_edge_case:
+        checksum = _calculate_lt_id_checksum(pid=pid)
+
+    return LithuanianPersonalCodeSchema(
+        gender=gender,
+        birth_year=birth_year,
+        birth_month=birth_month,
+        birth_day=birth_day,
+        identifier_number=identifier_number,
+        is_edge_case=is_edge_case,
+        checksum=checksum,
+    )</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.value_to_bool"><code class="name flex">
+<span>def <span class="ident">value_to_bool</span></span>(<span>value: str) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def value_to_bool(value: str) -&gt; bool:
+    return is_true(value)</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.write_file"><code class="name flex">
+<span>def <span class="ident">write_file</span></span>(<span>path: pathlib.Path, content: Union[str, bytes], override: bool = False) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Write content to file. Return True if file was written, False otherwise.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def write_file(
+    path: pathlib.Path, content: str | bytes, override: bool = False
+) -&gt; bool:
+    &#34;&#34;&#34;Write content to file. Return True if file was written, False otherwise.&#34;&#34;&#34;
+    if not override and file_exists(path):
+        return False
+
+    path.write_text(content) if isinstance(content, str) else path.write_bytes(content)
+
+    return True</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.write_json"><code class="name flex">
+<span>def <span class="ident">write_json</span></span>(<span>path: pathlib.Path, data: dict | list, pretty: bool = True, override: bool = False) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Write json to file. Return true if written, false if not.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def write_json(
+    path: pathlib.Path, data: dict | list, pretty: bool = True, override: bool = False
+) -&gt; bool:
+    &#34;&#34;&#34;Write json to file. Return true if written, false if not.&#34;&#34;&#34;
+    if pretty:
+        content = get_pretty_json(data)
+    else:
+        content = json.dumps(data, default=str, ensure_ascii=False)
+
+    result = write_file(path=path, content=content, override=override)
+    return result</code></pre>
+</details>
+</dd>
+</dl>
 </section>
 <section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="gyvatukas.LithuanianPersonalCodeSchema"><code class="flex name class">
+<span>class <span class="ident">LithuanianPersonalCodeSchema</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Lithuanian personal identification code "asmens kodas" schema.</p>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>__init__</code> uses <code>__pydantic_self__</code> instead of the more common <code>self</code> for the first arg to
+allow <code>self</code> as a field name.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class LithuanianPersonalCodeSchema(pydantic.BaseModel):
+    &#34;&#34;&#34;Lithuanian personal identification code &#34;asmens kodas&#34; schema.&#34;&#34;&#34;
+
+    gender: Literal[&#34;male&#34;, &#34;female&#34;] | None
+    birth_year: int
+    birth_month: int | None
+    birth_day: int | None
+    identifier_number: str
+    is_edge_case: bool
+    checksum: int | None = None
+
+    @property
+    def birth_date(self) -&gt; datetime.date | None:
+        &#34;&#34;&#34;Return birthdate as dt object if is not an edge case (has no 0 in month/day).&#34;&#34;&#34;
+        if not self.is_edge_case:
+            return datetime.date(self.birth_year, self.birth_month, self.birth_day)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="gyvatukas.LithuanianPersonalCodeSchema.birth_day"><code class="name">var <span class="ident">birth_day</span> : Optional[int]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="gyvatukas.LithuanianPersonalCodeSchema.birth_month"><code class="name">var <span class="ident">birth_month</span> : Optional[int]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="gyvatukas.LithuanianPersonalCodeSchema.birth_year"><code class="name">var <span class="ident">birth_year</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="gyvatukas.LithuanianPersonalCodeSchema.checksum"><code class="name">var <span class="ident">checksum</span> : Optional[int]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="gyvatukas.LithuanianPersonalCodeSchema.gender"><code class="name">var <span class="ident">gender</span> : Optional[Literal['male', 'female']]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="gyvatukas.LithuanianPersonalCodeSchema.identifier_number"><code class="name">var <span class="ident">identifier_number</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="gyvatukas.LithuanianPersonalCodeSchema.is_edge_case"><code class="name">var <span class="ident">is_edge_case</span> : bool</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="gyvatukas.LithuanianPersonalCodeSchema.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="gyvatukas.LithuanianPersonalCodeSchema.model_fields"><code class="name">var <span class="ident">model_fields</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="gyvatukas.LithuanianPersonalCodeSchema.birth_date"><code class="name">var <span class="ident">birth_date</span> : datetime.date | None</code></dt>
+<dd>
+<div class="desc"><p>Return birthdate as dt object if is not an edge case (has no 0 in month/day).</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def birth_date(self) -&gt; datetime.date | None:
+    &#34;&#34;&#34;Return birthdate as dt object if is not an edge case (has no 0 in month/day).&#34;&#34;&#34;
+    if not self.is_edge_case:
+        return datetime.date(self.birth_year, self.birth_month, self.birth_day)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="gyvatukas.ScanResultSchema"><code class="flex name class">
+<span>class <span class="ident">ScanResultSchema</span></span>
+<span>(</span><span>**data: Any)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Scan result schema.</p>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<code>ValidationError</code>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><code>__init__</code> uses <code>__pydantic_self__</code> instead of the more common <code>self</code> for the first arg to
+allow <code>self</code> as a field name.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ScanResultSchema(pydantic.BaseModel):
+    &#34;&#34;&#34;Scan result schema.&#34;&#34;&#34;
+
+    path: pathlib.Path
+    name: str
+    ext: str
+    parent: pathlib.Path
+    size: int
+    is_dir: bool
+    is_file: bool
+    is_symlink: bool</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="gyvatukas.ScanResultSchema.ext"><code class="name">var <span class="ident">ext</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="gyvatukas.ScanResultSchema.is_dir"><code class="name">var <span class="ident">is_dir</span> : bool</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="gyvatukas.ScanResultSchema.is_file"><code class="name">var <span class="ident">is_file</span> : bool</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="gyvatukas.ScanResultSchema.is_symlink"><code class="name">var <span class="ident">is_symlink</span> : bool</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="gyvatukas.ScanResultSchema.model_config"><code class="name">var <span class="ident">model_config</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="gyvatukas.ScanResultSchema.model_fields"><code class="name">var <span class="ident">model_fields</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="gyvatukas.ScanResultSchema.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="gyvatukas.ScanResultSchema.parent"><code class="name">var <span class="ident">parent</span> : pathlib.Path</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="gyvatukas.ScanResultSchema.path"><code class="name">var <span class="ident">path</span> : pathlib.Path</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="gyvatukas.ScanResultSchema.size"><code class="name">var <span class="ident">size</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
 <h1>Index</h1>
 <div class="toc">
 <ul>
-<li><a href="#gyvatukas">gyvatukas</a><ul>
-<li><a href="#changelog">changelog</a></li>
-<li><a href="#publishing-a-package-to-pypi-w-poetry">publishing a package to pypi w. poetry</a></li>
-</ul>
-</li>
+<li><a href="#gyvatukas">gyvatukas</a></li>
 </ul>
 </div>
 <ul id="index">
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
+<li><code><a title="gyvatukas.exceptions" href="exceptions.html">gyvatukas.exceptions</a></code></li>
+<li><code><a title="gyvatukas.internal" href="internal.html">gyvatukas.internal</a></code></li>
 <li><code><a title="gyvatukas.utils" href="utils/index.html">gyvatukas.utils</a></code></li>
+<li><code><a title="gyvatukas.www" href="www/index.html">gyvatukas.www</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="gyvatukas.dict_remove_matching_values" href="#gyvatukas.dict_remove_matching_values">dict_remove_matching_values</a></code></li>
+<li><code><a title="gyvatukas.dir_exists" href="#gyvatukas.dir_exists">dir_exists</a></code></li>
+<li><code><a title="gyvatukas.file_exists" href="#gyvatukas.file_exists">file_exists</a></code></li>
+<li><code><a title="gyvatukas.get_dt_utc_now" href="#gyvatukas.get_dt_utc_now">get_dt_utc_now</a></code></li>
+<li><code><a title="gyvatukas.get_env" href="#gyvatukas.get_env">get_env</a></code></li>
+<li><code><a title="gyvatukas.get_hashed_salted_password" href="#gyvatukas.get_hashed_salted_password">get_hashed_salted_password</a></code></li>
+<li><code><a title="gyvatukas.get_ip_country" href="#gyvatukas.get_ip_country">get_ip_country</a></code></li>
+<li><code><a title="gyvatukas.get_ipv4_meta" href="#gyvatukas.get_ipv4_meta">get_ipv4_meta</a></code></li>
+<li><code><a title="gyvatukas.get_my_ipv4" href="#gyvatukas.get_my_ipv4">get_my_ipv4</a></code></li>
+<li><code><a title="gyvatukas.get_pretty_json" href="#gyvatukas.get_pretty_json">get_pretty_json</a></code></li>
+<li><code><a title="gyvatukas.get_random_secure_string" href="#gyvatukas.get_random_secure_string">get_random_secure_string</a></code></li>
+<li><code><a title="gyvatukas.is_email_valid" href="#gyvatukas.is_email_valid">is_email_valid</a></code></li>
+<li><code><a title="gyvatukas.is_psw_correct" href="#gyvatukas.is_psw_correct">is_psw_correct</a></code></li>
+<li><code><a title="gyvatukas.is_true" href="#gyvatukas.is_true">is_true</a></code></li>
+<li><code><a title="gyvatukas.load_json" href="#gyvatukas.load_json">load_json</a></code></li>
+<li><code><a title="gyvatukas.path_extension" href="#gyvatukas.path_extension">path_extension</a></code></li>
+<li><code><a title="gyvatukas.path_filename" href="#gyvatukas.path_filename">path_filename</a></code></li>
+<li><code><a title="gyvatukas.path_without_filename" href="#gyvatukas.path_without_filename">path_without_filename</a></code></li>
+<li><code><a title="gyvatukas.read_file" href="#gyvatukas.read_file">read_file</a></code></li>
+<li><code><a title="gyvatukas.read_json" href="#gyvatukas.read_json">read_json</a></code></li>
+<li><code><a title="gyvatukas.validate_email" href="#gyvatukas.validate_email">validate_email</a></code></li>
+<li><code><a title="gyvatukas.validate_lt_id" href="#gyvatukas.validate_lt_id">validate_lt_id</a></code></li>
+<li><code><a title="gyvatukas.value_to_bool" href="#gyvatukas.value_to_bool">value_to_bool</a></code></li>
+<li><code><a title="gyvatukas.write_file" href="#gyvatukas.write_file">write_file</a></code></li>
+<li><code><a title="gyvatukas.write_json" href="#gyvatukas.write_json">write_json</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="gyvatukas.LithuanianPersonalCodeSchema" href="#gyvatukas.LithuanianPersonalCodeSchema">LithuanianPersonalCodeSchema</a></code></h4>
+<ul class="two-column">
+<li><code><a title="gyvatukas.LithuanianPersonalCodeSchema.birth_date" href="#gyvatukas.LithuanianPersonalCodeSchema.birth_date">birth_date</a></code></li>
+<li><code><a title="gyvatukas.LithuanianPersonalCodeSchema.birth_day" href="#gyvatukas.LithuanianPersonalCodeSchema.birth_day">birth_day</a></code></li>
+<li><code><a title="gyvatukas.LithuanianPersonalCodeSchema.birth_month" href="#gyvatukas.LithuanianPersonalCodeSchema.birth_month">birth_month</a></code></li>
+<li><code><a title="gyvatukas.LithuanianPersonalCodeSchema.birth_year" href="#gyvatukas.LithuanianPersonalCodeSchema.birth_year">birth_year</a></code></li>
+<li><code><a title="gyvatukas.LithuanianPersonalCodeSchema.checksum" href="#gyvatukas.LithuanianPersonalCodeSchema.checksum">checksum</a></code></li>
+<li><code><a title="gyvatukas.LithuanianPersonalCodeSchema.gender" href="#gyvatukas.LithuanianPersonalCodeSchema.gender">gender</a></code></li>
+<li><code><a title="gyvatukas.LithuanianPersonalCodeSchema.identifier_number" href="#gyvatukas.LithuanianPersonalCodeSchema.identifier_number">identifier_number</a></code></li>
+<li><code><a title="gyvatukas.LithuanianPersonalCodeSchema.is_edge_case" href="#gyvatukas.LithuanianPersonalCodeSchema.is_edge_case">is_edge_case</a></code></li>
+<li><code><a title="gyvatukas.LithuanianPersonalCodeSchema.model_config" href="#gyvatukas.LithuanianPersonalCodeSchema.model_config">model_config</a></code></li>
+<li><code><a title="gyvatukas.LithuanianPersonalCodeSchema.model_fields" href="#gyvatukas.LithuanianPersonalCodeSchema.model_fields">model_fields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="gyvatukas.ScanResultSchema" href="#gyvatukas.ScanResultSchema">ScanResultSchema</a></code></h4>
+<ul class="two-column">
+<li><code><a title="gyvatukas.ScanResultSchema.ext" href="#gyvatukas.ScanResultSchema.ext">ext</a></code></li>
+<li><code><a title="gyvatukas.ScanResultSchema.is_dir" href="#gyvatukas.ScanResultSchema.is_dir">is_dir</a></code></li>
+<li><code><a title="gyvatukas.ScanResultSchema.is_file" href="#gyvatukas.ScanResultSchema.is_file">is_file</a></code></li>
+<li><code><a title="gyvatukas.ScanResultSchema.is_symlink" href="#gyvatukas.ScanResultSchema.is_symlink">is_symlink</a></code></li>
+<li><code><a title="gyvatukas.ScanResultSchema.model_config" href="#gyvatukas.ScanResultSchema.model_config">model_config</a></code></li>
+<li><code><a title="gyvatukas.ScanResultSchema.model_fields" href="#gyvatukas.ScanResultSchema.model_fields">model_fields</a></code></li>
+<li><code><a title="gyvatukas.ScanResultSchema.name" href="#gyvatukas.ScanResultSchema.name">name</a></code></li>
+<li><code><a title="gyvatukas.ScanResultSchema.parent" href="#gyvatukas.ScanResultSchema.parent">parent</a></code></li>
+<li><code><a title="gyvatukas.ScanResultSchema.path" href="#gyvatukas.ScanResultSchema.path">path</a></code></li>
+<li><code><a title="gyvatukas.ScanResultSchema.size" href="#gyvatukas.ScanResultSchema.size">size</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

@@ -1,5 +1,5 @@
 import pytest
-from gyvatukas.utils.validators import validate_lt_id, LithuanianPersonalCodeSchema
+from gyvatukas.utils.lithuania import validate_lt_id, LithuanianPersonalCodeSchema
 
 
 @pytest.mark.parametrize(
