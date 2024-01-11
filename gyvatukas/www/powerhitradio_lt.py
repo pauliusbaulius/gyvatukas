@@ -2,6 +2,8 @@ import requests
 
 from gyvatukas.utils.dt import get_dt_utc_now
 
+# TODO: Rate limit 1 req/s.
+
 
 class PowerHitRadioLt:
     URL_CURRENTLY_PLAYING = "https://powerhitradio.tv3.lt/stream/player4/getsong"

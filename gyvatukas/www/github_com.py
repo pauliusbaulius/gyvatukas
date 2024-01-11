@@ -1,13 +1,16 @@
 import logging
+import time
+from threading import Lock
 
 import requests
 
 from gyvatukas.exceptions import GyvatukasException
+from gyvatukas.www.base import BaseClient
 
 _logger = logging.getLogger("gyvatukas")
 
 
-class GithubCom:
+class GithubCom(BaseClient):
     """Some wrappers for utils made available by the very generous M$ GitHub ladies and gentlemen.
 
     🚨 Consider passing your api token, otherwise you will be rate limited to 60 requests per hour.
@@ -15,12 +18,27 @@ class GithubCom:
 
     See: https://docs.github.com/en/rest?apiVersion=2022-11-28
     """
+    _LAST_CALL_TIME = 0
+    _LOCK = Lock()
+    RATE_LIMIT_PER_SECOND_UNAUTHENTICATED = 60 / 3600  # 60 requests per hour.
+    RATE_LIMIT_PER_SECOND_AUTH = 5000 / 3600  # 5000 requests per hour.
 
     GITHUB_API_VERSION = "2022-11-28"  # Latest as of 2024-01.
     URL_API_MARKDOWN_CONVERT = "https://api.github.com/markdown"
 
     def __init__(self, api_token: str = None):
         self.api_token = api_token
+        if not api_token:
+            super().__init__(rate_limit_per_second=self.RATE_LIMIT_PER_SECOND_UNAUTHENTICATED)
+        else:
+            super().__init__(rate_limit_per_second=self.RATE_LIMIT_PER_SECOND_AUTH)
+
+    def rate_limit(self) -> None:
+        with GithubCom._LOCK:
+            time_elapsed = time.time() - GithubCom._LAST_CALL_TIME
+            if time_elapsed < 1 / self.rate_limit_per_second:
+                time.sleep((1 / self.rate_limit_per_second) - time_elapsed)
+            GithubCom._LAST_CALL_TIME = time.time()
 
     @staticmethod
     def _get_api_version_header() -> dict:
@@ -47,6 +65,7 @@ class GithubCom:
 
         See: https://docs.github.com/en/rest/reference/markdown
         """
+        self.rate_limit()
 
         with requests.post(
             url=self.URL_API_MARKDOWN_CONVERT,
