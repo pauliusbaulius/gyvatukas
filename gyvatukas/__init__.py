@@ -21,7 +21,8 @@ from .utils.generators import get_random_secure_string
 from .utils.ip import get_my_ipv4, get_ipv4_meta, get_ip_country
 from .utils.json_ import get_pretty_json, read_json, write_json, load_json
 from .utils.lithuania import LithuanianPersonalCodeSchema, validate_lt_id
-from .utils.validators import validate_email, is_email_valid
+from .utils.optimization import compress_data, decompress_data
+from .utils.validators import is_email_valid
 
 __all__ = [
     # bool.py
@@ -60,7 +61,9 @@ __all__ = [
     # lithuania.py
     "LithuanianPersonalCodeSchema",
     "validate_lt_id",
+    # optimization.py
+    "compress_data",
+    "decompress_data",
     # validators.py
-    "validate_email",
     "is_email_valid",
 ]
