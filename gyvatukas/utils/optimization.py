@@ -11,7 +11,12 @@ TYPE_COMPRESSIBLE_DATA_TYPES = bytes | str | list | dict
 def _is_zstd_installed() -> bool:
     """Check if zstd is installed."""
     try:
-        subprocess.run(["zstd", "--version"], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        subprocess.run(
+            ["zstd", "--version"],
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
         return True
     except (subprocess.CalledProcessError, FileNotFoundError):
         return False
@@ -27,7 +32,7 @@ def compress_data(data: TYPE_COMPRESSIBLE_DATA_TYPES) -> tuple[bytes, float]:
 
     # Encode the string to bytes
     if isinstance(data, str):
-        data = data.encode('utf-8')
+        data = data.encode("utf-8")
 
     og_size = len(data)
 
@@ -46,7 +51,7 @@ def decompress_data(data: bytes) -> TYPE_COMPRESSIBLE_DATA_TYPES:
     decompressed_data = z.decompress(data)
 
     # Decode bytes to string
-    data = decompressed_data.decode('utf-8')
+    data = decompressed_data.decode("utf-8")
 
     # Try to convert back to list/dict.
     try:

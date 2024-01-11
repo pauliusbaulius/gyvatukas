@@ -18,6 +18,7 @@ class GithubCom(BaseClient):
 
     See: https://docs.github.com/en/rest?apiVersion=2022-11-28
     """
+
     _LAST_CALL_TIME = 0
     _LOCK = Lock()
     RATE_LIMIT_PER_SECOND_UNAUTHENTICATED = 60 / 3600  # 60 requests per hour.
@@ -29,7 +30,9 @@ class GithubCom(BaseClient):
     def __init__(self, api_token: str = None):
         self.api_token = api_token
         if not api_token:
-            super().__init__(rate_limit_per_second=self.RATE_LIMIT_PER_SECOND_UNAUTHENTICATED)
+            super().__init__(
+                rate_limit_per_second=self.RATE_LIMIT_PER_SECOND_UNAUTHENTICATED
+            )
         else:
             super().__init__(rate_limit_per_second=self.RATE_LIMIT_PER_SECOND_AUTH)
 

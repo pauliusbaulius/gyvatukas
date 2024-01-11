@@ -13,6 +13,7 @@ class NominatimOrg(BaseClient):
     🚨 Employs 1 request per second rate limit, as per Nominatim.org policy.
     See: https://operations.osmfoundation.org/policies/nominatim/
     """
+
     _LAST_CALL_TIME = 0
     _LOCK = Lock()
     RATE_LIMIT_PER_SECOND = 0.1

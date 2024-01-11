@@ -6,6 +6,7 @@ class BaseClient(abc.ABC):
 
     We want to be nice to the APIs and websites, so we implement rate limiting.
     """
+
     def __init__(self, rate_limit_per_second):
         self.rate_limit_per_second = rate_limit_per_second
 
