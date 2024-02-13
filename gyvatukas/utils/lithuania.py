@@ -142,7 +142,9 @@ def validate_lt_tel_nr(tel_nr: str, format_370: bool = True) -> tuple[bool, str]
     is_valid = False
 
     # Remove all symbols except + and 0-9.
-    clean_tel_nr = remove_except(tel_nr, ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "+"])
+    clean_tel_nr = remove_except(
+        tel_nr, ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "+"]
+    )
 
     # Check if valid.
     regex = r"^(?:\+370|8|0)\d{8}$"
