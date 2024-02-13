@@ -1,5 +1,5 @@
 import pytest
-from gyvatukas.utils.lithuania import validate_lt_id, LithuanianPersonalCodeSchema
+from gyvatukas.utils.lithuania import validate_lt_id, LithuanianPersonalCodeSchema, validate_lt_tel_nr
 
 
 @pytest.mark.parametrize(
@@ -34,3 +34,20 @@ from gyvatukas.utils.lithuania import validate_lt_id, LithuanianPersonalCodeSche
 def test_validate_lt_id(pid, expected_result) -> None:
     result = validate_lt_id(pid)
     assert result == expected_result
+
+
+@pytest.mark.parametrize(
+    "tel, is_valid, formatted_tel",
+    [
+        ("+37061234567", True, "+37061234567"),
+        ("861234567", True, "+37061234567"),
+        ("061234567", True, "+37061234567"),  # New format from 2025.
+        ("+37061234567aaa", True, "+37061234567"),  # Invalid characters are removed.
+        ("+3.7.0.6.1.2.3.4.5.6.7!!!", True, "+37061234567"),
+        ("cbb", False, "cbb"),  # Returns original string if invalid.
+        ("+370612345678", False, "+370612345678"),
+    ],
+)
+def test_validate_lt_tel_nr(tel, is_valid, formatted_tel) -> None:
+    result = validate_lt_tel_nr(tel)
+    assert result == (is_valid, formatted_tel)

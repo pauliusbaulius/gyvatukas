@@ -1,7 +1,10 @@
+import re
 from typing import Literal
 import datetime
 
 import pydantic
+
+from gyvatukas.utils.string import remove_except
 
 
 class LithuanianPersonalCodeSchema(pydantic.BaseModel):
@@ -126,3 +129,28 @@ def get_lt_nearby_pashtomatas_by_lat_lon(lat: float, lon: float) -> list[str]:
     🚨 Lat/lon should be in Lithuania.
     """
     raise NotImplementedError
+
+
+def validate_lt_tel_nr(tel_nr: str, format_370: bool = True) -> tuple[bool, str]:
+    """Validate Lithuanian phone number. Return if is valid and formatted number.
+
+    Lithuanian number may start with +370, 8 or 0, followed by 8 digits.
+
+    🚨 Does not check if it exists lol.
+    ❗ Does not validate short numbers like 112, 1848, etc.
+    """
+    is_valid = False
+
+    # Remove all symbols except + and 0-9.
+    clean_tel_nr = remove_except(tel_nr, ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "+"])
+
+    # Check if valid.
+    regex = r"^(?:\+370|8|0)\d{8}$"
+    if re.match(regex, clean_tel_nr):
+        is_valid = True
+
+    # If starts with 0 or 8, make it +370.
+    if format_370 and clean_tel_nr.startswith("8") or clean_tel_nr.startswith("0"):
+        clean_tel_nr = f"+370{tel_nr[1:]}"
+
+    return is_valid, clean_tel_nr if is_valid else tel_nr
