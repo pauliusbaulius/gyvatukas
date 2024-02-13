@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
-<title>gyvatukas.utils API documentation</title>
+<title>gyvatukas.utils.string API documentation</title>
 <meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
@@ -19,71 +19,59 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Namespace <code>gyvatukas.utils</code></h1>
+<h1 class="title">Module <code>gyvatukas.utils.string</code></h1>
 </header>
 <section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def remove_except(s: str, allowed: list[str]) -&gt; str:
+    &#34;&#34;&#34;Remove all characters from `s` except those in `allowed`.&#34;&#34;&#34;
+    return &#34;&#34;.join(filter(lambda x: x in allowed, s))
+
+
+def keep_except(s: str, allowed: list[str]) -&gt; str:
+    &#34;&#34;&#34;Keep all characters from `s` except those in `allowed`.&#34;&#34;&#34;
+    return &#34;&#34;.join(filter(lambda x: x not in allowed, s))</code></pre>
+</details>
 </section>
 <section>
-<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt><code class="name"><a title="gyvatukas.utils.bool" href="bool.html">gyvatukas.utils.bool</a></code></dt>
+<dt id="gyvatukas.utils.string.keep_except"><code class="name flex">
+<span>def <span class="ident">keep_except</span></span>(<span>s: str, allowed: list[str]) ‑> str</span>
+</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Keep all characters from <code>s</code> except those in <code>allowed</code>.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def keep_except(s: str, allowed: list[str]) -&gt; str:
+    &#34;&#34;&#34;Keep all characters from `s` except those in `allowed`.&#34;&#34;&#34;
+    return &#34;&#34;.join(filter(lambda x: x not in allowed, s))</code></pre>
+</details>
 </dd>
-<dt><code class="name"><a title="gyvatukas.utils.crypto" href="crypto.html">gyvatukas.utils.crypto</a></code></dt>
+<dt id="gyvatukas.utils.string.remove_except"><code class="name flex">
+<span>def <span class="ident">remove_except</span></span>(<span>s: str, allowed: list[str]) ‑> str</span>
+</code></dt>
 <dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="gyvatukas.utils.dict_" href="dict_.html">gyvatukas.utils.dict_</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="gyvatukas.utils.dt" href="dt.html">gyvatukas.utils.dt</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="gyvatukas.utils.env" href="env.html">gyvatukas.utils.env</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="gyvatukas.utils.fs" href="fs.html">gyvatukas.utils.fs</a></code></dt>
-<dd>
-<div class="desc"><p>Filesystem utilities. Uses <code>pathlib</code> instead of <code>os.path</code>.
-See: <a href="https://docs.python.org/3/library/pathlib.html">https://docs.python.org/3/library/pathlib.html</a></p></div>
-</dd>
-<dt><code class="name"><a title="gyvatukas.utils.generators" href="generators.html">gyvatukas.utils.generators</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="gyvatukas.utils.ip" href="ip.html">gyvatukas.utils.ip</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="gyvatukas.utils.json_" href="json_.html">gyvatukas.utils.json_</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="gyvatukas.utils.lithuania" href="lithuania.html">gyvatukas.utils.lithuania</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="gyvatukas.utils.optimization" href="optimization.html">gyvatukas.utils.optimization</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="gyvatukas.utils.string" href="string.html">gyvatukas.utils.string</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="gyvatukas.utils.validators" href="validators.html">gyvatukas.utils.validators</a></code></dt>
-<dd>
-<div class="desc"></div>
+<div class="desc"><p>Remove all characters from <code>s</code> except those in <code>allowed</code>.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def remove_except(s: str, allowed: list[str]) -&gt; str:
+    &#34;&#34;&#34;Remove all characters from `s` except those in `allowed`.&#34;&#34;&#34;
+    return &#34;&#34;.join(filter(lambda x: x in allowed, s))</code></pre>
+</details>
 </dd>
 </dl>
-</section>
-<section>
-</section>
-<section>
 </section>
 <section>
 </section>
@@ -96,24 +84,13 @@ See: <a href="https://docs.python.org/3/library/pathlib.html">https://docs.pytho
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="gyvatukas" href="../index.html">gyvatukas</a></code></li>
+<li><code><a title="gyvatukas.utils" href="index.html">gyvatukas.utils</a></code></li>
 </ul>
 </li>
-<li><h3><a href="#header-submodules">Sub-modules</a></h3>
-<ul>
-<li><code><a title="gyvatukas.utils.bool" href="bool.html">gyvatukas.utils.bool</a></code></li>
-<li><code><a title="gyvatukas.utils.crypto" href="crypto.html">gyvatukas.utils.crypto</a></code></li>
-<li><code><a title="gyvatukas.utils.dict_" href="dict_.html">gyvatukas.utils.dict_</a></code></li>
-<li><code><a title="gyvatukas.utils.dt" href="dt.html">gyvatukas.utils.dt</a></code></li>
-<li><code><a title="gyvatukas.utils.env" href="env.html">gyvatukas.utils.env</a></code></li>
-<li><code><a title="gyvatukas.utils.fs" href="fs.html">gyvatukas.utils.fs</a></code></li>
-<li><code><a title="gyvatukas.utils.generators" href="generators.html">gyvatukas.utils.generators</a></code></li>
-<li><code><a title="gyvatukas.utils.ip" href="ip.html">gyvatukas.utils.ip</a></code></li>
-<li><code><a title="gyvatukas.utils.json_" href="json_.html">gyvatukas.utils.json_</a></code></li>
-<li><code><a title="gyvatukas.utils.lithuania" href="lithuania.html">gyvatukas.utils.lithuania</a></code></li>
-<li><code><a title="gyvatukas.utils.optimization" href="optimization.html">gyvatukas.utils.optimization</a></code></li>
-<li><code><a title="gyvatukas.utils.string" href="string.html">gyvatukas.utils.string</a></code></li>
-<li><code><a title="gyvatukas.utils.validators" href="validators.html">gyvatukas.utils.validators</a></code></li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="gyvatukas.utils.string.keep_except" href="#gyvatukas.utils.string.keep_except">keep_except</a></code></li>
+<li><code><a title="gyvatukas.utils.string.remove_except" href="#gyvatukas.utils.string.remove_except">remove_except</a></code></li>
 </ul>
 </li>
 </ul>

@@ -26,10 +26,13 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from typing import Literal
+<pre><code class="python">import re
+from typing import Literal
 import datetime
 
 import pydantic
+
+from gyvatukas.utils.string import remove_except
 
 
 class LithuanianPersonalCodeSchema(pydantic.BaseModel):
@@ -153,7 +156,34 @@ def get_lt_nearby_pashtomatas_by_lat_lon(lat: float, lon: float) -&gt; list[str]
 
     🚨 Lat/lon should be in Lithuania.
     &#34;&#34;&#34;
-    raise NotImplementedError</code></pre>
+    raise NotImplementedError
+
+
+def validate_lt_tel_nr(tel_nr: str, format_370: bool = True) -&gt; tuple[bool, str]:
+    &#34;&#34;&#34;Validate Lithuanian phone number. Return if is valid and formatted number.
+
+    Lithuanian number may start with +370, 8 or 0, followed by 8 digits.
+
+    🚨 Does not check if it exists lol.
+    ❗ Does not validate short numbers like 112, 1848, etc.
+    &#34;&#34;&#34;
+    is_valid = False
+
+    # Remove all symbols except + and 0-9.
+    clean_tel_nr = remove_except(
+        tel_nr, [&#34;0&#34;, &#34;1&#34;, &#34;2&#34;, &#34;3&#34;, &#34;4&#34;, &#34;5&#34;, &#34;6&#34;, &#34;7&#34;, &#34;8&#34;, &#34;9&#34;, &#34;+&#34;]
+    )
+
+    # Check if valid.
+    regex = r&#34;^(?:\+370|8|0)\d{8}$&#34;
+    if re.match(regex, clean_tel_nr):
+        is_valid = True
+
+    # If starts with 0 or 8, make it +370.
+    if format_370 and clean_tel_nr.startswith(&#34;8&#34;) or clean_tel_nr.startswith(&#34;0&#34;):
+        clean_tel_nr = f&#34;+370{tel_nr[1:]}&#34;
+
+    return is_valid, clean_tel_nr if is_valid else tel_nr</code></pre>
 </details>
 </section>
 <section>
@@ -278,6 +308,45 @@ See: <a href="https://lt.wikipedia.org/wiki/Asmens_kodas">https://lt.wikipedia.o
     )</code></pre>
 </details>
 </dd>
+<dt id="gyvatukas.utils.lithuania.validate_lt_tel_nr"><code class="name flex">
+<span>def <span class="ident">validate_lt_tel_nr</span></span>(<span>tel_nr: str, format_370: bool = True) ‑> tuple[bool, str]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Validate Lithuanian phone number. Return if is valid and formatted number.</p>
+<p>Lithuanian number may start with +370, 8 or 0, followed by 8 digits.</p>
+<p>🚨 Does not check if it exists lol.
+❗ Does not validate short numbers like 112, 1848, etc.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def validate_lt_tel_nr(tel_nr: str, format_370: bool = True) -&gt; tuple[bool, str]:
+    &#34;&#34;&#34;Validate Lithuanian phone number. Return if is valid and formatted number.
+
+    Lithuanian number may start with +370, 8 or 0, followed by 8 digits.
+
+    🚨 Does not check if it exists lol.
+    ❗ Does not validate short numbers like 112, 1848, etc.
+    &#34;&#34;&#34;
+    is_valid = False
+
+    # Remove all symbols except + and 0-9.
+    clean_tel_nr = remove_except(
+        tel_nr, [&#34;0&#34;, &#34;1&#34;, &#34;2&#34;, &#34;3&#34;, &#34;4&#34;, &#34;5&#34;, &#34;6&#34;, &#34;7&#34;, &#34;8&#34;, &#34;9&#34;, &#34;+&#34;]
+    )
+
+    # Check if valid.
+    regex = r&#34;^(?:\+370|8|0)\d{8}$&#34;
+    if re.match(regex, clean_tel_nr):
+        is_valid = True
+
+    # If starts with 0 or 8, make it +370.
+    if format_370 and clean_tel_nr.startswith(&#34;8&#34;) or clean_tel_nr.startswith(&#34;0&#34;):
+        clean_tel_nr = f&#34;+370{tel_nr[1:]}&#34;
+
+    return is_valid, clean_tel_nr if is_valid else tel_nr</code></pre>
+</details>
+</dd>
 </dl>
 </section>
 <section>
@@ -395,6 +464,7 @@ def birth_date(self) -&gt; datetime.date | None:
 <li><code><a title="gyvatukas.utils.lithuania.get_lt_nearby_pashtomatas_by_address" href="#gyvatukas.utils.lithuania.get_lt_nearby_pashtomatas_by_address">get_lt_nearby_pashtomatas_by_address</a></code></li>
 <li><code><a title="gyvatukas.utils.lithuania.get_lt_nearby_pashtomatas_by_lat_lon" href="#gyvatukas.utils.lithuania.get_lt_nearby_pashtomatas_by_lat_lon">get_lt_nearby_pashtomatas_by_lat_lon</a></code></li>
 <li><code><a title="gyvatukas.utils.lithuania.validate_lt_id" href="#gyvatukas.utils.lithuania.validate_lt_id">validate_lt_id</a></code></li>
+<li><code><a title="gyvatukas.utils.lithuania.validate_lt_tel_nr" href="#gyvatukas.utils.lithuania.validate_lt_tel_nr">validate_lt_tel_nr</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
