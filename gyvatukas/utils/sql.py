@@ -36,7 +36,7 @@ class DictCursor(sqlite3.Cursor):
 def get_conn_cur(path_db: pathlib.Path):
     """Thread-safe context manager that yields SQLite connection and cursor.
     Reuses connection within same thread."""
-    if not hasattr(_thread_local, 'connection'):
+    if not hasattr(_thread_local, "connection"):
         _thread_local.connection = sqlite3.connect(path_db, check_same_thread=False)
 
     try:
@@ -58,6 +58,6 @@ def init_db(path_db: pathlib.Path, sql_script: str):
 
 def close_connections():
     """Close thread's database connection."""
-    if hasattr(_thread_local, 'connection'):
+    if hasattr(_thread_local, "connection"):
         _thread_local.connection.close()
         del _thread_local.connection
