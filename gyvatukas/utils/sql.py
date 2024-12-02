@@ -1,6 +1,8 @@
 import sqlite3
 import textwrap
 from contextlib import contextmanager
+import pathlib
+from threading import local
 
 
 def get_inline_sql(sql: str) -> str:
@@ -17,17 +19,45 @@ def get_inline_sql(sql: str) -> str:
     return sql
 
 
-# todo: thread safe implementation!
+_thread_local = local()
+
+
+class DictCursor(sqlite3.Cursor):
+    def __init__(self, connection):
+        super().__init__(connection)
+        self.row_factory = self._dict_factory
+
+    def _dict_factory(self, cursor, row):
+        fields = [column[0] for column in cursor.description]
+        return {key: value for key, value in zip(fields, row)}
+
+
 @contextmanager
-def get_conn_cur(db_path: str) -> tuple[sqlite3.Connection, sqlite3.Cursor]:
-    conn = sqlite3.connect(db_path)
-    conn.row_factory = sqlite3.Row
+def get_conn_cur(path_db: pathlib.Path):
+    """Thread-safe context manager that yields SQLite connection and cursor.
+    Reuses connection within same thread."""
+    if not hasattr(_thread_local, 'connection'):
+        _thread_local.connection = sqlite3.connect(path_db, check_same_thread=False)
+
     try:
-        cur = conn.cursor()
-        yield conn, cur
-        conn.commit()
+        cursor = DictCursor(_thread_local.connection)
+        yield _thread_local.connection, cursor
+        _thread_local.connection.commit()
     except Exception:
-        conn.rollback()
+        _thread_local.connection.rollback()
         raise
     finally:
-        conn.close()
+        cursor.close()
+
+
+def init_db(path_db: pathlib.Path, sql_script: str):
+    """Initialize database with SQL script."""
+    with get_conn_cur(path_db) as (conn, cur):
+        cur.executescript(sql_script)
+
+
+def close_connections():
+    """Close thread's database connection."""
+    if hasattr(_thread_local, 'connection'):
+        _thread_local.connection.close()
+        del _thread_local.connection
