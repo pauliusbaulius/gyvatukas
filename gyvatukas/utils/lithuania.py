@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import datetime
 from typing import Literal, Optional
 
-from gyvatukas.utils.string import remove_except
+from gyvatukas.utils.string_ import remove_except
 
 
 @dataclass
