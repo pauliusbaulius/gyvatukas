@@ -24,6 +24,7 @@ from .utils.lithuania import (
 )
 from .utils.validators import is_email_valid
 from .utils.sql import get_inline_sql, get_conn_cur
+from .utils.decorators import timer
 
 from .services.iptoolkit import IpToolKit
 
@@ -69,4 +70,6 @@ __all__ = [
     "get_conn_cur",
     # services.iptoolkit.py
     "IpToolKit",
+    # decorators.py
+    "timer",
 ]
