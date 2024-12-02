@@ -14,6 +14,7 @@ class GithubCom:
     Uses versioned ratio'd GitHub api.
     See: https://docs.github.com/en/rest?apiVersion=2022-11-28
     """
+
     RATE_LIMIT_PER_SECOND_UNAUTHENTICATED = 60 / 3600  # 60 requests per hour.
     RATE_LIMIT_PER_SECOND_AUTH = 5000 / 3600  # 5000 requests per hour.
 

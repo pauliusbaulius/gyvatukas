@@ -3,6 +3,7 @@ import pathlib
 from platformdirs import user_data_dir
 import diskcache
 
+
 def get_gyvatukas_version() -> str:
     """Returns the version of the gyvatukas package (maybe)"""
     meta = importlib.metadata.metadata("gyvatukas")

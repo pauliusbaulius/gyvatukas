@@ -1,5 +1,3 @@
-from dataclasses import dataclass
-
 import diskcache
 import httpx
 
@@ -15,6 +13,7 @@ class NominatimOrg:
     🚨 Employs 1 request per second rate limit, as per Nominatim.org policy.
     See: https://operations.osmfoundation.org/policies/nominatim/
     """
+
     def __init__(self, user_agent: str):
         self.user_agent = user_agent
         super().__init__()
