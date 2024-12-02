@@ -1,4 +1,5 @@
 """Relies on external services, no guarantees."""
+import ipaddress
 import logging
 
 import httpx
@@ -52,3 +53,11 @@ def get_ip_country(ip: str) -> str:
     if data is None:
         return "Unknown"
     return data.get("country", "Unknown")
+
+
+def ip_to_int(ip: str) -> int:
+    return int(ipaddress.IPv4Address(ip))
+
+
+def int_to_ip(ip_int: int) -> str:
+    return str(ipaddress.IPv4Address(ip_int))

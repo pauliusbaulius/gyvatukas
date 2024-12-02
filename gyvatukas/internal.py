@@ -1,6 +1,6 @@
 import importlib.metadata
 import pathlib
-from platformdirs import user_data_dir
+from platformdirs import site_data_dir, user_data_dir
 
 
 def get_gyvatukas_version() -> str:
@@ -14,10 +14,9 @@ def get_gyvatukas_version() -> str:
     return "unknown"
 
 
-def get_base_cache_path() -> pathlib.Path:
-    """Returns the base cache path to save data to on end user's machine."""
+def get_app_storage_path() -> pathlib.Path:
     path = pathlib.Path(
-        user_data_dir(appname="gyvatukas", appauthor="gyvtaukas")
+        user_data_dir(appname="gyvatukas", appauthor="gyvtaukas", ensure_exists=True)
     )
     path.mkdir(parents=True, exist_ok=True)
     return path

@@ -9,7 +9,7 @@ import logging
 from html.parser import HTMLParser
 
 from gyvatukas.exceptions import GyvatukasException
-from gyvatukas.internal import get_base_cache_path
+from gyvatukas.internal import get_app_storage_path
 from gyvatukas.utils.json_ import get_pretty_json
 
 _logger = logging.getLogger("gyvatukas")
@@ -91,7 +91,7 @@ class ManoEsoLt:
 
     def _save_session(self) -> None:
         """Saves session to disk for reuse."""
-        path = pathlib.Path(get_base_cache_path(), "mano_eso_lt.json")
+        path = pathlib.Path(get_app_storage_path(), "mano_eso_lt.json")
 
         data = {
             "username": self.username,
