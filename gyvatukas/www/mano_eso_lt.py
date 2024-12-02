@@ -1,12 +1,11 @@
 import datetime
 import pathlib
+from dataclasses import dataclass
 from itertools import groupby
-
-import pydantic
-import requests
 
 import logging
 from html.parser import HTMLParser
+import httpx
 
 from gyvatukas.exceptions import GyvatukasException
 from gyvatukas.internal import get_app_storage_path
@@ -44,12 +43,14 @@ class FormParser(HTMLParser):
             self.form[attributes["name"]] = attributes["value"]
 
 
-class ConsumptionRecord(pydantic.BaseModel):
+@dataclass
+class ConsumptionRecord:
     dt: datetime.datetime
     kwh: float
 
 
-class ConsumptionDataset(pydantic.BaseModel):
+@dataclass
+class ConsumptionDataset:
     type_key: str
     type: str
     dt: datetime.date
@@ -102,7 +103,7 @@ class ManoEsoLt:
         path.write_text(get_pretty_json(data))
 
     def login(self) -> None:
-        with requests.post(
+        with httpx.post(
             url=self.URL_LOGIN,
             data={
                 "name": self.username,
@@ -116,7 +117,7 @@ class ManoEsoLt:
             if response.status_code != 200:
                 raise GyvatukasException("Failed mano.eso.lt login!")
 
-            self.cookies = requests.utils.dict_from_cookiejar(response.cookies)
+            self.cookies = httpx.utils.dict_from_cookiejar(response.cookies)
             self._extract_special_fields(response.text)
 
             if self.persist_session:
@@ -170,7 +171,7 @@ class ManoEsoLt:
             **self.special_fields,
         }
 
-        with requests.post(
+        with httpx.post(
             url=self.URL_CONSUMPTION_DATA,
             data=data,
             headers=headers,
