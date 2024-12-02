@@ -30,6 +30,7 @@ class IpToolKit:
     }
 
     """
+
     DB_SCHEMA = """
         CREATE TABLE IF NOT EXISTS ip_to_country (
             ipf INTEGER,
@@ -40,7 +41,9 @@ class IpToolKit:
         CREATE INDEX IF NOT EXISTS ip_to_country_idx ON ip_to_country (ipf, ipt);
     """
 
-    def __init__(self, provider_config: dict | None = None, db_path: pathlib.Path | None = None):
+    def __init__(
+        self, provider_config: dict | None = None, db_path: pathlib.Path | None = None
+    ):
         self.provider_config = provider_config
         self.path_db = db_path or get_app_storage_path() / "iptoolkit.db"
 
@@ -56,11 +59,14 @@ class IpToolKit:
             conn.executescript(self.DB_SCHEMA)
 
             # Drop existing provider data.
-            conn.execute("DELETE FROM ip_to_country WHERE provider = :provider", {"provider": entries[0]["provider"]})
+            conn.execute(
+                "DELETE FROM ip_to_country WHERE provider = :provider",
+                {"provider": entries[0]["provider"]},
+            )
 
             conn.executemany(
                 "INSERT INTO ip_to_country(ipf, ipt, cc, provider) VALUES (:ipf, :ipt, :cc, :provider)",
-                entries
+                entries,
             )
             conn.commit()
 
@@ -79,25 +85,29 @@ class IpToolKit:
             response = httpx.get(url)
 
             if response.status_code != 200:
-                logger.warning(f"Could not download db-ip.com database @ {url} with http {response.status_code}, please investigate.")
+                logger.warning(
+                    f"Could not download db-ip.com database @ {url} with http {response.status_code}, please investigate."
+                )
                 return
 
-            with open(gz_path, 'wb') as f:
+            with open(gz_path, "wb") as f:
                 for chunk in response.iter_bytes():
                     f.write(chunk)
 
             # Read and yield rows directly from gz file
-            with gzip.open(gz_path, 'rt', encoding='utf-8') as gz_file:
+            with gzip.open(gz_path, "rt", encoding="utf-8") as gz_file:
                 reader = csv.DictReader(gz_file)
 
                 for row in reader:
                     try:
-                        entries.append({
-                            "ipf": ip_to_int(row["0.0.0.0"]),
-                            "ipt": ip_to_int(row["0.255.255.255"]),
-                            "cc": row["ZZ"],
-                            "provider": "db-ip.com",
-                        })
+                        entries.append(
+                            {
+                                "ipf": ip_to_int(row["0.0.0.0"]),
+                                "ipt": ip_to_int(row["0.255.255.255"]),
+                                "cc": row["ZZ"],
+                                "provider": "db-ip.com",
+                            }
+                        )
                     except Exception:
                         pass
 
@@ -111,7 +121,9 @@ class IpToolKit:
             logger.warning("Cannot setup ipinfo.io database, token is not in config.")
             return
 
-        url = "https://ipinfo.io/data/free/country.csv.gz?token={token}".format(token=token)
+        url = "https://ipinfo.io/data/free/country.csv.gz?token={token}".format(
+            token=token
+        )
         entries: list[dict] = []
 
         with (
@@ -122,7 +134,9 @@ class IpToolKit:
             # Download the file
             response = httpx.get(url)
             if response.status_code not in [200, 302]:
-                logger.warning(f"Could not download ipinfo.io database @ {url} with http {response.status_code}, please investigate.")
+                logger.warning(
+                    f"Could not download ipinfo.io database @ {url} with http {response.status_code}, please investigate."
+                )
                 return
 
             # If 302, extract download url.
@@ -130,25 +144,29 @@ class IpToolKit:
                 url = response.headers["Location"]
                 response = httpx.get(url)
                 if response.status_code != 200:
-                    logger.warning(f"Could not download ipinfo.io database @ {url} with http {response.status_code}, please investigate.")
+                    logger.warning(
+                        f"Could not download ipinfo.io database @ {url} with http {response.status_code}, please investigate."
+                    )
                     return
 
-            with open(gz_path, 'wb') as f:
+            with open(gz_path, "wb") as f:
                 for chunk in response.iter_bytes():
                     f.write(chunk)
 
             # Read and yield rows directly from gz file
-            with gzip.open(gz_path, 'rt', encoding='utf-8') as gz_file:
+            with gzip.open(gz_path, "rt", encoding="utf-8") as gz_file:
                 reader = csv.DictReader(gz_file)
 
                 for row in reader:
                     try:
-                        entries.append({
-                            "ipf": ip_to_int(row["start_ip"]),
-                            "ipt": ip_to_int(row["end_ip"]),
-                            "cc": row["country"],
-                            "provider": "ipinfo.io",
-                        })
+                        entries.append(
+                            {
+                                "ipf": ip_to_int(row["start_ip"]),
+                                "ipt": ip_to_int(row["end_ip"]),
+                                "cc": row["country"],
+                                "provider": "ipinfo.io",
+                            }
+                        )
                     except Exception:
                         pass
 
@@ -167,7 +185,7 @@ class IpToolKit:
         with get_conn_cur(self.path_db) as (conn, cur):
             cur.execute(
                 "SELECT cc, COUNT(*) as count FROM ip_to_country WHERE ipf <= :ipf AND ipt >= :ipt GROUP BY cc ORDER BY count DESC LIMIT 1",
-                {"ipf": ip_int, "ipt": ip_int}
+                {"ipf": ip_int, "ipt": ip_int},
             )
             result = cur.fetchone()
             return result["cc"] if result else None

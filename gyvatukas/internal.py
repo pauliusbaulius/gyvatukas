@@ -1,6 +1,6 @@
 import importlib.metadata
 import pathlib
-from platformdirs import site_data_dir, user_data_dir
+from platformdirs import user_data_dir
 
 
 def get_gyvatukas_version() -> str:

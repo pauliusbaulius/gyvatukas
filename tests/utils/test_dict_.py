@@ -45,11 +45,11 @@ def test_validate_lt_id(d, values, expected_result) -> None:
         ({"data": {"items": [{"id": 1}, {"id": 2}]}}, "data.items.0.id", 1),
         ({"a": 1}, "", {"a": 1}),
         (
-                {"a": [1, 2, {"b": [3, 4]}]},
-                "a.2.b.0",
-                3,
+            {"a": [1, 2, {"b": [3, 4]}]},
+            "a.2.b.0",
+            3,
         ),
-    ]
+    ],
 )
 def test_get_by_path_success(data, path, expected_result, separator="."):
     assert get_by_path(data, path, separator) == expected_result

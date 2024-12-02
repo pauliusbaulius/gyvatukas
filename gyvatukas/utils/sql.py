@@ -11,7 +11,7 @@ def get_inline_sql(sql: str) -> str:
     # Dedent first to normalize indentation
     sql = textwrap.dedent(sql)
     # Replace multiple whitespace characters with a single space
-    sql = ' '.join(sql.split())
+    sql = " ".join(sql.split())
     # Remove starting and ending whitespace
     sql = sql.strip()
     return sql

@@ -19,7 +19,6 @@ from .utils.generators import get_random_secure_string
 from .utils.ip import get_my_ipv4, get_ipv4_meta, get_ip_country
 from .utils.json_ import get_pretty_json, read_json, write_json
 from .utils.lithuania import (
-    LithuanianPersonalCode,
     validate_lt_id,
     validate_lt_tel_nr,
 )

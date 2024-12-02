@@ -37,8 +37,8 @@ lint:
 .PHONY: format
 format:
 	@echo "🧹 formatting"
-	$(VENV_PY) -m ruff --fix gyvatukas/ tests/
-	$(VENV_PY) -m black gyvatukas/ tests/
+	$(VENV_PY) -m ruff check --fix gyvatukas/ tests/
+	$(VENV_PY) -m ruff format gyvatukas/ tests/
 
 .PHONY: buildpackage
 buildpkg: lint format test docs

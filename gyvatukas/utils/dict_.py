@@ -18,7 +18,9 @@ def dict_remove_matching_values(d: dict, values: list) -> dict:
     return new_d
 
 
-def get_by_path(d: dict, path: str, separator: str = ".", do_not_raise: bool = False) -> Any:
+def get_by_path(
+    d: dict, path: str, separator: str = ".", do_not_raise: bool = False
+) -> Any:
     current = d
 
     if not path:
@@ -39,7 +41,9 @@ def get_by_path(d: dict, path: str, separator: str = ".", do_not_raise: bool = F
             else:
                 if do_not_raise:
                     return None
-                raise GyvatukasException(f"cannot index into {type(current)} with '{part}'")
+                raise GyvatukasException(
+                    f"cannot index into {type(current)} with '{part}'"
+                )
         except KeyError:
             if do_not_raise:
                 return None
