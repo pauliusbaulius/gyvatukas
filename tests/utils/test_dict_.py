@@ -1,5 +1,5 @@
 import pytest
-from gyvatukas.utils.dict_ import dict_remove_matching_values
+from gyvatukas.utils.dict_ import dict_remove_matching_values, get_by_path
 
 
 @pytest.mark.parametrize(

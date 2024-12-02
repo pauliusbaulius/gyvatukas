@@ -8,22 +8,18 @@ documentation = "https://pauliusbaulius.github.io/gyvatukas/gyvatukas/"
 repository = "https://github.com/pauliusbaulius/gyvatukas"
 
 [tool.poetry.dependencies]
-python = "^3.10"
-requests = "^2.31.0"
-json-repair = "^0.4.3"
-email-validator = "^2.1.0.post1"
-pdoc3 = "^0.10.0"
-pydantic = "^2.5.3"
-bcrypt = "^4.1.2"
-beautifulsoup4 = "^4.12.2"
-appdirs = "^1.4.4"
-zstandard = "^0.22.0"
+python = "^3.11"
+email-validator = "^2.2.0"
+bcrypt = "^4.2.1"
+beautifulsoup4 = "^4.12.3"
+httpx = "^0.28.0"
+platformdirs = "^4.3.6"
 
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.3"
-black = "^23.12.1"
 ruff = "^0.1.9"
+pdoc3 = "^0.11.3"
 
 [build-system]
 requires = ["poetry-core"]

@@ -1,6 +1,7 @@
+"""Relies on external services, no guarantees."""
 import logging
 
-import requests
+import httpx
 
 _logger = logging.getLogger("gyvatukas")
 
@@ -13,7 +14,7 @@ def get_my_ipv4(with_meta: bool = False) -> dict | str:
     _logger.debug("performing ipv4 lookup.")
     url = "https://ifconfig.me" if with_meta else "https://wasab.is/json"
 
-    result = requests.get(url=url, timeout=5)
+    result = httpx.get(url=url, timeout=5)
 
     if with_meta:
         result = result.json()
@@ -33,7 +34,7 @@ def get_ipv4_meta(ip: str) -> dict | None:
     _logger.debug("performing ipv4 meta lookup for ip `%s`.", ip)
     url = f"https://wasab.is/json?ip={ip}"
 
-    result = requests.get(url=url, timeout=5)
+    result = httpx.get(url=url, timeout=5)
 
     if result.status_code == 200:
         result = result.json()

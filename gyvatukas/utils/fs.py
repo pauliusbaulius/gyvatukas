@@ -3,8 +3,6 @@ See: https://docs.python.org/3/library/pathlib.html
 """
 import pathlib
 
-import pydantic
-
 
 def path_without_filename(path: pathlib.Path) -> pathlib.Path:
     """Return path without filename."""
@@ -50,23 +48,3 @@ def read_file(path: pathlib.Path, read_bytes: bool = False) -> str | None:
         return content
 
     return None
-
-
-class ScanResultSchema(pydantic.BaseModel):
-    """Scan result schema."""
-
-    path: pathlib.Path
-    name: str
-    ext: str
-    parent: pathlib.Path
-    size: int
-    is_dir: bool
-    is_file: bool
-    is_symlink: bool
-
-
-def scan_dir(path: pathlib.Path) -> list[ScanResultSchema]:
-    """Scan directory for files and return list of paths."""
-    # TODO: Tree of files/dirs in given path. Recursive. Flag to calculate size of each file/dir, etc.
-    #  Return as pydantic instance. Parse fname, ext, parent, size, etc.
-    raise NotImplementedError()

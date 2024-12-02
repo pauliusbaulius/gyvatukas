@@ -1,28 +1,27 @@
 import re
-from typing import Literal
+from dataclasses import dataclass
 import datetime
-
-import pydantic
+from typing import Literal, Optional
 
 from gyvatukas.utils.string import remove_except
 
 
-class LithuanianPersonalCodeSchema(pydantic.BaseModel):
-    """Lithuanian personal identification code "asmens kodas" schema."""
-
-    gender: Literal["male", "female"] | None
+@dataclass
+class LithuanianPersonalCode:
+    gender: Optional[Literal["male", "female"]]
     birth_year: int
-    birth_month: int | None
-    birth_day: int | None
+    birth_month: Optional[int]
+    birth_day: Optional[int]
     identifier_number: str
     is_edge_case: bool
-    checksum: int | None = None
+    checksum: Optional[int] = None
 
     @property
-    def birth_date(self) -> datetime.date | None:
+    def birth_date(self) -> Optional[datetime.date]:
         """Return birthdate as dt object if is not an edge case (has no 0 in month/day)."""
         if not self.is_edge_case:
             return datetime.date(self.birth_year, self.birth_month, self.birth_day)
+        return None
 
 
 def _calculate_lt_id_checksum(pid: str) -> int:
@@ -47,7 +46,7 @@ def _calculate_lt_id_checksum(pid: str) -> int:
     return 0
 
 
-def validate_lt_id(pid: str) -> LithuanianPersonalCodeSchema:
+def validate_lt_id(pid: str) -> LithuanianPersonalCode:
     """Validate Lithuanian personal identification code "asmens kodas".
     See: https://lt.wikipedia.org/wiki/Asmens_kodas
 
@@ -104,7 +103,7 @@ def validate_lt_id(pid: str) -> LithuanianPersonalCodeSchema:
     if not is_edge_case:
         checksum = _calculate_lt_id_checksum(pid=pid)
 
-    return LithuanianPersonalCodeSchema(
+    return LithuanianPersonalCode(
         gender=gender,
         birth_year=birth_year,
         birth_month=birth_month,
@@ -113,22 +112,6 @@ def validate_lt_id(pid: str) -> LithuanianPersonalCodeSchema:
         is_edge_case=is_edge_case,
         checksum=checksum,
     )
-
-
-def get_lt_nearby_pashtomatas_by_address(address: str) -> list[str]:
-    """Get nearby 'paštomatai' by an address.
-
-    🚨 Address should be in Lithuania.
-    """
-    raise NotImplementedError
-
-
-def get_lt_nearby_pashtomatas_by_lat_lon(lat: float, lon: float) -> list[str]:
-    """Get nearby 'paštomatai' by lat/lon values.
-
-    🚨 Lat/lon should be in Lithuania.
-    """
-    raise NotImplementedError
 
 
 def validate_lt_tel_nr(tel_nr: str, format_370: bool = True) -> tuple[bool, str]:

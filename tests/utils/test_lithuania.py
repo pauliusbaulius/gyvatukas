@@ -1,7 +1,7 @@
 import pytest
 from gyvatukas.utils.lithuania import (
     validate_lt_id,
-    LithuanianPersonalCodeSchema,
+    LithuanianPersonalCode,
     validate_lt_tel_nr,
 )
 
@@ -11,7 +11,7 @@ from gyvatukas.utils.lithuania import (
     [
         (
             "33309240064",
-            LithuanianPersonalCodeSchema(
+            LithuanianPersonalCode(
                 gender="male",
                 birth_year=1933,
                 birth_month=9,
@@ -23,7 +23,7 @@ from gyvatukas.utils.lithuania import (
         ),
         (
             "33300000064",
-            LithuanianPersonalCodeSchema(
+            LithuanianPersonalCode(
                 gender="male",
                 birth_year=1933,
                 birth_month=None,

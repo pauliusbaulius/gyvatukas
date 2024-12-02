@@ -8,7 +8,6 @@ def dict_remove_matching_values(d: dict, values: list) -> dict:
     Returns new dict.
     🐌 Creates a new dict, not recommended for large dicts.
     """
-    # TODO: Recursive iteration to remove deeply matched values? But as a separate function.
     new_d = {}
     for k, v in d.items():
         if v not in values:

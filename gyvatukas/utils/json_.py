@@ -3,8 +3,6 @@ import logging
 from typing import Any
 import pathlib
 
-from json_repair import json_repair
-
 from gyvatukas.utils.fs import read_file, write_file
 
 _logger = logging.getLogger("gyvatukas")
@@ -40,28 +38,3 @@ def write_json(
 
     result = write_file(path=path, content=content, override=override)
     return result
-
-
-def load_json(data: str) -> dict | list | None:
-    """Load json from string. Return dict if valid, None if not.
-
-    🚨 Tries to fix invalid json using https://github.com/mangiucugna/json_repair lib.
-    """
-    result = None
-    try:
-        result = json_repair.loads(data)
-    except Exception:  # noqa: Expected from json_repair lib.
-        _logger.warning("failed to load json from string!")
-
-        # Try to fix case when keys and values are single quoted.
-        # TODO: Naive approach also replaces value/key content if it contains single quotes!
-        data = data.replace("'", '"')
-        try:
-            result = json_repair.loads(data)
-        except Exception:
-            _logger.warning(
-                "failed to load json from string even after replacing ' with \"!"
-            )
-            pass
-    finally:
-        return result
