@@ -1,4 +1,4 @@
-import requests
+import httpx
 
 from gyvatukas.utils.dt import get_dt_utc_now
 
@@ -13,7 +13,7 @@ class PowerHitRadioLt:
 
         Returns parsed result, original response is stored in `_raw` key.
         """
-        with requests.post(
+        with httpx.post(
             url=self.URL_CURRENTLY_PLAYING, data={"action": "getsong"}
         ) as response:
             data = response.json()

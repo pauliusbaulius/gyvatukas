@@ -1,7 +1,7 @@
 import time
 from threading import Lock
 
-import requests
+import httpx
 
 from gyvatukas.exceptions import GyvatukasException
 from gyvatukas.www.base import BaseClient
@@ -62,7 +62,7 @@ class NominatimOrg(BaseClient):
         🚨 Precision required, since will return first match.
         """
         self.rate_limit()
-        with requests.get(
+        with httpx.get(
             "https://nominatim.openstreetmap.org/search",
             params={
                 "q": address,

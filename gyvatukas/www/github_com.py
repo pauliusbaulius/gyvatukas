@@ -2,7 +2,7 @@ import logging
 import time
 from threading import Lock
 
-import requests
+import httpx
 
 from gyvatukas.exceptions import GyvatukasException
 from gyvatukas.www.base import BaseClient
@@ -70,7 +70,7 @@ class GithubCom(BaseClient):
         """
         self.rate_limit()
 
-        with requests.post(
+        with httpx.post(
             url=self.URL_API_MARKDOWN_CONVERT,
             json={
                 "mode": "gfm" if fancy_gfm_mode else "markdown",
