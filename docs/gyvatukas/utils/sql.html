@@ -33,11 +33,18 @@ hljs.highlightAll();
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt id="gyvatukas.utils.sql.get_conn_cur"><code class="name flex">
-<span>def <span class="ident">get_conn_cur</span></span>(<span>db_path: str) ‑> tuple[sqlite3.Connection, sqlite3.Cursor]</span>
+<dt id="gyvatukas.utils.sql.close_connections"><code class="name flex">
+<span>def <span class="ident">close_connections</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Close thread's database connection.</p></div>
+</dd>
+<dt id="gyvatukas.utils.sql.get_conn_cur"><code class="name flex">
+<span>def <span class="ident">get_conn_cur</span></span>(<span>path_db: pathlib.Path)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Thread-safe context manager that yields SQLite connection and cursor.
+Reuses connection within same thread.</p></div>
 </dd>
 <dt id="gyvatukas.utils.sql.get_inline_sql"><code class="name flex">
 <span>def <span class="ident">get_inline_sql</span></span>(<span>sql: str) ‑> str</span>
@@ -48,9 +55,42 @@ hljs.highlightAll();
 <li>Cleanup PII if you are going to log all SQL queries 🤠</li>
 </ul></div>
 </dd>
+<dt id="gyvatukas.utils.sql.init_db"><code class="name flex">
+<span>def <span class="ident">init_db</span></span>(<span>path_db: pathlib.Path, sql_script: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Initialize database with SQL script.</p></div>
+</dd>
 </dl>
 </section>
 <section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="gyvatukas.utils.sql.DictCursor"><code class="flex name class">
+<span>class <span class="ident">DictCursor</span></span>
+<span>(</span><span>connection)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>SQLite database cursor class.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DictCursor(sqlite3.Cursor):
+    def __init__(self, connection):
+        super().__init__(connection)
+        self.row_factory = self._dict_factory
+
+    def _dict_factory(self, cursor, row):
+        fields = [column[0] for column in cursor.description]
+        return {key: value for key, value in zip(fields, row)}</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>sqlite3.Cursor</li>
+</ul>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -65,8 +105,17 @@ hljs.highlightAll();
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
+<li><code><a title="gyvatukas.utils.sql.close_connections" href="#gyvatukas.utils.sql.close_connections">close_connections</a></code></li>
 <li><code><a title="gyvatukas.utils.sql.get_conn_cur" href="#gyvatukas.utils.sql.get_conn_cur">get_conn_cur</a></code></li>
 <li><code><a title="gyvatukas.utils.sql.get_inline_sql" href="#gyvatukas.utils.sql.get_inline_sql">get_inline_sql</a></code></li>
+<li><code><a title="gyvatukas.utils.sql.init_db" href="#gyvatukas.utils.sql.init_db">init_db</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="gyvatukas.utils.sql.DictCursor" href="#gyvatukas.utils.sql.DictCursor">DictCursor</a></code></h4>
+</li>
 </ul>
 </li>
 </ul>

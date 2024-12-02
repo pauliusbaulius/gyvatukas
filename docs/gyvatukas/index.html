@@ -57,10 +57,6 @@ are published from master and are source of truth for the latest pypi release))<
 <dd>
 <div class="desc"></div>
 </dd>
-<dt><code class="name"><a title="gyvatukas.megaconsts" href="megaconsts.html">gyvatukas.megaconsts</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
 <dt><code class="name"><a title="gyvatukas.services" href="services/index.html">gyvatukas.services</a></code></dt>
 <dd>
 <div class="desc"></div>
@@ -80,6 +76,12 @@ are published from master and are source of truth for the latest pypi release))<
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
+<dt id="gyvatukas.close_connections"><code class="name flex">
+<span>def <span class="ident">close_connections</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Close thread's database connection.</p></div>
+</dd>
 <dt id="gyvatukas.dict_remove_matching_values"><code class="name flex">
 <span>def <span class="ident">dict_remove_matching_values</span></span>(<span>d: dict, values: list) ‑> dict</span>
 </code></dt>
@@ -90,13 +92,13 @@ Useful for removing None values from dict or empty strings when working with for
 🐌 Creates a new dict, not recommended for large dicts.</p></div>
 </dd>
 <dt id="gyvatukas.dir_exists"><code class="name flex">
-<span>def <span class="ident">dir_exists</span></span>(<span>path: pathlib._local.Path) ‑> bool</span>
+<span>def <span class="ident">dir_exists</span></span>(<span>path: pathlib.Path) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Check if directory exists.</p></div>
 </dd>
 <dt id="gyvatukas.file_exists"><code class="name flex">
-<span>def <span class="ident">file_exists</span></span>(<span>path: pathlib._local.Path) ‑> bool</span>
+<span>def <span class="ident">file_exists</span></span>(<span>path: pathlib.Path) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Check if file exists.</p></div>
@@ -108,10 +110,11 @@ Useful for removing None values from dict or empty strings when working with for
 <div class="desc"></div>
 </dd>
 <dt id="gyvatukas.get_conn_cur"><code class="name flex">
-<span>def <span class="ident">get_conn_cur</span></span>(<span>db_path: str) ‑> tuple[sqlite3.Connection, sqlite3.Cursor]</span>
+<span>def <span class="ident">get_conn_cur</span></span>(<span>path_db: pathlib.Path)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Thread-safe context manager that yields SQLite connection and cursor.
+Reuses connection within same thread.</p></div>
 </dd>
 <dt id="gyvatukas.get_dt_utc_now"><code class="name flex">
 <span>def <span class="ident">get_dt_utc_now</span></span>(<span>) ‑> datetime.datetime</span>
@@ -120,7 +123,7 @@ Useful for removing None values from dict or empty strings when working with for
 <div class="desc"></div>
 </dd>
 <dt id="gyvatukas.get_env"><code class="name flex">
-<span>def <span class="ident">get_env</span></span>(<span>name: str,<br>type: {<class 'bool'>, <class 'dict'>, <class 'list'>, <class 'int'>, <class 'float'>, <class 'str'>},<br>default: {<class 'bool'>, <class 'dict'>, <class 'list'>, <class 'int'>, <class 'float'>, <class 'str'>} = None,<br>required: bool = False) ‑> {<class 'bool'>, <class 'dict'>, <class 'list'>, <class 'int'>, <class 'float'>, <class 'str'>}</span>
+<span>def <span class="ident">get_env</span></span>(<span>name: str,<br>type: {<class 'bool'>, <class 'str'>, <class 'float'>, <class 'int'>, <class 'dict'>, <class 'list'>},<br>default: {<class 'bool'>, <class 'str'>, <class 'float'>, <class 'int'>, <class 'dict'>, <class 'list'>} = None,<br>required: bool = False) ‑> {<class 'bool'>, <class 'str'>, <class 'float'>, <class 'int'>, <class 'dict'>, <class 'list'>}</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Try to parse environment variable as given type.</p>
@@ -159,19 +162,19 @@ required: Fail if not found in environment? Useful for things like database port
 <p>🚨 Performs external request.</p></div>
 </dd>
 <dt id="gyvatukas.get_path_extension"><code class="name flex">
-<span>def <span class="ident">get_path_extension</span></span>(<span>path: pathlib._local.Path) ‑> str</span>
+<span>def <span class="ident">get_path_extension</span></span>(<span>path: pathlib.Path) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Return file extension from path.</p></div>
 </dd>
 <dt id="gyvatukas.get_path_filename"><code class="name flex">
-<span>def <span class="ident">get_path_filename</span></span>(<span>path: pathlib._local.Path) ‑> str</span>
+<span>def <span class="ident">get_path_filename</span></span>(<span>path: pathlib.Path) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Return filename from path.</p></div>
 </dd>
 <dt id="gyvatukas.get_path_without_filename"><code class="name flex">
-<span>def <span class="ident">get_path_without_filename</span></span>(<span>path: pathlib._local.Path) ‑> pathlib._local.Path</span>
+<span>def <span class="ident">get_path_without_filename</span></span>(<span>path: pathlib.Path) ‑> pathlib.Path</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Return path without filename.</p></div>
@@ -200,6 +203,12 @@ required: Fail if not found in environment? Useful for things like database port
 <dd>
 <div class="desc"><p>Return hashed password using <code>bcrypt</code>.</p></div>
 </dd>
+<dt id="gyvatukas.init_db"><code class="name flex">
+<span>def <span class="ident">init_db</span></span>(<span>path_db: pathlib.Path, sql_script: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Initialize database with SQL script.</p></div>
+</dd>
 <dt id="gyvatukas.is_email_valid"><code class="name flex">
 <span>def <span class="ident">is_email_valid</span></span>(<span>email: str, perform_dns_check: bool = False) ‑> tuple[bool, str]</span>
 </code></dt>
@@ -209,20 +218,26 @@ If email is valid, returns normalized email, otherwise returns the original emai
 <p>🚨 check_deliverability performs external request!</p>
 <p>Uses <a href="https://github.com/JoshData/python-email-validator">https://github.com/JoshData/python-email-validator</a> lib.</p></div>
 </dd>
+<dt id="gyvatukas.is_false"><code class="name flex">
+<span>def <span class="ident">is_false</span></span>(<span>value: Any) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="gyvatukas.is_true"><code class="name flex">
-<span>def <span class="ident">is_true</span></span>(<span>value: str) ‑> bool</span>
+<span>def <span class="ident">is_true</span></span>(<span>value: Any) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
 <dt id="gyvatukas.read_file"><code class="name flex">
-<span>def <span class="ident">read_file</span></span>(<span>path: pathlib._local.Path, read_bytes: bool = False) ‑> str | None</span>
+<span>def <span class="ident">read_file</span></span>(<span>path: pathlib.Path, read_bytes: bool = False) ‑> str | None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Read file contents. Return None if file does not exist or content is empty.</p></div>
 </dd>
 <dt id="gyvatukas.read_json"><code class="name flex">
-<span>def <span class="ident">read_json</span></span>(<span>path: pathlib._local.Path, default: Any = None) ‑> dict | list</span>
+<span>def <span class="ident">read_json</span></span>(<span>path: pathlib.Path, default: Any = None) ‑> dict | list</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Read json from file. Return empty dict if not found or invalid json.</p></div>
@@ -257,19 +272,19 @@ See: <a href="https://lt.wikipedia.org/wiki/Asmens_kodas">https://lt.wikipedia.o
 <div class="desc"><p>Verify password against hashed password using <code>bcrypt</code>.</p></div>
 </dd>
 <dt id="gyvatukas.value_to_bool"><code class="name flex">
-<span>def <span class="ident">value_to_bool</span></span>(<span>value: str) ‑> bool</span>
+<span>def <span class="ident">value_to_bool</span></span>(<span>value: Any) ‑> bool | None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
 <dt id="gyvatukas.write_file"><code class="name flex">
-<span>def <span class="ident">write_file</span></span>(<span>path: pathlib._local.Path, content: str | bytes, override: bool = False) ‑> bool</span>
+<span>def <span class="ident">write_file</span></span>(<span>path: pathlib.Path, content: str | bytes, override: bool = False) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Write content to file. Return True if file was written, False otherwise.</p></div>
 </dd>
 <dt id="gyvatukas.write_json"><code class="name flex">
-<span>def <span class="ident">write_json</span></span>(<span>path: pathlib._local.Path,<br>data: dict | list,<br>pretty: bool = True,<br>override: bool = False) ‑> bool</span>
+<span>def <span class="ident">write_json</span></span>(<span>path: pathlib.Path,<br>data: dict | list,<br>pretty: bool = True,<br>override: bool = False) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Write json to file. Return true if written, false if not.</p></div>
@@ -281,7 +296,7 @@ See: <a href="https://lt.wikipedia.org/wiki/Asmens_kodas">https://lt.wikipedia.o
 <dl>
 <dt id="gyvatukas.IpToolKit"><code class="flex name class">
 <span>class <span class="ident">IpToolKit</span></span>
-<span>(</span><span>provider_config: dict | None = None,<br>db_path: pathlib._local.Path | None = None)</span>
+<span>(</span><span>provider_config: dict | None = None, db_path: pathlib.Path | None = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Simple ip to country lookup tool based on free ip databases.</p>
@@ -481,7 +496,7 @@ See: <a href="https://lt.wikipedia.org/wiki/Asmens_kodas">https://lt.wikipedia.o
 <dl>
 <dt id="gyvatukas.IpToolKit.DB_SCHEMA"><code class="name">var <span class="ident">DB_SCHEMA</span></code></dt>
 <dd>
-<div class="desc"><p>The type of the None singleton.</p></div>
+<div class="desc"></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -524,7 +539,6 @@ See: <a href="https://lt.wikipedia.org/wiki/Asmens_kodas">https://lt.wikipedia.o
 <ul>
 <li><code><a title="gyvatukas.exceptions" href="exceptions.html">gyvatukas.exceptions</a></code></li>
 <li><code><a title="gyvatukas.internal" href="internal.html">gyvatukas.internal</a></code></li>
-<li><code><a title="gyvatukas.megaconsts" href="megaconsts.html">gyvatukas.megaconsts</a></code></li>
 <li><code><a title="gyvatukas.services" href="services/index.html">gyvatukas.services</a></code></li>
 <li><code><a title="gyvatukas.utils" href="utils/index.html">gyvatukas.utils</a></code></li>
 <li><code><a title="gyvatukas.www" href="www/index.html">gyvatukas.www</a></code></li>
@@ -532,6 +546,7 @@ See: <a href="https://lt.wikipedia.org/wiki/Asmens_kodas">https://lt.wikipedia.o
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
+<li><code><a title="gyvatukas.close_connections" href="#gyvatukas.close_connections">close_connections</a></code></li>
 <li><code><a title="gyvatukas.dict_remove_matching_values" href="#gyvatukas.dict_remove_matching_values">dict_remove_matching_values</a></code></li>
 <li><code><a title="gyvatukas.dir_exists" href="#gyvatukas.dir_exists">dir_exists</a></code></li>
 <li><code><a title="gyvatukas.file_exists" href="#gyvatukas.file_exists">file_exists</a></code></li>
@@ -550,7 +565,9 @@ See: <a href="https://lt.wikipedia.org/wiki/Asmens_kodas">https://lt.wikipedia.o
 <li><code><a title="gyvatukas.get_random_secure_string" href="#gyvatukas.get_random_secure_string">get_random_secure_string</a></code></li>
 <li><code><a title="gyvatukas.get_utc_today" href="#gyvatukas.get_utc_today">get_utc_today</a></code></li>
 <li><code><a title="gyvatukas.hash_password" href="#gyvatukas.hash_password">hash_password</a></code></li>
+<li><code><a title="gyvatukas.init_db" href="#gyvatukas.init_db">init_db</a></code></li>
 <li><code><a title="gyvatukas.is_email_valid" href="#gyvatukas.is_email_valid">is_email_valid</a></code></li>
+<li><code><a title="gyvatukas.is_false" href="#gyvatukas.is_false">is_false</a></code></li>
 <li><code><a title="gyvatukas.is_true" href="#gyvatukas.is_true">is_true</a></code></li>
 <li><code><a title="gyvatukas.read_file" href="#gyvatukas.read_file">read_file</a></code></li>
 <li><code><a title="gyvatukas.read_json" href="#gyvatukas.read_json">read_json</a></code></li>
