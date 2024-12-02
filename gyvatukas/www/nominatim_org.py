@@ -1,33 +1,23 @@
-import time
-from threading import Lock
+from dataclasses import dataclass
 
+import diskcache
 import httpx
 
 from gyvatukas.exceptions import GyvatukasException
-from gyvatukas.www.base import BaseClient
+from gyvatukas.internal import get_app_cache
+
+cache = get_app_cache()
 
 
-class NominatimOrg(BaseClient):
+class NominatimOrg:
     """Nominatim.org API client.
 
     🚨 Employs 1 request per second rate limit, as per Nominatim.org policy.
     See: https://operations.osmfoundation.org/policies/nominatim/
     """
-
-    _LAST_CALL_TIME = 0
-    _LOCK = Lock()
-    RATE_LIMIT_PER_SECOND = 0.1
-
     def __init__(self, user_agent: str):
         self.user_agent = user_agent
-        super().__init__(rate_limit_per_second=self.RATE_LIMIT_PER_SECOND)
-
-    def rate_limit(self) -> None:
-        with NominatimOrg._LOCK:
-            time_elapsed = time.time() - NominatimOrg._LAST_CALL_TIME
-            if time_elapsed < 1 / self.rate_limit_per_second:
-                time.sleep((1 / self.rate_limit_per_second) - time_elapsed)
-            NominatimOrg._LAST_CALL_TIME = time.time()
+        super().__init__()
 
     def _get_request_headers(self) -> dict:
         """Return request headers."""
@@ -35,34 +25,34 @@ class NominatimOrg(BaseClient):
             "User-Agent": self.user_agent,
         }
 
+    @diskcache.throttle(cache, 1, 1, name="nominatimorg")
     def resolve_coords_to_address(self, lat: float, lon: float) -> str:
         """Given lat/lon, return address."""
-        self.rate_limit()
-        raise NotImplementedError()
+        response = httpx.get(
+            "https://nominatim.openstreetmap.org/reverse",
+            params={
+                "lat": lat,
+                "lon": lon,
+                "format": "json",
+                "limit": 1,
+            },
+            headers=self._get_request_headers(),
+        )
+        data = response.json()
+        if not data:
+            raise GyvatukasException(
+                f"Failed to resolve {lat=} {lon=} to address with http {response.status_code}"
+            )
+        return data["display_name"]
 
-    def _parse_display_name(self, display_name: str) -> dict:
-        """Parse `display_name` returned by nominatim.org, as it has the following structure:
-        `amenity, street, city, county, state, postcode, country`
-        """
-        display_name = display_name.split(", ")
-        data = {
-            "amenity": display_name[0],
-            "street": display_name[1],
-            "city": display_name[2],
-            "county": display_name[3],
-            "state": display_name[4],
-            "postcode": display_name[5],
-            "country": display_name[6],
-        }
-        return data
-
+    @diskcache.throttle(cache, 1, 1, name="nominatimorg")
     def resolve_address_to_coords(self, address: str) -> tuple[float, float]:
         """Given address, return coords as lat/lon.
 
         🚨 Precision required, since will return first match.
         """
-        self.rate_limit()
-        with httpx.get(
+        # todo: maybe return dataclass with bbox, formatted addr, etc?
+        response = httpx.get(
             "https://nominatim.openstreetmap.org/search",
             params={
                 "q": address,
@@ -70,10 +60,19 @@ class NominatimOrg(BaseClient):
                 "limit": 1,
             },
             headers=self._get_request_headers(),
-        ) as r:
-            data = r.json()
-            if not data:
-                raise GyvatukasException(
-                    f"Failed to resolve address `{address}` to coords!"
-                )
-            return float(data[0]["lat"]), float(data[0]["lon"])
+        )
+        data = response.json()
+        if not data:
+            raise GyvatukasException(
+                f"Failed to resolve address `{address}` to coords with http {response.status_code}"
+            )
+        return data[0]["lat"], data[0]["lon"]
+
+
+if __name__ == "__main__":
+    nom = NominatimOrg(user_agent="gyvatukas library")
+    address = "svitrigailos 32, vilnius"
+    lat, lon = nom.resolve_address_to_coords(address=address)
+    print(f"{address} translated to {lat=} {lon=}")
+    address = nom.resolve_coords_to_address(lat=lat, lon=lon)
+    print(f"{lat=} {lon=} translated to {address=}")
