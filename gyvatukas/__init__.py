@@ -3,7 +3,7 @@
 """
 from .utils.bool import is_true, value_to_bool
 from .utils.crypto import validate_password, hash_password
-from .utils.dict_ import dict_remove_matching_values
+from .utils.dict_ import dict_remove_matching_values, get_by_path
 from .utils.dt import get_dt_utc_now
 from .utils.env import get_env
 from .utils.fs import (
@@ -34,6 +34,7 @@ __all__ = [
     "hash_password",
     # dict_.py
     "dict_remove_matching_values",
+    "get_by_path",
     # dt.py
     "get_dt_utc_now",
     # env.py

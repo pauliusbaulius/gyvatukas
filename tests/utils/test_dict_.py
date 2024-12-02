@@ -31,3 +31,25 @@ from gyvatukas.utils.dict_ import dict_remove_matching_values, get_by_path
 def test_validate_lt_id(d, values, expected_result) -> None:
     result = dict_remove_matching_values(d=d, values=values)
     assert result == expected_result
+
+
+@pytest.mark.parametrize(
+    "data, path, expected_result",
+    [
+        ({"a": 1}, "a", 1),
+        ({"a": {"b": 2}}, "a.b", 2),
+        ({"a": [1, 2, 3]}, "a.0", 1),
+        ({"a": [1, 2, 3]}, "a.2", 3),
+        ({"a": (1, 2, 3)}, "a.1", 2),
+        ({"users": [{"name": "John"}, {"name": "Jane"}]}, "users.1.name", "Jane"),
+        ({"data": {"items": [{"id": 1}, {"id": 2}]}}, "data.items.0.id", 1),
+        ({"a": 1}, "", {"a": 1}),
+        (
+                {"a": [1, 2, {"b": [3, 4]}]},
+                "a.2.b.0",
+                3,
+        ),
+    ]
+)
+def test_get_by_path_success(data, path, expected_result, separator="."):
+    assert get_by_path(data, path, separator) == expected_result
