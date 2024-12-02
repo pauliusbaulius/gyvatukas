@@ -1,7 +1,7 @@
 """
 .. include:: ../README.md
 """
-from .utils.bool import is_true, value_to_bool
+from .utils.bool import is_true, value_to_bool, is_false
 from .utils.crypto import validate_password, hash_password
 from .utils.dict_ import dict_remove_matching_values, dict_get_by_path
 from .utils.dt import get_dt_utc_now, get_utc_today
@@ -31,6 +31,7 @@ from .services.iptoolkit import IpToolKit
 __all__ = [
     # bool.py
     "is_true",
+    "is_false",
     "value_to_bool",
     # crypo.py
     "validate_password",
