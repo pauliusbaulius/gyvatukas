@@ -12,7 +12,7 @@ print(is_valid, clean_tel)
 ```
 
 ## dev
-0. New code (add new features to `__init__/__all__` if/when they are "prod" worthy)
+1. New code (add new features to `__init__/__all__` if/when they are "prod" worthy)
 2. Build docs
 3. Increment version in pyproject.toml
 4. Build package (commit package + pyproject.toml + docs (clean single build commit, since docs 
