@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.3">
-<title>gyvatukas.utils.dt API documentation</title>
+<title>gyvatukas.utils.sql API documentation</title>
 <meta name="description" content="">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
@@ -22,7 +22,7 @@ hljs.highlightAll();
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>gyvatukas.utils.dt</code></h1>
+<h1 class="title">Module <code>gyvatukas.utils.sql</code></h1>
 </header>
 <section id="section-intro">
 </section>
@@ -33,11 +33,20 @@ hljs.highlightAll();
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt id="gyvatukas.utils.dt.get_dt_utc_now"><code class="name flex">
-<span>def <span class="ident">get_dt_utc_now</span></span>(<span>) ‑> datetime.datetime</span>
+<dt id="gyvatukas.utils.sql.get_conn_cur"><code class="name flex">
+<span>def <span class="ident">get_conn_cur</span></span>(<span>db_path: str) ‑> tuple[sqlite3.Connection, sqlite3.Cursor]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
+</dd>
+<dt id="gyvatukas.utils.sql.get_inline_sql"><code class="name flex">
+<span>def <span class="ident">get_inline_sql</span></span>(<span>sql: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Convert pretty SQL statement in docstring to something that looks good in console output or logs.</p>
+<ul>
+<li>Cleanup PII if you are going to log all SQL queries 🤠</li>
+</ul></div>
 </dd>
 </dl>
 </section>
@@ -56,7 +65,8 @@ hljs.highlightAll();
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
-<li><code><a title="gyvatukas.utils.dt.get_dt_utc_now" href="#gyvatukas.utils.dt.get_dt_utc_now">get_dt_utc_now</a></code></li>
+<li><code><a title="gyvatukas.utils.sql.get_conn_cur" href="#gyvatukas.utils.sql.get_conn_cur">get_conn_cur</a></code></li>
+<li><code><a title="gyvatukas.utils.sql.get_inline_sql" href="#gyvatukas.utils.sql.get_inline_sql">get_inline_sql</a></code></li>
 </ul>
 </li>
 </ul>
