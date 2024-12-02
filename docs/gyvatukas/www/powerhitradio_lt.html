@@ -45,32 +45,17 @@ hljs.highlightAll();
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class PowerHitRadioLt:
-    URL_CURRENTLY_PLAYING = &#34;https://powerhitradio.tv3.lt/stream/player4/getsong&#34;
+    URL_CURRENTLY_PLAYING = &#34;https://powerhitradio.tv3.lt/Pwr/lastSong&#34;
 
+    @diskcache.throttle(cache, 1, 1)
     def get_currently_playing(self) -&gt; dict:
         &#34;&#34;&#34;Get currently playing song from Power Hit Radio LT.
 
         Returns parsed result, original response is stored in `_raw` key.
         &#34;&#34;&#34;
-        with httpx.post(
-            url=self.URL_CURRENTLY_PLAYING, data={&#34;action&#34;: &#34;getsong&#34;}
-        ) as response:
-            data = response.json()
-            if data.get(&#34;song&#34;) == &#34;song&#34;:
-                return {
-                    &#34;is_song&#34;: True,
-                    &#34;artist&#34;: data[&#34;artistName&#34;],
-                    &#34;title&#34;: data[&#34;songTitle&#34;],
-                    &#34;time&#34;: get_dt_utc_now(),
-                    &#34;_raw&#34;: data,
-                }
-            else:
-                return {
-                    &#34;is_song&#34;: False,
-                    &#34;title&#34;: data[&#34;songTitle&#34;],
-                    &#34;time&#34;: get_dt_utc_now(),
-                    &#34;_raw&#34;: data,
-                }</code></pre>
+        response = httpx.get(url=self.URL_CURRENTLY_PLAYING)
+        data = response.json()
+        return data</code></pre>
 </details>
 <h3>Class variables</h3>
 <dl>

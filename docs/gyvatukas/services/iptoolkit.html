@@ -223,6 +223,7 @@ hljs.highlightAll();
 
     def get_country_by_ipv4(self, ipv4: str) -&gt; str | None:
         &#34;&#34;&#34;Given ipv4 address, return best matched country code or None.&#34;&#34;&#34;
+        # todo: Validate IP4.
         ip_int = ip_to_int(ipv4)
         with get_conn_cur(self.path_db) as (conn, cur):
             cur.execute(

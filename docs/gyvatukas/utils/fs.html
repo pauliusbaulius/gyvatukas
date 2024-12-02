@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.3">
 <title>gyvatukas.utils.fs API documentation</title>
-<meta name="description" content="Filesystem utilities. Uses `pathlib` instead of `os.path`.
-See: https://docs.python.org/3/library/pathlib.html">
+<meta name="description" content="">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
@@ -26,8 +25,6 @@ hljs.highlightAll();
 <h1 class="title">Module <code>gyvatukas.utils.fs</code></h1>
 </header>
 <section id="section-intro">
-<p>Filesystem utilities. Uses <code>pathlib</code> instead of <code>os.path</code>.
-See: <a href="https://docs.python.org/3/library/pathlib.html">https://docs.python.org/3/library/pathlib.html</a></p>
 </section>
 <section>
 </section>
@@ -48,20 +45,20 @@ See: <a href="https://docs.python.org/3/library/pathlib.html">https://docs.pytho
 <dd>
 <div class="desc"><p>Check if file exists.</p></div>
 </dd>
-<dt id="gyvatukas.utils.fs.path_extension"><code class="name flex">
-<span>def <span class="ident">path_extension</span></span>(<span>path: pathlib._local.Path) ‑> str</span>
+<dt id="gyvatukas.utils.fs.get_path_extension"><code class="name flex">
+<span>def <span class="ident">get_path_extension</span></span>(<span>path: pathlib._local.Path) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Return file extension from path.</p></div>
 </dd>
-<dt id="gyvatukas.utils.fs.path_filename"><code class="name flex">
-<span>def <span class="ident">path_filename</span></span>(<span>path: pathlib._local.Path) ‑> str</span>
+<dt id="gyvatukas.utils.fs.get_path_filename"><code class="name flex">
+<span>def <span class="ident">get_path_filename</span></span>(<span>path: pathlib._local.Path) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Return filename from path.</p></div>
 </dd>
-<dt id="gyvatukas.utils.fs.path_without_filename"><code class="name flex">
-<span>def <span class="ident">path_without_filename</span></span>(<span>path: pathlib._local.Path) ‑> pathlib._local.Path</span>
+<dt id="gyvatukas.utils.fs.get_path_without_filename"><code class="name flex">
+<span>def <span class="ident">get_path_without_filename</span></span>(<span>path: pathlib._local.Path) ‑> pathlib._local.Path</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Return path without filename.</p></div>
@@ -97,9 +94,9 @@ See: <a href="https://docs.python.org/3/library/pathlib.html">https://docs.pytho
 <ul class="">
 <li><code><a title="gyvatukas.utils.fs.dir_exists" href="#gyvatukas.utils.fs.dir_exists">dir_exists</a></code></li>
 <li><code><a title="gyvatukas.utils.fs.file_exists" href="#gyvatukas.utils.fs.file_exists">file_exists</a></code></li>
-<li><code><a title="gyvatukas.utils.fs.path_extension" href="#gyvatukas.utils.fs.path_extension">path_extension</a></code></li>
-<li><code><a title="gyvatukas.utils.fs.path_filename" href="#gyvatukas.utils.fs.path_filename">path_filename</a></code></li>
-<li><code><a title="gyvatukas.utils.fs.path_without_filename" href="#gyvatukas.utils.fs.path_without_filename">path_without_filename</a></code></li>
+<li><code><a title="gyvatukas.utils.fs.get_path_extension" href="#gyvatukas.utils.fs.get_path_extension">get_path_extension</a></code></li>
+<li><code><a title="gyvatukas.utils.fs.get_path_filename" href="#gyvatukas.utils.fs.get_path_filename">get_path_filename</a></code></li>
+<li><code><a title="gyvatukas.utils.fs.get_path_without_filename" href="#gyvatukas.utils.fs.get_path_without_filename">get_path_without_filename</a></code></li>
 <li><code><a title="gyvatukas.utils.fs.read_file" href="#gyvatukas.utils.fs.read_file">read_file</a></code></li>
 <li><code><a title="gyvatukas.utils.fs.write_file" href="#gyvatukas.utils.fs.write_file">write_file</a></code></li>
 </ul>
