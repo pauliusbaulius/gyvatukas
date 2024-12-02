@@ -7,9 +7,9 @@ from .utils.dict_ import dict_remove_matching_values, get_by_path
 from .utils.dt import get_dt_utc_now
 from .utils.env import get_env
 from .utils.fs import (
-    path_without_filename,
-    path_extension,
-    path_filename,
+    get_path_without_filename,
+    get_path_extension,
+    get_path_filename,
     dir_exists,
     file_exists,
     write_file,
@@ -43,9 +43,9 @@ __all__ = [
     # env.py
     "get_env",
     # fs.py
-    "path_without_filename",
-    "path_extension",
-    "path_filename",
+    "get_path_without_filename",
+    "get_path_extension",
+    "get_path_filename",
     "dir_exists",
     "file_exists",
     "write_file",

@@ -1,20 +1,17 @@
-"""Filesystem utilities. Uses `pathlib` instead of `os.path`.
-See: https://docs.python.org/3/library/pathlib.html
-"""
 import pathlib
 
 
-def path_without_filename(path: pathlib.Path) -> pathlib.Path:
+def get_path_without_filename(path: pathlib.Path) -> pathlib.Path:
     """Return path without filename."""
     return path.parent
 
 
-def path_extension(path: pathlib.Path) -> str:
+def get_path_extension(path: pathlib.Path) -> str:
     """Return file extension from path."""
     return path.suffix
 
 
-def path_filename(path: pathlib.Path) -> str:
+def get_path_filename(path: pathlib.Path) -> str:
     """Return filename from path."""
     return path.name
 
