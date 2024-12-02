@@ -181,6 +181,7 @@ class IpToolKit:
 
     def get_country_by_ipv4(self, ipv4: str) -> str | None:
         """Given ipv4 address, return best matched country code or None."""
+        # todo: Validate IP4.
         ip_int = ip_to_int(ipv4)
         with get_conn_cur(self.path_db) as (conn, cur):
             cur.execute(
@@ -194,3 +195,10 @@ class IpToolKit:
 if __name__ == "__main__":
     iptk = IpToolKit()
     print(iptk.get_country_by_ipv4("8.8.8.8"))
+
+# todo: Add maxmind.com
+# todo: Add ip2location.com
+# todo: Stats: how many rows in total, how many per provider
+# todo: Store downloads in app dir and reuse if they are not outdated.
+# todo: Maybe do class approach to have bit better logic layout.
+# todo: cache/lru cache on get_country_by_ipv4
