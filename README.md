@@ -1,5 +1,5 @@
 # gyvatukas
-collection of python utils and prototypes.
+collection of python utils and prototypes. feel free to open mr's and send hate mail to dev@paulius.xyz
 
 ## usage
 `pip install gyvatukas` or `poetry add gyvatukas`
