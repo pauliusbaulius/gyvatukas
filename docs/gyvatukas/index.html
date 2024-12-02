@@ -57,6 +57,10 @@ are published from master and are source of truth for the latest pypi release))<
 <dd>
 <div class="desc"></div>
 </dd>
+<dt><code class="name"><a title="gyvatukas.megaconsts" href="megaconsts.html">gyvatukas.megaconsts</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt><code class="name"><a title="gyvatukas.services" href="services/index.html">gyvatukas.services</a></code></dt>
 <dd>
 <div class="desc"></div>
@@ -116,7 +120,7 @@ Useful for removing None values from dict or empty strings when working with for
 <div class="desc"></div>
 </dd>
 <dt id="gyvatukas.get_env"><code class="name flex">
-<span>def <span class="ident">get_env</span></span>(<span>name: str,<br>type: {<class 'bool'>, <class 'dict'>, <class 'int'>, <class 'list'>, <class 'float'>, <class 'str'>},<br>default: {<class 'bool'>, <class 'dict'>, <class 'int'>, <class 'list'>, <class 'float'>, <class 'str'>} = None,<br>required: bool = False) ‑> {<class 'bool'>, <class 'dict'>, <class 'int'>, <class 'list'>, <class 'float'>, <class 'str'>}</span>
+<span>def <span class="ident">get_env</span></span>(<span>name: str,<br>type: {<class 'bool'>, <class 'dict'>, <class 'list'>, <class 'int'>, <class 'float'>, <class 'str'>},<br>default: {<class 'bool'>, <class 'dict'>, <class 'list'>, <class 'int'>, <class 'float'>, <class 'str'>} = None,<br>required: bool = False) ‑> {<class 'bool'>, <class 'dict'>, <class 'list'>, <class 'int'>, <class 'float'>, <class 'str'>}</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Try to parse environment variable as given type.</p>
@@ -135,7 +139,7 @@ required: Fail if not found in environment? Useful for things like database port
 </ul></div>
 </dd>
 <dt id="gyvatukas.get_ip_country"><code class="name flex">
-<span>def <span class="ident">get_ip_country</span></span>(<span>ip: str) ‑> str</span>
+<span>def <span class="ident">get_ip_country</span></span>(<span>ip: str) ‑> str | None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Get country for given ip address or "Unknown" if not found.</p></div>
@@ -148,7 +152,7 @@ required: Fail if not found in environment? Useful for things like database port
 <p>🚨 Performs external request.</p></div>
 </dd>
 <dt id="gyvatukas.get_my_ipv4"><code class="name flex">
-<span>def <span class="ident">get_my_ipv4</span></span>(<span>with_meta: bool = False) ‑> dict | str</span>
+<span>def <span class="ident">get_my_ipv4</span></span>(<span>) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Lookup external ipv4 address. Uses <a href="https://ifconfig.me">https://ifconfig.me</a> or <a href="https://wasab.is.">https://wasab.is.</a></p>
@@ -520,6 +524,7 @@ See: <a href="https://lt.wikipedia.org/wiki/Asmens_kodas">https://lt.wikipedia.o
 <ul>
 <li><code><a title="gyvatukas.exceptions" href="exceptions.html">gyvatukas.exceptions</a></code></li>
 <li><code><a title="gyvatukas.internal" href="internal.html">gyvatukas.internal</a></code></li>
+<li><code><a title="gyvatukas.megaconsts" href="megaconsts.html">gyvatukas.megaconsts</a></code></li>
 <li><code><a title="gyvatukas.services" href="services/index.html">gyvatukas.services</a></code></li>
 <li><code><a title="gyvatukas.utils" href="utils/index.html">gyvatukas.utils</a></code></li>
 <li><code><a title="gyvatukas.www" href="www/index.html">gyvatukas.www</a></code></li>

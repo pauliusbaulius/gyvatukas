@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.3">
-<title>gyvatukas.utils API documentation</title>
+<title>gyvatukas.utils.string_ API documentation</title>
 <meta name="description" content="">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
@@ -22,74 +22,30 @@ hljs.highlightAll();
 <main>
 <article id="content">
 <header>
-<h1 class="title">Namespace <code>gyvatukas.utils</code></h1>
+<h1 class="title">Module <code>gyvatukas.utils.string_</code></h1>
 </header>
 <section id="section-intro">
 </section>
 <section>
-<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt><code class="name"><a title="gyvatukas.utils.bool" href="bool.html">gyvatukas.utils.bool</a></code></dt>
+<dt id="gyvatukas.utils.string_.keep_except"><code class="name flex">
+<span>def <span class="ident">keep_except</span></span>(<span>s: str, allowed: list[str]) ‑> str</span>
+</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Keep all characters from <code>s</code> except those in <code>allowed</code>.</p></div>
 </dd>
-<dt><code class="name"><a title="gyvatukas.utils.crypto" href="crypto.html">gyvatukas.utils.crypto</a></code></dt>
+<dt id="gyvatukas.utils.string_.remove_except"><code class="name flex">
+<span>def <span class="ident">remove_except</span></span>(<span>s: str, allowed: list[str]) ‑> str</span>
+</code></dt>
 <dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="gyvatukas.utils.decorators" href="decorators.html">gyvatukas.utils.decorators</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="gyvatukas.utils.dict_" href="dict_.html">gyvatukas.utils.dict_</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="gyvatukas.utils.dt" href="dt.html">gyvatukas.utils.dt</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="gyvatukas.utils.env" href="env.html">gyvatukas.utils.env</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="gyvatukas.utils.fs" href="fs.html">gyvatukas.utils.fs</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="gyvatukas.utils.generators" href="generators.html">gyvatukas.utils.generators</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="gyvatukas.utils.ip" href="ip.html">gyvatukas.utils.ip</a></code></dt>
-<dd>
-<div class="desc"><p>Relies on external services, no guarantees.</p></div>
-</dd>
-<dt><code class="name"><a title="gyvatukas.utils.json_" href="json_.html">gyvatukas.utils.json_</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="gyvatukas.utils.lithuania" href="lithuania.html">gyvatukas.utils.lithuania</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="gyvatukas.utils.sql" href="sql.html">gyvatukas.utils.sql</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="gyvatukas.utils.string_" href="string_.html">gyvatukas.utils.string_</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="gyvatukas.utils.validators" href="validators.html">gyvatukas.utils.validators</a></code></dt>
-<dd>
-<div class="desc"></div>
+<div class="desc"><p>Remove all characters from <code>s</code> except those in <code>allowed</code>.</p></div>
 </dd>
 </dl>
-</section>
-<section>
-</section>
-<section>
 </section>
 <section>
 </section>
@@ -101,25 +57,13 @@ hljs.highlightAll();
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="gyvatukas" href="../index.html">gyvatukas</a></code></li>
+<li><code><a title="gyvatukas.utils" href="index.html">gyvatukas.utils</a></code></li>
 </ul>
 </li>
-<li><h3><a href="#header-submodules">Sub-modules</a></h3>
-<ul>
-<li><code><a title="gyvatukas.utils.bool" href="bool.html">gyvatukas.utils.bool</a></code></li>
-<li><code><a title="gyvatukas.utils.crypto" href="crypto.html">gyvatukas.utils.crypto</a></code></li>
-<li><code><a title="gyvatukas.utils.decorators" href="decorators.html">gyvatukas.utils.decorators</a></code></li>
-<li><code><a title="gyvatukas.utils.dict_" href="dict_.html">gyvatukas.utils.dict_</a></code></li>
-<li><code><a title="gyvatukas.utils.dt" href="dt.html">gyvatukas.utils.dt</a></code></li>
-<li><code><a title="gyvatukas.utils.env" href="env.html">gyvatukas.utils.env</a></code></li>
-<li><code><a title="gyvatukas.utils.fs" href="fs.html">gyvatukas.utils.fs</a></code></li>
-<li><code><a title="gyvatukas.utils.generators" href="generators.html">gyvatukas.utils.generators</a></code></li>
-<li><code><a title="gyvatukas.utils.ip" href="ip.html">gyvatukas.utils.ip</a></code></li>
-<li><code><a title="gyvatukas.utils.json_" href="json_.html">gyvatukas.utils.json_</a></code></li>
-<li><code><a title="gyvatukas.utils.lithuania" href="lithuania.html">gyvatukas.utils.lithuania</a></code></li>
-<li><code><a title="gyvatukas.utils.sql" href="sql.html">gyvatukas.utils.sql</a></code></li>
-<li><code><a title="gyvatukas.utils.string_" href="string_.html">gyvatukas.utils.string_</a></code></li>
-<li><code><a title="gyvatukas.utils.validators" href="validators.html">gyvatukas.utils.validators</a></code></li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="gyvatukas.utils.string_.keep_except" href="#gyvatukas.utils.string_.keep_except">keep_except</a></code></li>
+<li><code><a title="gyvatukas.utils.string_.remove_except" href="#gyvatukas.utils.string_.remove_except">remove_except</a></code></li>
 </ul>
 </li>
 </ul>
