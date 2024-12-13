@@ -4,7 +4,10 @@ import logging
 
 
 def timer(logger_name: str = "timer", min_duration_ms: int = 0):
-    """Log function duration in ms. Specify own logger or use default `timer` logger. Can set minimum threshold for logging."""
+    """Log function duration in ms. Specify own logger or use default `timer` logger. Can set minimum threshold for logging.
+
+    ❗Does not support async functions yet.
+    """
 
     def decorator(func):
         @functools.wraps(func)

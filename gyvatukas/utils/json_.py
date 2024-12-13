@@ -15,7 +15,7 @@ def get_pretty_json(data: dict | list) -> str:
 
 
 def read_json(path: pathlib.Path, default: Any = None) -> dict | list:
-    """Read json from file. Return empty dict if not found or invalid json."""
+    """Read JSON from file. Return empty dict if file not found or JSON is invalid."""
     data = read_file(path=path)
     if data:
         try:
@@ -30,7 +30,7 @@ def read_json(path: pathlib.Path, default: Any = None) -> dict | list:
 def write_json(
     path: pathlib.Path, data: dict | list, pretty: bool = True, override: bool = False
 ) -> bool:
-    """Write json to file. Return true if written, false if not."""
+    """Write JSON to file. Return true if written, false if not."""
     if pretty:
         content = get_pretty_json(data)
     else:

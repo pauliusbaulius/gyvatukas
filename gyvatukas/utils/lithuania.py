@@ -25,7 +25,7 @@ class LithuanianPersonalCode:
 
 
 def _calculate_lt_id_checksum(pid: str) -> int:
-    """Calculate Lithuanian personal identification code "asmens kodas" checksum.
+    """Calculate Lithuanian personal identification code checksum.
     See: https://lt.wikipedia.org/wiki/Asmens_kodas
     """
     weights_a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 1]
@@ -47,7 +47,7 @@ def _calculate_lt_id_checksum(pid: str) -> int:
 
 
 def validate_lt_id(pid: str) -> LithuanianPersonalCode:
-    """Validate Lithuanian personal identification code "asmens kodas".
+    """Validate Lithuanian personal identification code.
     See: https://lt.wikipedia.org/wiki/Asmens_kodas
 
     🚨 Does not check if it makes sense, e.g. birthdate is in the future or identifier number is valid.

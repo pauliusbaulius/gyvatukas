@@ -1,4 +1,4 @@
-"""Relies on external services, no guarantees."""
+"""Bunch of IP related utilities relying on 3rd party."""
 import ipaddress
 import logging
 
