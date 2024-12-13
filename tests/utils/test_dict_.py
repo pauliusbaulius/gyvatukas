@@ -1,5 +1,5 @@
 import pytest
-from gyvatukas.utils.dict_ import dict_remove_matching_values, get_by_path
+from gyvatukas.utils.dict_ import dict_remove_matching_values, dict_get_by_path
 
 
 @pytest.mark.parametrize(
@@ -52,4 +52,4 @@ def test_validate_lt_id(d, values, expected_result) -> None:
     ],
 )
 def test_get_by_path_success(data, path, expected_result, separator="."):
-    assert get_by_path(data, path, separator) == expected_result
+    assert dict_get_by_path(data, path, separator) == expected_result

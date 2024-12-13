@@ -7,7 +7,7 @@ import tempfile
 import httpx
 
 from gyvatukas.internal import get_app_storage_path
-from gyvatukas.utils.dict_ import get_by_path
+from gyvatukas.utils.dict_ import dict_get_by_path
 from gyvatukas.utils.ip import ip_to_int
 from gyvatukas.utils.sql import get_conn_cur
 
@@ -116,7 +116,7 @@ class IpToolKit:
     def _setup_ipinfoio(self) -> None:
         logger.info("Setting up ipinfo.io database.")
 
-        token = get_by_path(self.provider_config, "ipinfo.io/token", "/")
+        token = dict_get_by_path(self.provider_config, "ipinfo.io/token", "/")
         if not token:
             logger.warning("Cannot setup ipinfo.io database, token is not in config.")
             return
