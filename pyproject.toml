@@ -9,12 +9,12 @@ repository = "https://github.com/pauliusbaulius/gyvatukas"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-email-validator = "^2"
 bcrypt = "^4"
 beautifulsoup4 = "^4"
 httpx = "^0"
 platformdirs = "^4"
 diskcache = "^5"
+emval = "^0.1.5"
 
 
 [tool.poetry.group.dev.dependencies]
