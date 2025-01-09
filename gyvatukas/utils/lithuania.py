@@ -138,3 +138,11 @@ def validate_lt_tel_nr(tel_nr: str, format_370: bool = True) -> tuple[bool, str]
             clean_tel_nr = f"+370{clean_tel_nr[1:]}"
 
     return is_valid, clean_tel_nr if is_valid else tel_nr
+
+
+def get_clean_tel_nr(tel_nr: str) -> str | None:
+    """Return mobile phone number with +370 prefix. Return None if invalid."""
+    is_valid, clean_tel_nr = validate_lt_tel_nr(tel_nr=tel_nr, format_370=True)
+    if not is_valid:
+        return None
+    return clean_tel_nr

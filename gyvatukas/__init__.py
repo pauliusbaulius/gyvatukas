@@ -21,6 +21,7 @@ from .utils.json_ import get_pretty_json, read_json, write_json
 from .utils.lithuania import (
     validate_lt_id,
     validate_lt_tel_nr,
+    get_clean_tel_nr,
 )
 from .utils.validators import is_email_valid
 from .utils.sql import get_inline_sql, get_conn_cur, init_db, close_connections
@@ -66,6 +67,7 @@ __all__ = [
     # lithuania.py
     "validate_lt_id",
     "validate_lt_tel_nr",
+    "get_clean_tel_nr",
     # validators.py
     "is_email_valid",
     # sql.py
