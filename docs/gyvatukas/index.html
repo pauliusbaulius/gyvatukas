@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<meta name="generator" content="pdoc3 0.11.3">
+<meta name="generator" content="pdoc3 0.11.4">
 <title>gyvatukas API documentation</title>
 <meta name="description" content="gyvatukas
-collection of python utils and prototypes. feel free to open mr&#39;s and send hate mail to dev@paulius.xyz …">
+collection of python utils and prototypes. feel free to open mrs and send hate mail to dev@paulius.xyz …">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
@@ -27,7 +27,7 @@ hljs.highlightAll();
 </header>
 <section id="section-intro">
 <h1 id="gyvatukas">gyvatukas</h1>
-<p>collection of python utils and prototypes. feel free to open mr's and send hate mail to dev@paulius.xyz</p>
+<p>collection of python utils and prototypes. feel free to open mrs and send hate mail to dev@paulius.xyz</p>
 <h2 id="usage">usage</h2>
 <p><code>pip install <a title="gyvatukas" href="#gyvatukas">gyvatukas</a></code> or <code>poetry add <a title="gyvatukas" href="#gyvatukas">gyvatukas</a></code></p>
 <pre><code class="language-python">import gyvatukas as g
@@ -81,6 +81,59 @@ are published from master and are source of truth for the latest pypi release))<
 </code></dt>
 <dd>
 <div class="desc"><p>Close thread's database connection.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def close_connections():
+    &#34;&#34;&#34;Close thread&#39;s database connection.&#34;&#34;&#34;
+    if hasattr(_thread_local, &#34;connection&#34;):
+        _thread_local.connection.close()
+        del _thread_local.connection</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.dict_get_by_path"><code class="name flex">
+<span>def <span class="ident">dict_get_by_path</span></span>(<span>d: dict, path: str, separator: str = '.', allow_none: bool = False) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def dict_get_by_path(
+    d: dict, path: str, separator: str = &#34;.&#34;, allow_none: bool = False
+) -&gt; Any:
+    current = d
+
+    if not path:
+        return current
+
+    for part in path.split(separator):
+        try:
+            if isinstance(current, (list, tuple)):
+                try:
+                    index = int(part)
+                    current = current[index]
+                except (ValueError, IndexError):
+                    if allow_none:
+                        return None
+                    raise GyvatukasException(f&#34;invalid index &#39;{part}&#39; for sequence&#34;)
+            elif isinstance(current, dict):
+                current = current[part]
+            else:
+                if allow_none:
+                    return None
+                raise GyvatukasException(
+                    f&#34;cannot index into {type(current)} with &#39;{part}&#39;&#34;
+                )
+        except KeyError:
+            if allow_none:
+                return None
+            raise
+
+    return current</code></pre>
+</details>
 </dd>
 <dt id="gyvatukas.dict_remove_matching_values"><code class="name flex">
 <span>def <span class="ident">dict_remove_matching_values</span></span>(<span>d: dict, values: list) ‑> dict</span>
@@ -90,24 +143,52 @@ are published from master and are source of truth for the latest pypi release))<
 Useful for removing None values from dict or empty strings when working with form data.</p>
 <p>Returns new dict.
 🐌 Creates a new dict, not recommended for large dicts.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def dict_remove_matching_values(d: dict, values: list) -&gt; dict:
+    &#34;&#34;&#34;Remove all key-value pairs from dict where value is in values.
+    Useful for removing None values from dict or empty strings when working with form data.
+
+    Returns new dict.
+    🐌 Creates a new dict, not recommended for large dicts.
+    &#34;&#34;&#34;
+    new_d = {}
+    for k, v in d.items():
+        if v not in values:
+            new_d[k] = v
+
+    return new_d</code></pre>
+</details>
 </dd>
 <dt id="gyvatukas.dir_exists"><code class="name flex">
 <span>def <span class="ident">dir_exists</span></span>(<span>path: pathlib.Path) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Check if directory exists.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def dir_exists(path: pathlib.Path) -&gt; bool:
+    &#34;&#34;&#34;Check if directory exists.&#34;&#34;&#34;
+    return path.exists() and path.is_dir()</code></pre>
+</details>
 </dd>
 <dt id="gyvatukas.file_exists"><code class="name flex">
 <span>def <span class="ident">file_exists</span></span>(<span>path: pathlib.Path) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Check if file exists.</p></div>
-</dd>
-<dt id="gyvatukas.get_by_path"><code class="name flex">
-<span>def <span class="ident">get_by_path</span></span>(<span>d: dict, path: str, separator: str = '.', do_not_raise: bool = False) ‑> Any</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def file_exists(path: pathlib.Path) -&gt; bool:
+    &#34;&#34;&#34;Check if file exists.&#34;&#34;&#34;
+    return path.exists()</code></pre>
+</details>
 </dd>
 <dt id="gyvatukas.get_conn_cur"><code class="name flex">
 <span>def <span class="ident">get_conn_cur</span></span>(<span>path_db: pathlib.Path)</span>
@@ -115,12 +196,42 @@ Useful for removing None values from dict or empty strings when working with for
 <dd>
 <div class="desc"><p>Thread-safe context manager that yields SQLite connection and cursor.
 Reuses connection within same thread.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@contextmanager
+def get_conn_cur(path_db: pathlib.Path):
+    &#34;&#34;&#34;Thread-safe context manager that yields SQLite connection and cursor.
+    Reuses connection within same thread.&#34;&#34;&#34;
+    if not hasattr(_thread_local, &#34;connection&#34;):
+        _thread_local.connection = sqlite3.connect(path_db, check_same_thread=False)
+
+    try:
+        cursor = DictCursor(_thread_local.connection)
+        yield _thread_local.connection, cursor
+        _thread_local.connection.commit()
+    except Exception:
+        _thread_local.connection.rollback()
+        raise
+    finally:
+        cursor.close()</code></pre>
+</details>
 </dd>
 <dt id="gyvatukas.get_dt_utc_now"><code class="name flex">
 <span>def <span class="ident">get_dt_utc_now</span></span>(<span>) ‑> datetime.datetime</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_dt_utc_now() -&gt; datetime.datetime:
+    # Python devs decided to deprecate datetime.datetime.utcnow() since is naive datetime.
+    # https://blog.miguelgrinberg.com/post/it-s-time-for-a-change-datetime-utcnow-is-now-deprecated
+    return datetime.datetime.now(tz=datetime.timezone.utc)</code></pre>
+</details>
 </dd>
 <dt id="gyvatukas.get_env"><code class="name flex">
 <span>def <span class="ident">get_env</span></span>(<span>name: str,<br>type: {<class 'bool'>, <class 'str'>, <class 'float'>, <class 'int'>, <class 'dict'>, <class 'list'>},<br>default: {<class 'bool'>, <class 'str'>, <class 'float'>, <class 'int'>, <class 'dict'>, <class 'list'>} = None,<br>required: bool = False) ‑> {<class 'bool'>, <class 'str'>, <class 'float'>, <class 'int'>, <class 'dict'>, <class 'list'>}</span>
@@ -131,6 +242,61 @@ Reuses connection within same thread.</p></div>
 <p>type: Output type, will split "a,b,c" into ["a", "b", "c"] if type=list.
 default: Default value if given name does not exist in environ
 required: Fail if not found in environment? Useful for things like database port :)</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_env(
+    name: str,
+    type: SUPPORTED_ENV_TYPES,
+    default: SUPPORTED_ENV_TYPES = None,
+    required: bool = False,
+) -&gt; SUPPORTED_ENV_TYPES:
+    &#34;&#34;&#34;Try to parse environment variable as given type.
+
+    🚩 Does not load environment variables. Use `python-dotenv` for that.
+
+    type: Output type, will split &#34;a,b,c&#34; into [&#34;a&#34;, &#34;b&#34;, &#34;c&#34;] if type=list.
+    default: Default value if given name does not exist in environ
+    required: Fail if not found in environment? Useful for things like database port :)
+    &#34;&#34;&#34;
+    truthy = (&#34;true&#34;, &#34;1&#34;, &#34;yes&#34;)
+    falsy = (&#34;false&#34;, &#34;0&#34;, &#34;no&#34;)
+    value: Union[None, str] = os.getenv(name, None)
+
+    if value is None or value == &#34;&#34;:
+        if required:
+            raise ValueError(
+                f&#34;Value `{value}` is required but not found in environment!&#34;
+            )
+        return default
+
+    if type == bool:
+        if value.lower() not in truthy + falsy:
+            raise ValueError(
+                f&#34;Invalid value `{value}` for variable `{name}`. Cannot be parsed as bool...&#34;
+            )
+        return value in truthy
+
+    if type == list:
+        return value.split(&#34;,&#34;)
+
+    if type == int:
+        return int(value)
+
+    if type == float:
+        return float(value)
+
+    if type == dict:
+        try:
+            return json.loads(value)
+        except json.JSONDecodeError:
+            raise ValueError(
+                f&#34;Invalid value `{value}` for variable `{name}`. Cannot be parsed as dict...&#34;
+            )
+
+    return str(value)</code></pre>
+</details>
 </dd>
 <dt id="gyvatukas.get_inline_sql"><code class="name flex">
 <span>def <span class="ident">get_inline_sql</span></span>(<span>sql: str) ‑> str</span>
@@ -140,12 +306,41 @@ required: Fail if not found in environment? Useful for things like database port
 <ul>
 <li>Cleanup PII if you are going to log all SQL queries 🤠</li>
 </ul></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_inline_sql(sql: str) -&gt; str:
+    &#34;&#34;&#34;Convert pretty SQL statement in docstring to something that looks good in console output or logs.
+
+    - Cleanup PII if you are going to log all SQL queries 🤠
+    &#34;&#34;&#34;
+    # Dedent first to normalize indentation
+    sql = textwrap.dedent(sql)
+    # Replace multiple whitespace characters with a single space
+    sql = &#34; &#34;.join(sql.split())
+    # Remove starting and ending whitespace
+    sql = sql.strip()
+    return sql</code></pre>
+</details>
 </dd>
 <dt id="gyvatukas.get_ip_country"><code class="name flex">
 <span>def <span class="ident">get_ip_country</span></span>(<span>ip: str) ‑> str | None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Get country for given ip address or "Unknown" if not found.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@timer()
+def get_ip_country(ip: str) -&gt; str | None:
+    &#34;&#34;&#34;Get country for given ip address or &#34;Unknown&#34; if not found.&#34;&#34;&#34;
+    data = get_ipv4_meta(ip)
+    if data is None:
+        return None
+    return data.get(&#34;country&#34;, &#34;Unknown&#34;)</code></pre>
+</details>
 </dd>
 <dt id="gyvatukas.get_ipv4_meta"><code class="name flex">
 <span>def <span class="ident">get_ipv4_meta</span></span>(<span>ip: str) ‑> dict | None</span>
@@ -153,6 +348,28 @@ required: Fail if not found in environment? Useful for things like database port
 <dd>
 <div class="desc"><p>Lookup ipv4 information. Uses <a href="https://wasab.is.">https://wasab.is.</a></p>
 <p>🚨 Performs external request.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@timer()
+def get_ipv4_meta(ip: str) -&gt; dict | None:
+    &#34;&#34;&#34;Lookup ipv4 information. Uses https://wasab.is.
+
+    🚨 Performs external request.
+    &#34;&#34;&#34;
+    _logger.debug(&#34;performing ipv4 meta lookup for ip `%s`.&#34;, ip)
+    url = f&#34;https://wasab.is/json?ip={ip}&#34;
+
+    result = httpx.get(url=url, timeout=5)
+
+    if result.status_code == 200:
+        result = result.json()
+    else:
+        result = None
+
+    return result</code></pre>
+</details>
 </dd>
 <dt id="gyvatukas.get_my_ipv4"><code class="name flex">
 <span>def <span class="ident">get_my_ipv4</span></span>(<span>) ‑> str</span>
@@ -160,54 +377,139 @@ required: Fail if not found in environment? Useful for things like database port
 <dd>
 <div class="desc"><p>Lookup external ipv4 address. Uses <a href="https://ifconfig.me">https://ifconfig.me</a> or <a href="https://wasab.is.">https://wasab.is.</a></p>
 <p>🚨 Performs external request.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@timer()
+def get_my_ipv4() -&gt; str:
+    &#34;&#34;&#34;Lookup external ipv4 address. Uses https://ifconfig.me or https://wasab.is.
+
+    🚨 Performs external request.
+    &#34;&#34;&#34;
+    _logger.debug(&#34;performing ipv4 lookup.&#34;)
+    url = &#34;https://wasab.is/json&#34;
+
+    result = httpx.get(url=url, timeout=5)
+    data = result.json()
+    return data[&#34;ip&#34;]</code></pre>
+</details>
 </dd>
 <dt id="gyvatukas.get_path_extension"><code class="name flex">
 <span>def <span class="ident">get_path_extension</span></span>(<span>path: pathlib.Path) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Return file extension from path.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_path_extension(path: pathlib.Path) -&gt; str:
+    &#34;&#34;&#34;Return file extension from path.&#34;&#34;&#34;
+    return path.suffix</code></pre>
+</details>
 </dd>
 <dt id="gyvatukas.get_path_filename"><code class="name flex">
 <span>def <span class="ident">get_path_filename</span></span>(<span>path: pathlib.Path) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Return filename from path.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_path_filename(path: pathlib.Path) -&gt; str:
+    &#34;&#34;&#34;Return filename from path.&#34;&#34;&#34;
+    return path.name</code></pre>
+</details>
 </dd>
 <dt id="gyvatukas.get_path_without_filename"><code class="name flex">
 <span>def <span class="ident">get_path_without_filename</span></span>(<span>path: pathlib.Path) ‑> pathlib.Path</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Return path without filename.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_path_without_filename(path: pathlib.Path) -&gt; pathlib.Path:
+    &#34;&#34;&#34;Return path without filename.&#34;&#34;&#34;
+    return path.parent</code></pre>
+</details>
 </dd>
 <dt id="gyvatukas.get_pretty_json"><code class="name flex">
 <span>def <span class="ident">get_pretty_json</span></span>(<span>data: dict | list) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Return pretty json string.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_pretty_json(data: dict | list) -&gt; str:
+    &#34;&#34;&#34;Return pretty json string.&#34;&#34;&#34;
+    result = json.dumps(data, indent=4, default=str, ensure_ascii=False)
+    return result</code></pre>
+</details>
 </dd>
 <dt id="gyvatukas.get_random_secure_string"><code class="name flex">
 <span>def <span class="ident">get_random_secure_string</span></span>(<span>length: int) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Get random secure string generated by <code>secrets</code> module.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_random_secure_string(length: int) -&gt; str:
+    &#34;&#34;&#34;Get random secure string generated by `secrets` module.&#34;&#34;&#34;
+    return secrets.token_urlsafe(length)</code></pre>
+</details>
 </dd>
 <dt id="gyvatukas.get_utc_today"><code class="name flex">
 <span>def <span class="ident">get_utc_today</span></span>(<span>) ‑> datetime.date</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_utc_today() -&gt; datetime.date:
+    return get_dt_utc_now().date()</code></pre>
+</details>
 </dd>
 <dt id="gyvatukas.hash_password"><code class="name flex">
 <span>def <span class="ident">hash_password</span></span>(<span>password: str) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Return hashed password using <code>bcrypt</code>.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def hash_password(password: str) -&gt; str:
+    &#34;&#34;&#34;Return hashed password using `bcrypt`.&#34;&#34;&#34;
+    hashed_password = bcrypt.hashpw(
+        password=password.encode(&#34;utf-8&#34;), salt=bcrypt.gensalt()
+    )
+    return hashed_password.decode(&#34;utf-8&#34;)</code></pre>
+</details>
 </dd>
 <dt id="gyvatukas.init_db"><code class="name flex">
 <span>def <span class="ident">init_db</span></span>(<span>path_db: pathlib.Path, sql_script: str)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Initialize database with SQL script.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def init_db(path_db: pathlib.Path, sql_script: str):
+    &#34;&#34;&#34;Initialize database with SQL script.&#34;&#34;&#34;
+    with get_conn_cur(path_db) as (conn, cur):
+        cur.executescript(sql_script)</code></pre>
+</details>
 </dd>
 <dt id="gyvatukas.is_email_valid"><code class="name flex">
 <span>def <span class="ident">is_email_valid</span></span>(<span>email: str, perform_dns_check: bool = False) ‑> tuple[bool, str]</span>
@@ -215,46 +517,245 @@ required: Fail if not found in environment? Useful for things like database port
 <dd>
 <div class="desc"><p>Check if email is valid. If check_deliverability is True, will also check if email is deliverable.
 If email is valid, returns normalized email, otherwise returns the original email.</p>
-<p>🚨 check_deliverability performs external request!</p>
-<p>Uses <a href="https://github.com/JoshData/python-email-validator">https://github.com/JoshData/python-email-validator</a> lib.</p></div>
+<p>❗ Does not do dns check since <code>emval</code> does not support it yet.</p>
+<p>Uses <a href="https://github.com/bnkc/emval">https://github.com/bnkc/emval</a> lib.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_email_valid(email: str, perform_dns_check: bool = False) -&gt; tuple[bool, str]:
+    &#34;&#34;&#34;Check if email is valid. If check_deliverability is True, will also check if email is deliverable.
+    If email is valid, returns normalized email, otherwise returns the original email.
+
+    ❗ Does not do dns check since `emval` does not support it yet.
+
+    Uses https://github.com/bnkc/emval lib.
+    &#34;&#34;&#34;
+    _logger.debug(&#34;validating email `%s&#34;, email)
+
+    try:
+        validated = emval.validate_email(
+            email,
+        )
+    except Exception as e:
+        _logger.exception(f&#34;email `{email}` validation failed with {e}&#34;)
+        return False, email
+
+    return True, validated.normalized</code></pre>
+</details>
 </dd>
 <dt id="gyvatukas.is_false"><code class="name flex">
 <span>def <span class="ident">is_false</span></span>(<span>value: Any) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_false(value: Any) -&gt; bool:
+    if isinstance(value, bool):
+        return not value
+    if isinstance(value, (int, float)):
+        return value == 0
+    if isinstance(value, str):
+        return value.lower().strip() in FALSE_VALUES
+    return not bool(value)</code></pre>
+</details>
 </dd>
 <dt id="gyvatukas.is_true"><code class="name flex">
 <span>def <span class="ident">is_true</span></span>(<span>value: Any) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_true(value: Any) -&gt; bool:
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, (int, float)):
+        return value != 0
+    if isinstance(value, str):
+        return value.lower().strip() in TRUE_VALUES
+    return bool(value)</code></pre>
+</details>
 </dd>
 <dt id="gyvatukas.read_file"><code class="name flex">
 <span>def <span class="ident">read_file</span></span>(<span>path: pathlib.Path, read_bytes: bool = False) ‑> str | None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Read file contents. Return None if file does not exist or content is empty.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def read_file(path: pathlib.Path, read_bytes: bool = False) -&gt; str | None:
+    &#34;&#34;&#34;Read file contents. Return None if file does not exist or content is empty.&#34;&#34;&#34;
+    if file_exists(path):
+        content = path.read_bytes() if read_bytes else path.read_text()
+        return content
+
+    return None</code></pre>
+</details>
 </dd>
 <dt id="gyvatukas.read_json"><code class="name flex">
 <span>def <span class="ident">read_json</span></span>(<span>path: pathlib.Path, default: Any = None) ‑> dict | list</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Read json from file. Return empty dict if not found or invalid json.</p></div>
+<div class="desc"><p>Read JSON from file. Return empty dict if file not found or JSON is invalid.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def read_json(path: pathlib.Path, default: Any = None) -&gt; dict | list:
+    &#34;&#34;&#34;Read JSON from file. Return empty dict if file not found or JSON is invalid.&#34;&#34;&#34;
+    data = read_file(path=path)
+    if data:
+        try:
+            return json.loads(data)
+        except json.JSONDecodeError:
+            pass
+    if default is not None:
+        return default
+    return {}</code></pre>
+</details>
 </dd>
 <dt id="gyvatukas.timer"><code class="name flex">
 <span>def <span class="ident">timer</span></span>(<span>logger_name: str = 'timer', min_duration_ms: int = 0)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Log function duration in ms. Specify own logger or use default <code><a title="gyvatukas.timer" href="#gyvatukas.timer">timer()</a></code> logger. Can set minimum threshold for logging.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def timer(logger_name: str = &#34;timer&#34;, min_duration_ms: int = 0):
+    &#34;&#34;&#34;Log function duration in ms. Specify own logger or use default `timer` logger. Can set minimum threshold for logging.&#34;&#34;&#34;
+
+    def decorator(func):
+        # Handle both async and sync functions
+        if asyncio.iscoroutinefunction(func):
+
+            @functools.wraps(func)
+            async def wrapper(*args, **kwargs):
+                logger = logging.getLogger(logger_name)
+                t0 = time.perf_counter()
+                result = await func(*args, **kwargs)
+                duration_ms = (time.perf_counter() - t0) * 1000
+                if duration_ms &gt;= min_duration_ms:
+                    logger.info(
+                        f&#34;`{func.__name__}` took {duration_ms:.2f}ms&#34;,
+                        extra={
+                            &#34;ms&#34;: duration_ms,
+                            &#34;fn&#34;: func.__name__,
+                            &#34;metric&#34;: &#34;timer&#34;,
+                        },
+                    )
+                return result
+        else:
+
+            @functools.wraps(func)
+            def wrapper(*args, **kwargs):
+                logger = logging.getLogger(logger_name)
+                t0 = time.perf_counter()
+                result = func(*args, **kwargs)
+                duration_ms = (time.perf_counter() - t0) * 1000
+                if duration_ms &gt;= min_duration_ms:
+                    logger.info(
+                        f&#34;`{func.__name__}` took {duration_ms:.2f}ms&#34;,
+                        extra={
+                            &#34;ms&#34;: duration_ms,
+                            &#34;fn&#34;: func.__name__,
+                            &#34;metric&#34;: &#34;timer&#34;,
+                        },
+                    )
+                return result
+
+        return wrapper
+
+    return decorator</code></pre>
+</details>
 </dd>
 <dt id="gyvatukas.validate_lt_id"><code class="name flex">
 <span>def <span class="ident">validate_lt_id</span></span>(<span>pid: str) ‑> <a title="gyvatukas.utils.lithuania.LithuanianPersonalCode" href="utils/lithuania.html#gyvatukas.utils.lithuania.LithuanianPersonalCode">LithuanianPersonalCode</a></span>
 </code></dt>
 <dd>
-<div class="desc"><p>Validate Lithuanian personal identification code "asmens kodas".
+<div class="desc"><p>Validate Lithuanian personal identification code.
 See: <a href="https://lt.wikipedia.org/wiki/Asmens_kodas">https://lt.wikipedia.org/wiki/Asmens_kodas</a></p>
 <p>🚨 Does not check if it makes sense, e.g. birthdate is in the future or identifier number is valid.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def validate_lt_id(pid: str) -&gt; LithuanianPersonalCode:
+    &#34;&#34;&#34;Validate Lithuanian personal identification code.
+    See: https://lt.wikipedia.org/wiki/Asmens_kodas
+
+    🚨 Does not check if it makes sense, e.g. birthdate is in the future or identifier number is valid.
+    &#34;&#34;&#34;
+    is_edge_case = False
+
+    if len(pid) != 11:
+        raise Exception(&#34;PID should be 11 characters long!&#34;)
+
+    gender_number = int(pid[0])
+    birth_year = int(pid[1:3])
+    birth_month = int(pid[3:5])
+    birth_day = int(pid[5:7])
+
+    # Wikipedia:
+    # Asmens kodai, suteikiami vyresnio amžiaus žmonėms neprisimenantiems savo gimimo mėnesio ar dienos.
+    # Tokiuose koduose vietoje mėnesio ar dienos skaitmenų įrašomi 0. Tai labai reta išimtis.
+    if birth_month == 0:
+        is_edge_case = True
+        birth_month = None
+
+    if birth_day == 0:
+        is_edge_case = True
+        birth_day = None
+
+    identifier_number = pid[7:]
+
+    # Validate first digit aka sex.
+    if gender_number in [1, 3, 5]:
+        gender = &#34;male&#34;
+    elif gender_number in [2, 4, 6]:
+        gender = &#34;female&#34;
+    elif gender_number == 9:
+        gender = None
+        is_edge_case = True
+    else:
+        raise Exception(
+            f&#34;Invalid first number of PID `{gender_number}`, must be one of `1,2,3,4,5,6,9`!&#34;
+        )
+
+    # Set base birth year.
+    birth_base = 0
+    if gender_number in [1, 2]:
+        birth_base = 1800
+    elif gender_number in [3, 4]:
+        birth_base = 1900
+    elif gender_number in [5, 6]:
+        birth_base = 2000
+
+    birth_year = birth_base + birth_year
+
+    checksum = None
+    if not is_edge_case:
+        checksum = _calculate_lt_id_checksum(pid=pid)
+
+    return LithuanianPersonalCode(
+        gender=gender,
+        birth_year=birth_year,
+        birth_month=birth_month,
+        birth_day=birth_day,
+        identifier_number=identifier_number,
+        is_edge_case=is_edge_case,
+        checksum=checksum,
+    )</code></pre>
+</details>
 </dd>
 <dt id="gyvatukas.validate_lt_tel_nr"><code class="name flex">
 <span>def <span class="ident">validate_lt_tel_nr</span></span>(<span>tel_nr: str, format_370: bool = True) ‑> tuple[bool, str]</span>
@@ -264,36 +765,204 @@ See: <a href="https://lt.wikipedia.org/wiki/Asmens_kodas">https://lt.wikipedia.o
 <p>Lithuanian number may start with +370, 8 or 0, followed by 8 digits.</p>
 <p>🚨 Does not check if it exists lol.
 ❗ Does not validate short numbers like 112, 1848, etc.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def validate_lt_tel_nr(tel_nr: str, format_370: bool = True) -&gt; tuple[bool, str]:
+    &#34;&#34;&#34;Validate Lithuanian phone number. Return if is valid and formatted number.
+
+    Lithuanian number may start with +370, 8 or 0, followed by 8 digits.
+
+    🚨 Does not check if it exists lol.
+    ❗ Does not validate short numbers like 112, 1848, etc.
+    &#34;&#34;&#34;
+    is_valid = False
+
+    # Remove all symbols except + and 0-9.
+    clean_tel_nr = str_remove_except(
+        tel_nr, [&#34;0&#34;, &#34;1&#34;, &#34;2&#34;, &#34;3&#34;, &#34;4&#34;, &#34;5&#34;, &#34;6&#34;, &#34;7&#34;, &#34;8&#34;, &#34;9&#34;, &#34;+&#34;]
+    )
+
+    # Check if valid.
+    regex = r&#34;^(?:\+370|8|0)\d{8}$&#34;
+    if re.match(regex, clean_tel_nr):
+        is_valid = True
+
+    # If starts with 0 or 8, make it +370.
+    if format_370 and clean_tel_nr.startswith(&#34;8&#34;) or clean_tel_nr.startswith(&#34;0&#34;):
+        clean_tel_nr = f&#34;+370{tel_nr[1:]}&#34;
+
+    return is_valid, clean_tel_nr if is_valid else tel_nr</code></pre>
+</details>
 </dd>
 <dt id="gyvatukas.validate_password"><code class="name flex">
 <span>def <span class="ident">validate_password</span></span>(<span>password: str, hashed_password: str) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Verify password against hashed password using <code>bcrypt</code>.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def validate_password(password: str, hashed_password: str) -&gt; bool:
+    &#34;&#34;&#34;Verify password against hashed password using `bcrypt`.&#34;&#34;&#34;
+    return bcrypt.checkpw(
+        password=password.encode(&#34;utf-8&#34;),
+        hashed_password=hashed_password.encode(&#34;utf-8&#34;),
+    )</code></pre>
+</details>
 </dd>
 <dt id="gyvatukas.value_to_bool"><code class="name flex">
 <span>def <span class="ident">value_to_bool</span></span>(<span>value: Any) ‑> bool | None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def value_to_bool(value: Any) -&gt; Union[bool, None]:
+    if is_true(value):
+        return True
+    if is_false(value):
+        return False
+    return None</code></pre>
+</details>
 </dd>
 <dt id="gyvatukas.write_file"><code class="name flex">
 <span>def <span class="ident">write_file</span></span>(<span>path: pathlib.Path, content: str | bytes, override: bool = False) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Write content to file. Return True if file was written, False otherwise.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def write_file(
+    path: pathlib.Path, content: str | bytes, override: bool = False
+) -&gt; bool:
+    &#34;&#34;&#34;Write content to file. Return True if file was written, False otherwise.&#34;&#34;&#34;
+    if not override and file_exists(path):
+        return False
+
+    path.write_text(content) if isinstance(content, str) else path.write_bytes(content)
+
+    return True</code></pre>
+</details>
 </dd>
 <dt id="gyvatukas.write_json"><code class="name flex">
 <span>def <span class="ident">write_json</span></span>(<span>path: pathlib.Path,<br>data: dict | list,<br>pretty: bool = True,<br>override: bool = False) ‑> bool</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Write json to file. Return true if written, false if not.</p></div>
+<div class="desc"><p>Write JSON to file. Return true if written, false if not.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def write_json(
+    path: pathlib.Path, data: dict | list, pretty: bool = True, override: bool = False
+) -&gt; bool:
+    &#34;&#34;&#34;Write JSON to file. Return true if written, false if not.&#34;&#34;&#34;
+    if pretty:
+        content = get_pretty_json(data)
+    else:
+        content = json.dumps(data, default=str, ensure_ascii=False)
+
+    result = write_file(path=path, content=content, override=override)
+    return result</code></pre>
+</details>
 </dd>
 </dl>
 </section>
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
+<dt id="gyvatukas.DirDB"><code class="flex name class">
+<span>class <span class="ident">DirDB</span></span>
+<span>(</span><span>base_path: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Implementation that stores each value in a separate file.</p>
+<p>Initialize the database with a base path.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>base_path</code></strong></dt>
+<dd>The base directory path for the database</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DirDB(AbstractDB):
+    &#34;&#34;&#34;Implementation that stores each value in a separate file.&#34;&#34;&#34;
+
+    def _get_path(self, key: str) -&gt; str:
+        &#34;&#34;&#34;Get the full file path for a key.&#34;&#34;&#34;
+        safe_key = key.replace(&#34;/&#34;, &#34;_&#34;).replace(&#34;\\&#34;, &#34;_&#34;)
+        return os.path.join(self.base_path, safe_key)
+
+    def get(self, key: str) -&gt; Optional[ValueType]:
+        path = self._get_path(key)
+        if not os.path.exists(path):
+            return None
+
+        with open(path, &#34;rb&#34;) as f:
+            content = f.read()
+
+        # Try to decode as string first
+        try:
+            return content.decode(&#34;utf-8&#34;)
+        except UnicodeDecodeError:
+            return content
+
+    def set(self, key: str, value: ValueType) -&gt; None:
+        path = self._get_path(key)
+
+        if isinstance(value, (dict, list)):
+            content = json.dumps(value).encode(&#34;utf-8&#34;)
+        elif isinstance(value, int):
+            content = str(value).encode(&#34;utf-8&#34;)
+        elif isinstance(value, str):
+            content = value.encode(&#34;utf-8&#34;)
+        elif isinstance(value, bytes):
+            content = value
+        else:
+            raise ValueError(f&#34;Unsupported value type: {type(value)}&#34;)
+
+        with open(path, &#34;wb&#34;) as f:
+            f.write(content)
+
+    def delete(self, key: str) -&gt; bool:
+        path = self._get_path(key)
+        if os.path.exists(path):
+            os.remove(path)
+            return True
+        return False
+
+    def update(self, key: str, value: ValueType) -&gt; bool:
+        if not os.path.exists(self._get_path(key)):
+            return False
+        self.set(key, value)
+        return True</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="gyvatukas.utils.db.AbstractDB" href="utils/db.html#gyvatukas.utils.db.AbstractDB">AbstractDB</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="gyvatukas.utils.db.AbstractDB" href="utils/db.html#gyvatukas.utils.db.AbstractDB">AbstractDB</a></b></code>:
+<ul class="hlist">
+<li><code><a title="gyvatukas.utils.db.AbstractDB.delete" href="utils/db.html#gyvatukas.utils.db.AbstractDB.delete">delete</a></code></li>
+<li><code><a title="gyvatukas.utils.db.AbstractDB.get" href="utils/db.html#gyvatukas.utils.db.AbstractDB.get">get</a></code></li>
+<li><code><a title="gyvatukas.utils.db.AbstractDB.set" href="utils/db.html#gyvatukas.utils.db.AbstractDB.set">set</a></code></li>
+<li><code><a title="gyvatukas.utils.db.AbstractDB.update" href="utils/db.html#gyvatukas.utils.db.AbstractDB.update">update</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 <dt id="gyvatukas.IpToolKit"><code class="flex name class">
 <span>class <span class="ident">IpToolKit</span></span>
 <span>(</span><span>provider_config: dict | None = None, db_path: pathlib.Path | None = None)</span>
@@ -345,7 +1014,7 @@ See: <a href="https://lt.wikipedia.org/wiki/Asmens_kodas">https://lt.wikipedia.o
     def __init__(
         self, provider_config: dict | None = None, db_path: pathlib.Path | None = None
     ):
-        self.provider_config = provider_config
+        self.provider_config = provider_config or {}
         self.path_db = db_path or get_app_storage_path() / &#34;iptoolkit.db&#34;
 
         if not self.db_exists():
@@ -417,7 +1086,7 @@ See: <a href="https://lt.wikipedia.org/wiki/Asmens_kodas">https://lt.wikipedia.o
     def _setup_ipinfoio(self) -&gt; None:
         logger.info(&#34;Setting up ipinfo.io database.&#34;)
 
-        token = get_by_path(self.provider_config, &#34;ipinfo.io/token&#34;, &#34;/&#34;)
+        token = dict_get_by_path(self.provider_config, &#34;ipinfo.io/token&#34;, &#34;/&#34;)
         if not token:
             logger.warning(&#34;Cannot setup ipinfo.io database, token is not in config.&#34;)
             return
@@ -506,20 +1175,126 @@ See: <a href="https://lt.wikipedia.org/wiki/Asmens_kodas">https://lt.wikipedia.o
 </code></dt>
 <dd>
 <div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def db_exists(self) -&gt; bool:
+    return self.path_db.exists()</code></pre>
+</details>
 </dd>
 <dt id="gyvatukas.IpToolKit.get_country_by_ipv4"><code class="name flex">
 <span>def <span class="ident">get_country_by_ipv4</span></span>(<span>self, ipv4: str) ‑> str | None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Given ipv4 address, return best matched country code or None.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_country_by_ipv4(self, ipv4: str) -&gt; str | None:
+    &#34;&#34;&#34;Given ipv4 address, return best matched country code or None.&#34;&#34;&#34;
+    # todo: Validate IP4.
+    ip_int = ip_to_int(ipv4)
+    with get_conn_cur(self.path_db) as (conn, cur):
+        cur.execute(
+            &#34;SELECT cc, COUNT(*) as count FROM ip_to_country WHERE ipf &lt;= :ipf AND ipt &gt;= :ipt GROUP BY cc ORDER BY count DESC LIMIT 1&#34;,
+            {&#34;ipf&#34;: ip_int, &#34;ipt&#34;: ip_int},
+        )
+        result = cur.fetchone()
+        return result[&#34;cc&#34;] if result else None</code></pre>
+</details>
 </dd>
 <dt id="gyvatukas.IpToolKit.setup_db"><code class="name flex">
 <span>def <span class="ident">setup_db</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def setup_db(self) -&gt; None:
+    # Always setup db-ip.com since their db is free and no signup required.
+    if &#34;ipinfo.io&#34; in self.provider_config:
+        self._setup_ipinfoio()
+
+    self._setup_dbipcom()</code></pre>
+</details>
 </dd>
 </dl>
+</dd>
+<dt id="gyvatukas.JsonDB"><code class="flex name class">
+<span>class <span class="ident">JsonDB</span></span>
+<span>(</span><span>base_path: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Implementation that stores all values in a single JSON file.</p>
+<p>Initialize the database with a base path.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>base_path</code></strong></dt>
+<dd>The base directory path for the database</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class JsonDB(AbstractDB):
+    &#34;&#34;&#34;Implementation that stores all values in a single JSON file.&#34;&#34;&#34;
+
+    def __init__(self, base_path: str):
+        super().__init__(base_path)
+        self.db_path = os.path.join(self.base_path, &#34;db.json&#34;)
+        self._data: Dict[str, ValueType] = {}
+
+        if os.path.exists(self.db_path):
+            with open(self.db_path, &#34;r&#34;) as f:
+                self._data = json.load(f)
+
+    def _save(self) -&gt; None:
+        &#34;&#34;&#34;Save the current state to the JSON file.&#34;&#34;&#34;
+        with open(self.db_path, &#34;w&#34;) as f:
+            json.dump(self._data, f, indent=2)
+
+    def get(self, key: str) -&gt; Optional[ValueType]:
+        return self._data.get(key)
+
+    def set(self, key: str, value: ValueType) -&gt; None:
+        if isinstance(value, bytes):
+            raise ValueError(&#34;JsonDB doesn&#39;t support bytes values&#34;)
+        self._data[key] = value
+        self._save()
+
+    def delete(self, key: str) -&gt; bool:
+        if key in self._data:
+            del self._data[key]
+            self._save()
+            return True
+        return False
+
+    def update(self, key: str, value: ValueType) -&gt; bool:
+        if key not in self._data:
+            return False
+        self.set(key, value)
+        return True</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="gyvatukas.utils.db.AbstractDB" href="utils/db.html#gyvatukas.utils.db.AbstractDB">AbstractDB</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="gyvatukas.utils.db.AbstractDB" href="utils/db.html#gyvatukas.utils.db.AbstractDB">AbstractDB</a></b></code>:
+<ul class="hlist">
+<li><code><a title="gyvatukas.utils.db.AbstractDB.delete" href="utils/db.html#gyvatukas.utils.db.AbstractDB.delete">delete</a></code></li>
+<li><code><a title="gyvatukas.utils.db.AbstractDB.get" href="utils/db.html#gyvatukas.utils.db.AbstractDB.get">get</a></code></li>
+<li><code><a title="gyvatukas.utils.db.AbstractDB.set" href="utils/db.html#gyvatukas.utils.db.AbstractDB.set">set</a></code></li>
+<li><code><a title="gyvatukas.utils.db.AbstractDB.update" href="utils/db.html#gyvatukas.utils.db.AbstractDB.update">update</a></code></li>
+</ul>
+</li>
+</ul>
 </dd>
 </dl>
 </section>
@@ -547,10 +1322,10 @@ See: <a href="https://lt.wikipedia.org/wiki/Asmens_kodas">https://lt.wikipedia.o
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
 <li><code><a title="gyvatukas.close_connections" href="#gyvatukas.close_connections">close_connections</a></code></li>
+<li><code><a title="gyvatukas.dict_get_by_path" href="#gyvatukas.dict_get_by_path">dict_get_by_path</a></code></li>
 <li><code><a title="gyvatukas.dict_remove_matching_values" href="#gyvatukas.dict_remove_matching_values">dict_remove_matching_values</a></code></li>
 <li><code><a title="gyvatukas.dir_exists" href="#gyvatukas.dir_exists">dir_exists</a></code></li>
 <li><code><a title="gyvatukas.file_exists" href="#gyvatukas.file_exists">file_exists</a></code></li>
-<li><code><a title="gyvatukas.get_by_path" href="#gyvatukas.get_by_path">get_by_path</a></code></li>
 <li><code><a title="gyvatukas.get_conn_cur" href="#gyvatukas.get_conn_cur">get_conn_cur</a></code></li>
 <li><code><a title="gyvatukas.get_dt_utc_now" href="#gyvatukas.get_dt_utc_now">get_dt_utc_now</a></code></li>
 <li><code><a title="gyvatukas.get_env" href="#gyvatukas.get_env">get_env</a></code></li>
@@ -583,6 +1358,9 @@ See: <a href="https://lt.wikipedia.org/wiki/Asmens_kodas">https://lt.wikipedia.o
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
+<h4><code><a title="gyvatukas.DirDB" href="#gyvatukas.DirDB">DirDB</a></code></h4>
+</li>
+<li>
 <h4><code><a title="gyvatukas.IpToolKit" href="#gyvatukas.IpToolKit">IpToolKit</a></code></h4>
 <ul class="">
 <li><code><a title="gyvatukas.IpToolKit.DB_SCHEMA" href="#gyvatukas.IpToolKit.DB_SCHEMA">DB_SCHEMA</a></code></li>
@@ -591,13 +1369,16 @@ See: <a href="https://lt.wikipedia.org/wiki/Asmens_kodas">https://lt.wikipedia.o
 <li><code><a title="gyvatukas.IpToolKit.setup_db" href="#gyvatukas.IpToolKit.setup_db">setup_db</a></code></li>
 </ul>
 </li>
+<li>
+<h4><code><a title="gyvatukas.JsonDB" href="#gyvatukas.JsonDB">JsonDB</a></code></h4>
+</li>
 </ul>
 </li>
 </ul>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.3</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.4</a>.</p>
 </footer>
 </body>
 </html>
