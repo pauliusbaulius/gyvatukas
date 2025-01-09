@@ -11,8 +11,9 @@ from gyvatukas.utils.lithuania import (
     InvalidBirthDateError,
     InvalidChecksumError,
     InvalidIdentifierError,
-    FutureBirthDateError
+    FutureBirthDateError,
 )
+
 
 @pytest.mark.parametrize(
     "pid, expected_result",
@@ -43,9 +44,12 @@ from gyvatukas.utils.lithuania import (
         ),
     ],
 )
-def test_validate_lt_id_valid_cases(pid: str, expected_result: LithuanianPersonalCode) -> None:
+def test_validate_lt_id_valid_cases(
+    pid: str, expected_result: LithuanianPersonalCode
+) -> None:
     result = validate_lt_id(pid)
     assert result == expected_result
+
 
 @pytest.mark.parametrize(
     "pid, expected_exception",
@@ -61,7 +65,9 @@ def test_validate_lt_id_valid_cases(pid: str, expected_result: LithuanianPersona
         ("53509240066", FutureBirthDateError),  # Future date (2035) with valid checksum
     ],
 )
-def test_validate_lt_id_invalid_cases(pid: str, expected_exception: type[LtIdValidationError]) -> None:
+def test_validate_lt_id_invalid_cases(
+    pid: str, expected_exception: type[LtIdValidationError]
+) -> None:
     with pytest.raises(expected_exception):
         validate_lt_id(pid)
 
@@ -75,7 +81,7 @@ def test_birth_date_property() -> None:
         birth_day=24,
         identifier_number="006",
         is_edge_case=False,
-        checksum=4
+        checksum=4,
     )
     assert normal_case.birth_date == datetime.date(1933, 9, 24)
 
@@ -87,7 +93,7 @@ def test_birth_date_property() -> None:
         birth_day=None,
         identifier_number="006",
         is_edge_case=True,
-        checksum=None
+        checksum=None,
     )
     assert edge_case.birth_date is None
 

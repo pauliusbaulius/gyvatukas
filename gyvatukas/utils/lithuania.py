@@ -8,41 +8,49 @@ from typing import Literal
 
 class LtIdValidationError(Exception):
     """Base exception for Lithuanian ID validation errors."""
+
     pass
 
 
 class InvalidFormatError(LtIdValidationError):
     """Invalid format of the ID (length, digits, etc.)"""
+
     pass
 
 
 class InvalidGenderNumberError(LtIdValidationError):
     """Invalid gender number in the ID."""
+
     pass
 
 
 class InvalidBirthDateError(LtIdValidationError):
     """Invalid birth date in the ID."""
+
     pass
 
 
 class InvalidChecksumError(LtIdValidationError):
     """Invalid checksum in the ID."""
+
     pass
 
 
 class InvalidIdentifierError(LtIdValidationError):
     """Invalid identifier number in the ID."""
+
     pass
 
 
 class FutureBirthDateError(LtIdValidationError):
     """Birth date is in the future."""
+
     pass
 
 
 class GenderNumber(Enum):
     """Enumeration of possible gender numbers and their meaning."""
+
     MALE_1800 = 1
     FEMALE_1800 = 2
     MALE_1900 = 3
@@ -66,8 +74,7 @@ class LithuanianPersonalCode:
     def birth_date(self) -> date | None:
         """Return birthdate as dt object if is not an edge case (has no 0 in month/day)."""
         if not self.is_edge_case:
-            return date(self.birth_year, self.birth_month,
-                        self.birth_day)  # type: ignore
+            return date(self.birth_year, self.birth_month, self.birth_day)  # type: ignore
         return None
 
 
@@ -93,7 +100,8 @@ def validate_format(pid: str) -> None:
     """Validate basic format of the ID."""
     if len(pid) != 11:
         raise InvalidFormatError(
-            f"PID must be exactly 11 digits long, got {len(pid)} digits")
+            f"PID must be exactly 11 digits long, got {len(pid)} digits"
+        )
     if not pid.isdigit():
         raise InvalidFormatError("PID must contain only digits")
 
@@ -104,7 +112,8 @@ def validate_gender_number(number: int) -> tuple[str | None, int]:
         gender_num = GenderNumber(number)
     except ValueError:
         raise InvalidGenderNumberError(
-            f"Invalid first number {number}, must be one of {[g.value for g in GenderNumber]}")
+            f"Invalid first number {number}, must be one of {[g.value for g in GenderNumber]}"
+        )
 
     gender_map = {
         GenderNumber.MALE_1800: ("male", 1800),
@@ -113,7 +122,7 @@ def validate_gender_number(number: int) -> tuple[str | None, int]:
         GenderNumber.FEMALE_1800: ("female", 1800),
         GenderNumber.FEMALE_1900: ("female", 1900),
         GenderNumber.FEMALE_2000: ("female", 2000),
-        GenderNumber.SPECIAL_CASE: (None, 1900)
+        GenderNumber.SPECIAL_CASE: (None, 1900),
     }
 
     return gender_map[gender_num]
@@ -129,8 +138,9 @@ def validate_identifier(identifier: str) -> None:
         raise InvalidIdentifierError("Identifier number cannot be 000")
 
 
-def validate_birth_date(year: int, month: int | None, day: int | None,
-                        is_edge_case: bool) -> None:
+def validate_birth_date(
+    year: int, month: int | None, day: int | None, is_edge_case: bool
+) -> None:
     """Validate birth date."""
     if is_edge_case:
         return
@@ -196,7 +206,7 @@ def validate_lt_id(pid: str) -> LithuanianPersonalCode:
         birth_day=birth_day,
         identifier_number=identifier_number,
         is_edge_case=is_edge_case,
-        checksum=control_number if not is_edge_case else None
+        checksum=control_number if not is_edge_case else None,
     )
 
 
@@ -220,7 +230,8 @@ def validate_lt_tel_nr(tel_nr: str, format_370: bool = True) -> tuple[bool, str]
         is_valid = True
         # If starts with 0 or 8, make it +370
         if format_370 and (
-                clean_tel_nr.startswith("8") or clean_tel_nr.startswith("0")):
+            clean_tel_nr.startswith("8") or clean_tel_nr.startswith("0")
+        ):
             clean_tel_nr = f"+370{clean_tel_nr[1:]}"
 
     return is_valid, clean_tel_nr if is_valid else tel_nr
