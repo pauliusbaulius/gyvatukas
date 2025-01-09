@@ -123,19 +123,18 @@ def validate_lt_tel_nr(tel_nr: str, format_370: bool = True) -> tuple[bool, str]
     ❗ Does not validate short numbers like 112, 1848, etc.
     """
     is_valid = False
-
-    # Remove all symbols except + and 0-9.
+    # Remove all symbols except + and 0-9
     clean_tel_nr = str_remove_except(
         tel_nr, ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "+"]
     )
 
-    # Check if valid.
+    # Check if valid
     regex = r"^(?:\+370|8|0)\d{8}$"
     if re.match(regex, clean_tel_nr):
         is_valid = True
-
-    # If starts with 0 or 8, make it +370.
-    if format_370 and clean_tel_nr.startswith("8") or clean_tel_nr.startswith("0"):
-        clean_tel_nr = f"+370{tel_nr[1:]}"
+        # If starts with 0 or 8, make it +370
+        if format_370 and (
+                clean_tel_nr.startswith("8") or clean_tel_nr.startswith("0")):
+            clean_tel_nr = f"+370{clean_tel_nr[1:]}"
 
     return is_valid, clean_tel_nr if is_valid else tel_nr
