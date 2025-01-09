@@ -44,7 +44,7 @@ class IpToolKit:
     def __init__(
         self, provider_config: dict | None = None, db_path: pathlib.Path | None = None
     ):
-        self.provider_config = provider_config
+        self.provider_config = provider_config or {}
         self.path_db = db_path or get_app_storage_path() / "iptoolkit.db"
 
         if not self.db_exists():
