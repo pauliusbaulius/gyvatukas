@@ -9,8 +9,6 @@ def is_email_valid(email: str, perform_dns_check: bool = False) -> tuple[bool, s
     """Check if email is valid. If check_deliverability is True, will also check if email is deliverable.
     If email is valid, returns normalized email, otherwise returns the original email.
 
-    ❗ Does not do dns check since `emval` does not support it yet.
-
     Uses https://github.com/bnkc/emval lib.
     """
     _logger.debug("validating email `%s", email)
@@ -18,6 +16,7 @@ def is_email_valid(email: str, perform_dns_check: bool = False) -> tuple[bool, s
     try:
         validated = emval.validate_email(
             email,
+            deliverable_address=perform_dns_check,
         )
     except Exception as e:
         _logger.exception(f"email `{email}` validation failed with {e}")
