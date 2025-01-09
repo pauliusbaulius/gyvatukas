@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import os
 import json
-from typing import Union, Dict, List, Optional
+from typing import Union, Dict, Optional
 
 # Type alias for supported value types
 ValueType = Union[str, int, dict, list, bytes]
@@ -72,7 +72,7 @@ class DirDB(AbstractDB):
 
     def _get_path(self, key: str) -> str:
         """Get the full file path for a key."""
-        safe_key = key.replace('/', '_').replace('\\', '_')
+        safe_key = key.replace("/", "_").replace("\\", "_")
         return os.path.join(self.base_path, safe_key)
 
     def get(self, key: str) -> Optional[ValueType]:
@@ -80,12 +80,12 @@ class DirDB(AbstractDB):
         if not os.path.exists(path):
             return None
 
-        with open(path, 'rb') as f:
+        with open(path, "rb") as f:
             content = f.read()
 
         # Try to decode as string first
         try:
-            return content.decode('utf-8')
+            return content.decode("utf-8")
         except UnicodeDecodeError:
             return content
 
@@ -93,17 +93,17 @@ class DirDB(AbstractDB):
         path = self._get_path(key)
 
         if isinstance(value, (dict, list)):
-            content = json.dumps(value).encode('utf-8')
+            content = json.dumps(value).encode("utf-8")
         elif isinstance(value, int):
-            content = str(value).encode('utf-8')
+            content = str(value).encode("utf-8")
         elif isinstance(value, str):
-            content = value.encode('utf-8')
+            content = value.encode("utf-8")
         elif isinstance(value, bytes):
             content = value
         else:
             raise ValueError(f"Unsupported value type: {type(value)}")
 
-        with open(path, 'wb') as f:
+        with open(path, "wb") as f:
             f.write(content)
 
     def delete(self, key: str) -> bool:
@@ -125,16 +125,16 @@ class JsonDB(AbstractDB):
 
     def __init__(self, base_path: str):
         super().__init__(base_path)
-        self.db_path = os.path.join(self.base_path, 'db.json')
+        self.db_path = os.path.join(self.base_path, "db.json")
         self._data: Dict[str, ValueType] = {}
 
         if os.path.exists(self.db_path):
-            with open(self.db_path, 'r') as f:
+            with open(self.db_path, "r") as f:
                 self._data = json.load(f)
 
     def _save(self) -> None:
         """Save the current state to the JSON file."""
-        with open(self.db_path, 'w') as f:
+        with open(self.db_path, "w") as f:
             json.dump(self._data, f, indent=2)
 
     def get(self, key: str) -> Optional[ValueType]:
