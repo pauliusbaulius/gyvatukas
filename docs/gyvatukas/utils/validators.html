@@ -39,7 +39,6 @@ hljs.highlightAll();
 <dd>
 <div class="desc"><p>Check if email is valid. If check_deliverability is True, will also check if email is deliverable.
 If email is valid, returns normalized email, otherwise returns the original email.</p>
-<p>❗ Does not do dns check since <code>emval</code> does not support it yet.</p>
 <p>Uses <a href="https://github.com/bnkc/emval">https://github.com/bnkc/emval</a> lib.</p></div>
 <details class="source">
 <summary>
@@ -49,8 +48,6 @@ If email is valid, returns normalized email, otherwise returns the original emai
     &#34;&#34;&#34;Check if email is valid. If check_deliverability is True, will also check if email is deliverable.
     If email is valid, returns normalized email, otherwise returns the original email.
 
-    ❗ Does not do dns check since `emval` does not support it yet.
-
     Uses https://github.com/bnkc/emval lib.
     &#34;&#34;&#34;
     _logger.debug(&#34;validating email `%s&#34;, email)
@@ -58,6 +55,7 @@ If email is valid, returns normalized email, otherwise returns the original emai
     try:
         validated = emval.validate_email(
             email,
+            deliverable_address=perform_dns_check,
         )
     except Exception as e:
         _logger.exception(f&#34;email `{email}` validation failed with {e}&#34;)

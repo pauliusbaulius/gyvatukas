@@ -190,6 +190,23 @@ Useful for removing None values from dict or empty strings when working with for
     return path.exists()</code></pre>
 </details>
 </dd>
+<dt id="gyvatukas.get_clean_tel_nr"><code class="name flex">
+<span>def <span class="ident">get_clean_tel_nr</span></span>(<span>tel_nr: str) ‑> str | None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Return mobile phone number with +370 prefix. Return None if invalid.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_clean_tel_nr(tel_nr: str) -&gt; str | None:
+    &#34;&#34;&#34;Return mobile phone number with +370 prefix. Return None if invalid.&#34;&#34;&#34;
+    is_valid, clean_tel_nr = validate_lt_tel_nr(tel_nr=tel_nr, format_370=True)
+    if not is_valid:
+        return None
+    return clean_tel_nr</code></pre>
+</details>
+</dd>
 <dt id="gyvatukas.get_conn_cur"><code class="name flex">
 <span>def <span class="ident">get_conn_cur</span></span>(<span>path_db: pathlib.Path)</span>
 </code></dt>
@@ -517,7 +534,6 @@ def get_my_ipv4() -&gt; str:
 <dd>
 <div class="desc"><p>Check if email is valid. If check_deliverability is True, will also check if email is deliverable.
 If email is valid, returns normalized email, otherwise returns the original email.</p>
-<p>❗ Does not do dns check since <code>emval</code> does not support it yet.</p>
 <p>Uses <a href="https://github.com/bnkc/emval">https://github.com/bnkc/emval</a> lib.</p></div>
 <details class="source">
 <summary>
@@ -527,8 +543,6 @@ If email is valid, returns normalized email, otherwise returns the original emai
     &#34;&#34;&#34;Check if email is valid. If check_deliverability is True, will also check if email is deliverable.
     If email is valid, returns normalized email, otherwise returns the original email.
 
-    ❗ Does not do dns check since `emval` does not support it yet.
-
     Uses https://github.com/bnkc/emval lib.
     &#34;&#34;&#34;
     _logger.debug(&#34;validating email `%s&#34;, email)
@@ -536,6 +550,7 @@ If email is valid, returns normalized email, otherwise returns the original emai
     try:
         validated = emval.validate_email(
             email,
+            deliverable_address=perform_dns_check,
         )
     except Exception as e:
         _logger.exception(f&#34;email `{email}` validation failed with {e}&#34;)
@@ -682,69 +697,55 @@ If email is valid, returns normalized email, otherwise returns the original emai
 <span>def <span class="ident">validate_lt_id</span></span>(<span>pid: str) ‑> <a title="gyvatukas.utils.lithuania.LithuanianPersonalCode" href="utils/lithuania.html#gyvatukas.utils.lithuania.LithuanianPersonalCode">LithuanianPersonalCode</a></span>
 </code></dt>
 <dd>
-<div class="desc"><p>Validate Lithuanian personal identification code.
-See: <a href="https://lt.wikipedia.org/wiki/Asmens_kodas">https://lt.wikipedia.org/wiki/Asmens_kodas</a></p>
-<p>🚨 Does not check if it makes sense, e.g. birthdate is in the future or identifier number is valid.</p></div>
+<div class="desc"><p>Validate Lithuanian personal identification code.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def validate_lt_id(pid: str) -&gt; LithuanianPersonalCode:
-    &#34;&#34;&#34;Validate Lithuanian personal identification code.
-    See: https://lt.wikipedia.org/wiki/Asmens_kodas
-
-    🚨 Does not check if it makes sense, e.g. birthdate is in the future or identifier number is valid.
-    &#34;&#34;&#34;
+    &#34;&#34;&#34;Validate Lithuanian personal identification code.&#34;&#34;&#34;
     is_edge_case = False
 
-    if len(pid) != 11:
-        raise Exception(&#34;PID should be 11 characters long!&#34;)
+    # 1. Basic format validation first
+    validate_format(pid)
 
+    # Parse components
     gender_number = int(pid[0])
     birth_year = int(pid[1:3])
     birth_month = int(pid[3:5])
     birth_day = int(pid[5:7])
+    identifier_number = pid[7:10]
+    control_number = int(pid[10])
 
-    # Wikipedia:
-    # Asmens kodai, suteikiami vyresnio amžiaus žmonėms neprisimenantiems savo gimimo mėnesio ar dienos.
-    # Tokiuose koduose vietoje mėnesio ar dienos skaitmenų įrašomi 0. Tai labai reta išimtis.
+    # 2. Gender validation
+    gender, birth_base = validate_gender_number(gender_number)
+    if gender is None:
+        is_edge_case = True
+
+    # Handle edge cases
     if birth_month == 0:
         is_edge_case = True
         birth_month = None
-
     if birth_day == 0:
         is_edge_case = True
         birth_day = None
 
-    identifier_number = pid[7:]
-
-    # Validate first digit aka sex.
-    if gender_number in [1, 3, 5]:
-        gender = &#34;male&#34;
-    elif gender_number in [2, 4, 6]:
-        gender = &#34;female&#34;
-    elif gender_number == 9:
-        gender = None
-        is_edge_case = True
-    else:
-        raise Exception(
-            f&#34;Invalid first number of PID `{gender_number}`, must be one of `1,2,3,4,5,6,9`!&#34;
-        )
-
-    # Set base birth year.
-    birth_base = 0
-    if gender_number in [1, 2]:
-        birth_base = 1800
-    elif gender_number in [3, 4]:
-        birth_base = 1900
-    elif gender_number in [5, 6]:
-        birth_base = 2000
-
+    # Calculate full birth year
     birth_year = birth_base + birth_year
 
-    checksum = None
+    # 3. Birth date validation (including future dates)
+    validate_birth_date(birth_year, birth_month, birth_day, is_edge_case)
+
+    # 4. Identifier validation
+    validate_identifier(identifier_number)
+
+    # 5. Checksum validation last (for non-edge cases)
     if not is_edge_case:
-        checksum = _calculate_lt_id_checksum(pid=pid)
+        calculated_checksum = calculate_lt_id_checksum(pid)
+        if calculated_checksum != control_number:
+            raise InvalidChecksumError(
+                f&#34;Invalid checksum! Expected {calculated_checksum}, got {control_number}&#34;
+            )
 
     return LithuanianPersonalCode(
         gender=gender,
@@ -753,7 +754,7 @@ See: <a href="https://lt.wikipedia.org/wiki/Asmens_kodas">https://lt.wikipedia.o
         birth_day=birth_day,
         identifier_number=identifier_number,
         is_edge_case=is_edge_case,
-        checksum=checksum,
+        checksum=control_number if not is_edge_case else None,
     )</code></pre>
 </details>
 </dd>
@@ -778,20 +779,20 @@ See: <a href="https://lt.wikipedia.org/wiki/Asmens_kodas">https://lt.wikipedia.o
     ❗ Does not validate short numbers like 112, 1848, etc.
     &#34;&#34;&#34;
     is_valid = False
-
-    # Remove all symbols except + and 0-9.
+    # Remove all symbols except + and 0-9
     clean_tel_nr = str_remove_except(
         tel_nr, [&#34;0&#34;, &#34;1&#34;, &#34;2&#34;, &#34;3&#34;, &#34;4&#34;, &#34;5&#34;, &#34;6&#34;, &#34;7&#34;, &#34;8&#34;, &#34;9&#34;, &#34;+&#34;]
     )
 
-    # Check if valid.
+    # Check if valid
     regex = r&#34;^(?:\+370|8|0)\d{8}$&#34;
     if re.match(regex, clean_tel_nr):
         is_valid = True
-
-    # If starts with 0 or 8, make it +370.
-    if format_370 and clean_tel_nr.startswith(&#34;8&#34;) or clean_tel_nr.startswith(&#34;0&#34;):
-        clean_tel_nr = f&#34;+370{tel_nr[1:]}&#34;
+        # If starts with 0 or 8, make it +370
+        if format_370 and (
+            clean_tel_nr.startswith(&#34;8&#34;) or clean_tel_nr.startswith(&#34;0&#34;)
+        ):
+            clean_tel_nr = f&#34;+370{clean_tel_nr[1:]}&#34;
 
     return is_valid, clean_tel_nr if is_valid else tel_nr</code></pre>
 </details>
@@ -1326,6 +1327,7 @@ See: <a href="https://lt.wikipedia.org/wiki/Asmens_kodas">https://lt.wikipedia.o
 <li><code><a title="gyvatukas.dict_remove_matching_values" href="#gyvatukas.dict_remove_matching_values">dict_remove_matching_values</a></code></li>
 <li><code><a title="gyvatukas.dir_exists" href="#gyvatukas.dir_exists">dir_exists</a></code></li>
 <li><code><a title="gyvatukas.file_exists" href="#gyvatukas.file_exists">file_exists</a></code></li>
+<li><code><a title="gyvatukas.get_clean_tel_nr" href="#gyvatukas.get_clean_tel_nr">get_clean_tel_nr</a></code></li>
 <li><code><a title="gyvatukas.get_conn_cur" href="#gyvatukas.get_conn_cur">get_conn_cur</a></code></li>
 <li><code><a title="gyvatukas.get_dt_utc_now" href="#gyvatukas.get_dt_utc_now">get_dt_utc_now</a></code></li>
 <li><code><a title="gyvatukas.get_env" href="#gyvatukas.get_env">get_env</a></code></li>

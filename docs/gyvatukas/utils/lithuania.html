@@ -33,73 +33,197 @@ hljs.highlightAll();
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
+<dt id="gyvatukas.utils.lithuania.calculate_lt_id_checksum"><code class="name flex">
+<span>def <span class="ident">calculate_lt_id_checksum</span></span>(<span>pid: str) ‑> int</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Calculate Lithuanian personal identification code checksum.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calculate_lt_id_checksum(pid: str) -&gt; int:
+    &#34;&#34;&#34;Calculate Lithuanian personal identification code checksum.&#34;&#34;&#34;
+    weights_a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 1]
+    weights_b = [3, 4, 5, 6, 7, 8, 9, 1, 2, 3]
+
+    checksum_a = sum([int(pid[i]) * weights_a[i] for i in range(10)])
+    checksum_a = checksum_a % 11
+    if checksum_a != 10:
+        return checksum_a
+
+    checksum_b = sum([int(pid[i]) * weights_b[i] for i in range(10)])
+    checksum_b = checksum_b % 11
+    if checksum_b != 10:
+        return checksum_b
+
+    return 0</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.utils.lithuania.get_clean_tel_nr"><code class="name flex">
+<span>def <span class="ident">get_clean_tel_nr</span></span>(<span>tel_nr: str) ‑> str | None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Return mobile phone number with +370 prefix. Return None if invalid.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_clean_tel_nr(tel_nr: str) -&gt; str | None:
+    &#34;&#34;&#34;Return mobile phone number with +370 prefix. Return None if invalid.&#34;&#34;&#34;
+    is_valid, clean_tel_nr = validate_lt_tel_nr(tel_nr=tel_nr, format_370=True)
+    if not is_valid:
+        return None
+    return clean_tel_nr</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.utils.lithuania.validate_birth_date"><code class="name flex">
+<span>def <span class="ident">validate_birth_date</span></span>(<span>year: int, month: int | None, day: int | None, is_edge_case: bool) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Validate birth date.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def validate_birth_date(
+    year: int, month: int | None, day: int | None, is_edge_case: bool
+) -&gt; None:
+    &#34;&#34;&#34;Validate birth date.&#34;&#34;&#34;
+    if is_edge_case:
+        return
+
+    try:
+        birth_date = date(year, month, day)  # type: ignore
+    except ValueError as e:
+        raise InvalidBirthDateError(f&#34;Invalid birth date: {e}&#34;)
+
+    if birth_date &gt; date.today():
+        raise FutureBirthDateError(f&#34;Birth date {birth_date} is in the future&#34;)</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.utils.lithuania.validate_format"><code class="name flex">
+<span>def <span class="ident">validate_format</span></span>(<span>pid: str) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Validate basic format of the ID.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def validate_format(pid: str) -&gt; None:
+    &#34;&#34;&#34;Validate basic format of the ID.&#34;&#34;&#34;
+    if len(pid) != 11:
+        raise InvalidFormatError(
+            f&#34;PID must be exactly 11 digits long, got {len(pid)} digits&#34;
+        )
+    if not pid.isdigit():
+        raise InvalidFormatError(&#34;PID must contain only digits&#34;)</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.utils.lithuania.validate_gender_number"><code class="name flex">
+<span>def <span class="ident">validate_gender_number</span></span>(<span>number: int) ‑> tuple[str | None, int]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Validate gender number and return gender and birth year base.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def validate_gender_number(number: int) -&gt; tuple[str | None, int]:
+    &#34;&#34;&#34;Validate gender number and return gender and birth year base.&#34;&#34;&#34;
+    try:
+        gender_num = GenderNumber(number)
+    except ValueError:
+        raise InvalidGenderNumberError(
+            f&#34;Invalid first number {number}, must be one of {[g.value for g in GenderNumber]}&#34;
+        )
+
+    gender_map = {
+        GenderNumber.MALE_1800: (&#34;male&#34;, 1800),
+        GenderNumber.MALE_1900: (&#34;male&#34;, 1900),
+        GenderNumber.MALE_2000: (&#34;male&#34;, 2000),
+        GenderNumber.FEMALE_1800: (&#34;female&#34;, 1800),
+        GenderNumber.FEMALE_1900: (&#34;female&#34;, 1900),
+        GenderNumber.FEMALE_2000: (&#34;female&#34;, 2000),
+        GenderNumber.SPECIAL_CASE: (None, 1900),
+    }
+
+    return gender_map[gender_num]</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.utils.lithuania.validate_identifier"><code class="name flex">
+<span>def <span class="ident">validate_identifier</span></span>(<span>identifier: str) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Validate the identifier number portion.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def validate_identifier(identifier: str) -&gt; None:
+    &#34;&#34;&#34;Validate the identifier number portion.&#34;&#34;&#34;
+    if len(identifier) != 3:
+        raise InvalidIdentifierError(&#34;Identifier number must be exactly 3 digits&#34;)
+
+    identifier_num = int(identifier)
+    if identifier_num == 0:
+        raise InvalidIdentifierError(&#34;Identifier number cannot be 000&#34;)</code></pre>
+</details>
+</dd>
 <dt id="gyvatukas.utils.lithuania.validate_lt_id"><code class="name flex">
 <span>def <span class="ident">validate_lt_id</span></span>(<span>pid: str) ‑> <a title="gyvatukas.utils.lithuania.LithuanianPersonalCode" href="#gyvatukas.utils.lithuania.LithuanianPersonalCode">LithuanianPersonalCode</a></span>
 </code></dt>
 <dd>
-<div class="desc"><p>Validate Lithuanian personal identification code.
-See: <a href="https://lt.wikipedia.org/wiki/Asmens_kodas">https://lt.wikipedia.org/wiki/Asmens_kodas</a></p>
-<p>🚨 Does not check if it makes sense, e.g. birthdate is in the future or identifier number is valid.</p></div>
+<div class="desc"><p>Validate Lithuanian personal identification code.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def validate_lt_id(pid: str) -&gt; LithuanianPersonalCode:
-    &#34;&#34;&#34;Validate Lithuanian personal identification code.
-    See: https://lt.wikipedia.org/wiki/Asmens_kodas
-
-    🚨 Does not check if it makes sense, e.g. birthdate is in the future or identifier number is valid.
-    &#34;&#34;&#34;
+    &#34;&#34;&#34;Validate Lithuanian personal identification code.&#34;&#34;&#34;
     is_edge_case = False
 
-    if len(pid) != 11:
-        raise Exception(&#34;PID should be 11 characters long!&#34;)
+    # 1. Basic format validation first
+    validate_format(pid)
 
+    # Parse components
     gender_number = int(pid[0])
     birth_year = int(pid[1:3])
     birth_month = int(pid[3:5])
     birth_day = int(pid[5:7])
+    identifier_number = pid[7:10]
+    control_number = int(pid[10])
 
-    # Wikipedia:
-    # Asmens kodai, suteikiami vyresnio amžiaus žmonėms neprisimenantiems savo gimimo mėnesio ar dienos.
-    # Tokiuose koduose vietoje mėnesio ar dienos skaitmenų įrašomi 0. Tai labai reta išimtis.
+    # 2. Gender validation
+    gender, birth_base = validate_gender_number(gender_number)
+    if gender is None:
+        is_edge_case = True
+
+    # Handle edge cases
     if birth_month == 0:
         is_edge_case = True
         birth_month = None
-
     if birth_day == 0:
         is_edge_case = True
         birth_day = None
 
-    identifier_number = pid[7:]
-
-    # Validate first digit aka sex.
-    if gender_number in [1, 3, 5]:
-        gender = &#34;male&#34;
-    elif gender_number in [2, 4, 6]:
-        gender = &#34;female&#34;
-    elif gender_number == 9:
-        gender = None
-        is_edge_case = True
-    else:
-        raise Exception(
-            f&#34;Invalid first number of PID `{gender_number}`, must be one of `1,2,3,4,5,6,9`!&#34;
-        )
-
-    # Set base birth year.
-    birth_base = 0
-    if gender_number in [1, 2]:
-        birth_base = 1800
-    elif gender_number in [3, 4]:
-        birth_base = 1900
-    elif gender_number in [5, 6]:
-        birth_base = 2000
-
+    # Calculate full birth year
     birth_year = birth_base + birth_year
 
-    checksum = None
+    # 3. Birth date validation (including future dates)
+    validate_birth_date(birth_year, birth_month, birth_day, is_edge_case)
+
+    # 4. Identifier validation
+    validate_identifier(identifier_number)
+
+    # 5. Checksum validation last (for non-edge cases)
     if not is_edge_case:
-        checksum = _calculate_lt_id_checksum(pid=pid)
+        calculated_checksum = calculate_lt_id_checksum(pid)
+        if calculated_checksum != control_number:
+            raise InvalidChecksumError(
+                f&#34;Invalid checksum! Expected {calculated_checksum}, got {control_number}&#34;
+            )
 
     return LithuanianPersonalCode(
         gender=gender,
@@ -108,7 +232,7 @@ See: <a href="https://lt.wikipedia.org/wiki/Asmens_kodas">https://lt.wikipedia.o
         birth_day=birth_day,
         identifier_number=identifier_number,
         is_edge_case=is_edge_case,
-        checksum=checksum,
+        checksum=control_number if not is_edge_case else None,
     )</code></pre>
 </details>
 </dd>
@@ -133,20 +257,20 @@ See: <a href="https://lt.wikipedia.org/wiki/Asmens_kodas">https://lt.wikipedia.o
     ❗ Does not validate short numbers like 112, 1848, etc.
     &#34;&#34;&#34;
     is_valid = False
-
-    # Remove all symbols except + and 0-9.
+    # Remove all symbols except + and 0-9
     clean_tel_nr = str_remove_except(
         tel_nr, [&#34;0&#34;, &#34;1&#34;, &#34;2&#34;, &#34;3&#34;, &#34;4&#34;, &#34;5&#34;, &#34;6&#34;, &#34;7&#34;, &#34;8&#34;, &#34;9&#34;, &#34;+&#34;]
     )
 
-    # Check if valid.
+    # Check if valid
     regex = r&#34;^(?:\+370|8|0)\d{8}$&#34;
     if re.match(regex, clean_tel_nr):
         is_valid = True
-
-    # If starts with 0 or 8, make it +370.
-    if format_370 and clean_tel_nr.startswith(&#34;8&#34;) or clean_tel_nr.startswith(&#34;0&#34;):
-        clean_tel_nr = f&#34;+370{tel_nr[1:]}&#34;
+        # If starts with 0 or 8, make it +370
+        if format_370 and (
+            clean_tel_nr.startswith(&#34;8&#34;) or clean_tel_nr.startswith(&#34;0&#34;)
+        ):
+            clean_tel_nr = f&#34;+370{clean_tel_nr[1:]}&#34;
 
     return is_valid, clean_tel_nr if is_valid else tel_nr</code></pre>
 </details>
@@ -156,31 +280,220 @@ See: <a href="https://lt.wikipedia.org/wiki/Asmens_kodas">https://lt.wikipedia.o
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
+<dt id="gyvatukas.utils.lithuania.FutureBirthDateError"><code class="flex name class">
+<span>class <span class="ident">FutureBirthDateError</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Birth date is in the future.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FutureBirthDateError(LtIdValidationError):
+    &#34;&#34;&#34;Birth date is in the future.&#34;&#34;&#34;
+
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="gyvatukas.utils.lithuania.LtIdValidationError" href="#gyvatukas.utils.lithuania.LtIdValidationError">LtIdValidationError</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="gyvatukas.utils.lithuania.GenderNumber"><code class="flex name class">
+<span>class <span class="ident">GenderNumber</span></span>
+<span>(</span><span>*args, **kwds)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Enumeration of possible gender numbers and their meaning.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GenderNumber(Enum):
+    &#34;&#34;&#34;Enumeration of possible gender numbers and their meaning.&#34;&#34;&#34;
+
+    MALE_1800 = 1
+    FEMALE_1800 = 2
+    MALE_1900 = 3
+    FEMALE_1900 = 4
+    MALE_2000 = 5
+    FEMALE_2000 = 6
+    SPECIAL_CASE = 9</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>enum.Enum</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="gyvatukas.utils.lithuania.GenderNumber.FEMALE_1800"><code class="name">var <span class="ident">FEMALE_1800</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="gyvatukas.utils.lithuania.GenderNumber.FEMALE_1900"><code class="name">var <span class="ident">FEMALE_1900</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="gyvatukas.utils.lithuania.GenderNumber.FEMALE_2000"><code class="name">var <span class="ident">FEMALE_2000</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="gyvatukas.utils.lithuania.GenderNumber.MALE_1800"><code class="name">var <span class="ident">MALE_1800</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="gyvatukas.utils.lithuania.GenderNumber.MALE_1900"><code class="name">var <span class="ident">MALE_1900</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="gyvatukas.utils.lithuania.GenderNumber.MALE_2000"><code class="name">var <span class="ident">MALE_2000</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="gyvatukas.utils.lithuania.GenderNumber.SPECIAL_CASE"><code class="name">var <span class="ident">SPECIAL_CASE</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="gyvatukas.utils.lithuania.InvalidBirthDateError"><code class="flex name class">
+<span>class <span class="ident">InvalidBirthDateError</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Invalid birth date in the ID.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class InvalidBirthDateError(LtIdValidationError):
+    &#34;&#34;&#34;Invalid birth date in the ID.&#34;&#34;&#34;
+
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="gyvatukas.utils.lithuania.LtIdValidationError" href="#gyvatukas.utils.lithuania.LtIdValidationError">LtIdValidationError</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="gyvatukas.utils.lithuania.InvalidChecksumError"><code class="flex name class">
+<span>class <span class="ident">InvalidChecksumError</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Invalid checksum in the ID.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class InvalidChecksumError(LtIdValidationError):
+    &#34;&#34;&#34;Invalid checksum in the ID.&#34;&#34;&#34;
+
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="gyvatukas.utils.lithuania.LtIdValidationError" href="#gyvatukas.utils.lithuania.LtIdValidationError">LtIdValidationError</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="gyvatukas.utils.lithuania.InvalidFormatError"><code class="flex name class">
+<span>class <span class="ident">InvalidFormatError</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Invalid format of the ID (length, digits, etc.)</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class InvalidFormatError(LtIdValidationError):
+    &#34;&#34;&#34;Invalid format of the ID (length, digits, etc.)&#34;&#34;&#34;
+
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="gyvatukas.utils.lithuania.LtIdValidationError" href="#gyvatukas.utils.lithuania.LtIdValidationError">LtIdValidationError</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="gyvatukas.utils.lithuania.InvalidGenderNumberError"><code class="flex name class">
+<span>class <span class="ident">InvalidGenderNumberError</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Invalid gender number in the ID.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class InvalidGenderNumberError(LtIdValidationError):
+    &#34;&#34;&#34;Invalid gender number in the ID.&#34;&#34;&#34;
+
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="gyvatukas.utils.lithuania.LtIdValidationError" href="#gyvatukas.utils.lithuania.LtIdValidationError">LtIdValidationError</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="gyvatukas.utils.lithuania.InvalidIdentifierError"><code class="flex name class">
+<span>class <span class="ident">InvalidIdentifierError</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Invalid identifier number in the ID.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class InvalidIdentifierError(LtIdValidationError):
+    &#34;&#34;&#34;Invalid identifier number in the ID.&#34;&#34;&#34;
+
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="gyvatukas.utils.lithuania.LtIdValidationError" href="#gyvatukas.utils.lithuania.LtIdValidationError">LtIdValidationError</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
 <dt id="gyvatukas.utils.lithuania.LithuanianPersonalCode"><code class="flex name class">
 <span>class <span class="ident">LithuanianPersonalCode</span></span>
 <span>(</span><span>gender: Literal['male', 'female'] | None,<br>birth_year: int,<br>birth_month: int | None,<br>birth_day: int | None,<br>identifier_number: str,<br>is_edge_case: bool,<br>checksum: int | None = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>LithuanianPersonalCode(gender: Optional[Literal['male', 'female']], birth_year: int, birth_month: Optional[int], birth_day: Optional[int], identifier_number: str, is_edge_case: bool, checksum: Optional[int] = None)</p></div>
+<div class="desc"><p>LithuanianPersonalCode(gender: Optional[Literal['male', 'female']], birth_year: int, birth_month: int | None, birth_day: int | None, identifier_number: str, is_edge_case: bool, checksum: int | None = None)</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@dataclass
 class LithuanianPersonalCode:
-    gender: Optional[Literal[&#34;male&#34;, &#34;female&#34;]]
+    gender: Literal[&#34;male&#34;, &#34;female&#34;] | None
     birth_year: int
-    birth_month: Optional[int]
-    birth_day: Optional[int]
+    birth_month: int | None
+    birth_day: int | None
     identifier_number: str
     is_edge_case: bool
-    checksum: Optional[int] = None
+    checksum: int | None = None
 
     @property
-    def birth_date(self) -&gt; Optional[datetime.date]:
+    def birth_date(self) -&gt; date | None:
         &#34;&#34;&#34;Return birthdate as dt object if is not an edge case (has no 0 in month/day).&#34;&#34;&#34;
         if not self.is_edge_case:
-            return datetime.date(self.birth_year, self.birth_month, self.birth_day)
+            return date(self.birth_year, self.birth_month, self.birth_day)  # type: ignore
         return None</code></pre>
 </details>
 <h3>Class variables</h3>
@@ -224,14 +537,44 @@ class LithuanianPersonalCode:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def birth_date(self) -&gt; Optional[datetime.date]:
+def birth_date(self) -&gt; date | None:
     &#34;&#34;&#34;Return birthdate as dt object if is not an edge case (has no 0 in month/day).&#34;&#34;&#34;
     if not self.is_edge_case:
-        return datetime.date(self.birth_year, self.birth_month, self.birth_day)
+        return date(self.birth_year, self.birth_month, self.birth_day)  # type: ignore
     return None</code></pre>
 </details>
 </dd>
 </dl>
+</dd>
+<dt id="gyvatukas.utils.lithuania.LtIdValidationError"><code class="flex name class">
+<span>class <span class="ident">LtIdValidationError</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Base exception for Lithuanian ID validation errors.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class LtIdValidationError(Exception):
+    &#34;&#34;&#34;Base exception for Lithuanian ID validation errors.&#34;&#34;&#34;
+
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="gyvatukas.utils.lithuania.FutureBirthDateError" href="#gyvatukas.utils.lithuania.FutureBirthDateError">FutureBirthDateError</a></li>
+<li><a title="gyvatukas.utils.lithuania.InvalidBirthDateError" href="#gyvatukas.utils.lithuania.InvalidBirthDateError">InvalidBirthDateError</a></li>
+<li><a title="gyvatukas.utils.lithuania.InvalidChecksumError" href="#gyvatukas.utils.lithuania.InvalidChecksumError">InvalidChecksumError</a></li>
+<li><a title="gyvatukas.utils.lithuania.InvalidFormatError" href="#gyvatukas.utils.lithuania.InvalidFormatError">InvalidFormatError</a></li>
+<li><a title="gyvatukas.utils.lithuania.InvalidGenderNumberError" href="#gyvatukas.utils.lithuania.InvalidGenderNumberError">InvalidGenderNumberError</a></li>
+<li><a title="gyvatukas.utils.lithuania.InvalidIdentifierError" href="#gyvatukas.utils.lithuania.InvalidIdentifierError">InvalidIdentifierError</a></li>
+</ul>
 </dd>
 </dl>
 </section>
@@ -248,12 +591,48 @@ def birth_date(self) -&gt; Optional[datetime.date]:
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
+<li><code><a title="gyvatukas.utils.lithuania.calculate_lt_id_checksum" href="#gyvatukas.utils.lithuania.calculate_lt_id_checksum">calculate_lt_id_checksum</a></code></li>
+<li><code><a title="gyvatukas.utils.lithuania.get_clean_tel_nr" href="#gyvatukas.utils.lithuania.get_clean_tel_nr">get_clean_tel_nr</a></code></li>
+<li><code><a title="gyvatukas.utils.lithuania.validate_birth_date" href="#gyvatukas.utils.lithuania.validate_birth_date">validate_birth_date</a></code></li>
+<li><code><a title="gyvatukas.utils.lithuania.validate_format" href="#gyvatukas.utils.lithuania.validate_format">validate_format</a></code></li>
+<li><code><a title="gyvatukas.utils.lithuania.validate_gender_number" href="#gyvatukas.utils.lithuania.validate_gender_number">validate_gender_number</a></code></li>
+<li><code><a title="gyvatukas.utils.lithuania.validate_identifier" href="#gyvatukas.utils.lithuania.validate_identifier">validate_identifier</a></code></li>
 <li><code><a title="gyvatukas.utils.lithuania.validate_lt_id" href="#gyvatukas.utils.lithuania.validate_lt_id">validate_lt_id</a></code></li>
 <li><code><a title="gyvatukas.utils.lithuania.validate_lt_tel_nr" href="#gyvatukas.utils.lithuania.validate_lt_tel_nr">validate_lt_tel_nr</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
+<li>
+<h4><code><a title="gyvatukas.utils.lithuania.FutureBirthDateError" href="#gyvatukas.utils.lithuania.FutureBirthDateError">FutureBirthDateError</a></code></h4>
+</li>
+<li>
+<h4><code><a title="gyvatukas.utils.lithuania.GenderNumber" href="#gyvatukas.utils.lithuania.GenderNumber">GenderNumber</a></code></h4>
+<ul class="two-column">
+<li><code><a title="gyvatukas.utils.lithuania.GenderNumber.FEMALE_1800" href="#gyvatukas.utils.lithuania.GenderNumber.FEMALE_1800">FEMALE_1800</a></code></li>
+<li><code><a title="gyvatukas.utils.lithuania.GenderNumber.FEMALE_1900" href="#gyvatukas.utils.lithuania.GenderNumber.FEMALE_1900">FEMALE_1900</a></code></li>
+<li><code><a title="gyvatukas.utils.lithuania.GenderNumber.FEMALE_2000" href="#gyvatukas.utils.lithuania.GenderNumber.FEMALE_2000">FEMALE_2000</a></code></li>
+<li><code><a title="gyvatukas.utils.lithuania.GenderNumber.MALE_1800" href="#gyvatukas.utils.lithuania.GenderNumber.MALE_1800">MALE_1800</a></code></li>
+<li><code><a title="gyvatukas.utils.lithuania.GenderNumber.MALE_1900" href="#gyvatukas.utils.lithuania.GenderNumber.MALE_1900">MALE_1900</a></code></li>
+<li><code><a title="gyvatukas.utils.lithuania.GenderNumber.MALE_2000" href="#gyvatukas.utils.lithuania.GenderNumber.MALE_2000">MALE_2000</a></code></li>
+<li><code><a title="gyvatukas.utils.lithuania.GenderNumber.SPECIAL_CASE" href="#gyvatukas.utils.lithuania.GenderNumber.SPECIAL_CASE">SPECIAL_CASE</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="gyvatukas.utils.lithuania.InvalidBirthDateError" href="#gyvatukas.utils.lithuania.InvalidBirthDateError">InvalidBirthDateError</a></code></h4>
+</li>
+<li>
+<h4><code><a title="gyvatukas.utils.lithuania.InvalidChecksumError" href="#gyvatukas.utils.lithuania.InvalidChecksumError">InvalidChecksumError</a></code></h4>
+</li>
+<li>
+<h4><code><a title="gyvatukas.utils.lithuania.InvalidFormatError" href="#gyvatukas.utils.lithuania.InvalidFormatError">InvalidFormatError</a></code></h4>
+</li>
+<li>
+<h4><code><a title="gyvatukas.utils.lithuania.InvalidGenderNumberError" href="#gyvatukas.utils.lithuania.InvalidGenderNumberError">InvalidGenderNumberError</a></code></h4>
+</li>
+<li>
+<h4><code><a title="gyvatukas.utils.lithuania.InvalidIdentifierError" href="#gyvatukas.utils.lithuania.InvalidIdentifierError">InvalidIdentifierError</a></code></h4>
+</li>
 <li>
 <h4><code><a title="gyvatukas.utils.lithuania.LithuanianPersonalCode" href="#gyvatukas.utils.lithuania.LithuanianPersonalCode">LithuanianPersonalCode</a></code></h4>
 <ul class="two-column">
@@ -266,6 +645,9 @@ def birth_date(self) -&gt; Optional[datetime.date]:
 <li><code><a title="gyvatukas.utils.lithuania.LithuanianPersonalCode.identifier_number" href="#gyvatukas.utils.lithuania.LithuanianPersonalCode.identifier_number">identifier_number</a></code></li>
 <li><code><a title="gyvatukas.utils.lithuania.LithuanianPersonalCode.is_edge_case" href="#gyvatukas.utils.lithuania.LithuanianPersonalCode.is_edge_case">is_edge_case</a></code></li>
 </ul>
+</li>
+<li>
+<h4><code><a title="gyvatukas.utils.lithuania.LtIdValidationError" href="#gyvatukas.utils.lithuania.LtIdValidationError">LtIdValidationError</a></code></h4>
 </li>
 </ul>
 </li>
