@@ -3,7 +3,7 @@
 """
 from .utils.bool import is_true, value_to_bool, is_false
 from .utils.crypto import validate_password, hash_password
-from .utils.dict_ import dict_remove_matching_values, dict_get_by_path
+from .utils.dict_ import dict_remove_matching_values, dict_get_by_path, dict_flatten
 from .utils.dt import get_dt_utc_now, get_utc_today
 from .utils.env import get_env
 from .utils.fs import (
@@ -41,6 +41,7 @@ __all__ = [
     # dict_.py
     "dict_remove_matching_values",
     "dict_get_by_path",
+    "dict_flatten",
     # dt.py
     "get_dt_utc_now",
     "get_utc_today",
