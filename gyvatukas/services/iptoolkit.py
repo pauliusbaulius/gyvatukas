@@ -22,7 +22,7 @@ class IpToolKit:
     - Do not forget to run setup_db() when changing provider config to get new data.
 
     Provider configuration:
-
+    # TODO: Document ant validate. If key matches, validate that all info passed.
     {
         "ipinfo.io": {
             "token": "<your_token>",
@@ -202,3 +202,4 @@ if __name__ == "__main__":
 # todo: Store downloads in app dir and reuse if they are not outdated.
 # todo: Maybe do class approach to have bit better logic layout.
 # todo: cache/lru cache on get_country_by_ipv4
+# todo: class based. each provider is a class. also store db download urls somewhere in a text file for easy updates? or build a scraper that checks for newest version lol
