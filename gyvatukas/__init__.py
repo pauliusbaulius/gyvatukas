@@ -26,7 +26,7 @@ from .utils.lithuania import (
 from .utils.validators import is_email_valid
 from .utils.sql import get_inline_sql, get_conn_cur, init_db, close_connections
 from .utils.decorators import timer
-from .utils.db import DirDB, JsonDB
+from .utils.simplestore import DirStore
 
 from .services.iptoolkit import IpToolKit
 
@@ -80,7 +80,6 @@ __all__ = [
     "IpToolKit",
     # decorators.py
     "timer",
-    # db.py
-    "DirDB",
-    "JsonDB",
+    # simplestore.py
+    "DirStore",
 ]
