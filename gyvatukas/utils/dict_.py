@@ -1,7 +1,5 @@
 from typing import Any
 
-from gyvatukas.exceptions import GyvatukasException
-
 
 def dict_remove_matching_values(d: dict, values: list) -> dict:
     """Remove all key-value pairs from dict where value is in values.
@@ -21,33 +19,59 @@ def dict_remove_matching_values(d: dict, values: list) -> dict:
 def dict_get_by_path(
     d: dict, path: str, separator: str = ".", allow_none: bool = False
 ) -> Any:
+    """
+    Access a nested value in a dictionary using a string path.
+    Less bloated alternative for glom, that just works for this very thing.
+
+    Args:
+        d: The dictionary to traverse
+        path: String path with parts separated by the separator
+        separator: Character that separates parts of the path
+        allow_none: If True, return None for invalid paths instead of raising exceptions
+
+    Returns:
+        The value at the specified path or None if allow_none is True and path is invalid
+
+    Usage:
+        >>> data = {"a": {"b": [1, 2, {"c": 3}]}}
+        >>> dict_get_by_path(data, "a.b.2.c")
+        3
+    """
+    if not path:
+        return d
+
+    # Pre-split the path for better performance with longer paths
+    parts = path.split(separator)
     current = d
 
-    if not path:
-        return current
-
-    for part in path.split(separator):
-        try:
-            if isinstance(current, (list, tuple)):
-                try:
-                    index = int(part)
-                    current = current[index]
-                except (ValueError, IndexError):
-                    if allow_none:
-                        return None
-                    raise GyvatukasException(f"invalid index '{part}' for sequence")
-            elif isinstance(current, dict):
+    for part in parts:
+        if isinstance(current, dict):
+            try:
                 current = current[part]
-            else:
+                continue
+            except KeyError:
                 if allow_none:
                     return None
-                raise GyvatukasException(
-                    f"cannot index into {type(current)} with '{part}'"
-                )
-        except KeyError:
-            if allow_none:
-                return None
-            raise
+                raise
+
+        if isinstance(current, (list, tuple)):
+            try:
+                idx = int(part)
+                try:
+                    current = current[idx]
+                    continue
+                except IndexError:
+                    if allow_none:
+                        return None
+                    raise IndexError(f"Index {idx} out of range")
+            except ValueError:
+                if allow_none:
+                    return None
+                raise ValueError(f"'{part}' is not a valid integer index")
+
+        if allow_none:
+            return None
+        raise TypeError(f"Cannot index into {type(current).__name__} with key '{part}'")
 
     return current
 
