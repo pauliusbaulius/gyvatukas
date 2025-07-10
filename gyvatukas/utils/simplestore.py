@@ -42,6 +42,7 @@ class KeyValueStore(ABC):
 
 class DirStore(KeyValueStore):
     def __init__(self, base_dir: Path) -> None:
+        self.base_dir = base_dir
         self.base_dir.mkdir(exist_ok=True)
 
     def _safe_filename(self, key: str) -> str:
