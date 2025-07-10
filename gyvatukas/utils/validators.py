@@ -10,6 +10,11 @@ def is_email_valid(email: str, perform_dns_check: bool = False) -> tuple[bool, s
     If email is valid, returns normalized email, otherwise returns the original email.
 
     Uses https://github.com/bnkc/emval lib.
+
+    Usage:
+        >>> is_valid, normalized = is_email_valid("test@example.com")
+        >>> print(f"is valid? {is_valid}")
+        >>> print(f"normalized: {normalized}")
     """
     _logger.debug("validating email `%s", email)
 

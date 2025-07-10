@@ -52,14 +52,18 @@ class DirStore(KeyValueStore):
     Data is serialized to json or pickle. Deserialization is done based on metadata.
 
     Usage:
-        store = DirStore(base_dir=Path("someplace"))
-        store.set("key", "value", override=True)
-        value = store.get("key")
-        store.delete("key")
-        value = store.pop("key")
-        exists = store.exists("key")
-        all_keys = store.keys()
-        store.clear()
+        >>> store = DirStore(base_dir=Path("someplace"))
+        >>> store.set("key", "value", override=True)
+        >>> value = store.get("key")
+        >>> print(value)
+        >>> store.delete("key")
+        >>> value = store.pop("key")
+        >>> print(value)
+        >>> exists = store.exists("key")
+        >>> print(f"exists? {exists}")
+        >>> all_keys = store.keys()
+        >>> print(len(all_keys))
+        >>> store.clear()
     """
 
     def __init__(self, base_dir: Path) -> None:

@@ -5,7 +5,15 @@ import logging
 
 
 def timer(logger_name: str = "timer", min_duration_ms: int = 0):
-    """Log function duration in ms. Specify own logger or use default `timer` logger. Can set minimum threshold for logging."""
+    """Log function duration in ms. Specify own logger or use default `timer` logger. Can set minimum threshold for logging.
+    
+    Usage:
+        >>> @timer(min_duration_ms=100)
+        >>> def my_function():
+        >>>     time.sleep(1)
+        >>>     return "Hello, World!"
+        >>> print(my_function())
+    """
 
     def decorator(func):
         # Handle both async and sync functions
