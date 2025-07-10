@@ -24,7 +24,7 @@ class NominatimOrg:
             "User-Agent": self.user_agent,
         }
 
-    @diskcache.throttle(cache, 1, 1, name="nominatimorg")
+    @diskcache.throttle(cache, 1, 1, name="www.nominatim.org")
     def resolve_coords_to_address(self, lat: float, lon: float) -> str:
         """Given lat/lon, return address."""
         response = httpx.get(
@@ -44,7 +44,7 @@ class NominatimOrg:
             )
         return data["display_name"]
 
-    @diskcache.throttle(cache, 1, 1, name="nominatimorg")
+    @diskcache.throttle(cache, 1, 1, name="www.nominatim.org")
     def resolve_address_to_coords(self, address: str) -> tuple[float, float]:
         """Given address, return coords as lat/lon.
 
