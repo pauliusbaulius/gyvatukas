@@ -10,6 +10,7 @@ def str_keep_except(s: str, allowed: list[str]) -> str:
 
 def human_readable_size(size: int, decimal_places: int = 2) -> str:
     """Convert a size in bytes to a human-readable string.
+    https://stackoverflow.com/questions/1094841/get-a-human-readable-version-of-a-file-size
 
     Args:
         size: Size in bytes
