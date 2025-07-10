@@ -6,6 +6,7 @@ from decimal import Decimal
 from datetime import datetime, date, time
 from gyvatukas.utils.simplestore import DirStore
 
+
 class TestDirStore:
     @pytest.fixture
     def temp_dir(self):
@@ -20,7 +21,7 @@ class TestDirStore:
     def test_init_creates_directory(self, temp_dir):
         if temp_dir.exists():
             shutil.rmtree(temp_dir)
-        store = DirStore(temp_dir)
+        store = DirStore(temp_dir)  # noqa
         assert temp_dir.exists()
         assert temp_dir.is_dir()
 
@@ -194,15 +195,8 @@ class TestDirStore:
 
     def test_nested_data_structures(self, store):
         nested_data = {
-            "level1": {
-                "level2": {
-                    "level3": [1, 2, 3, {"nested": "value"}]
-                }
-            },
-            "list_with_dicts": [
-                {"id": 1, "name": "Alice"},
-                {"id": 2, "name": "Bob"}
-            ]
+            "level1": {"level2": {"level3": [1, 2, 3, {"nested": "value"}]}},
+            "list_with_dicts": [{"id": 1, "name": "Alice"}, {"id": 2, "name": "Bob"}],
         }
         store.set("nested_key", nested_data)
         retrieved = store.get("nested_key")
@@ -230,7 +224,7 @@ class TestDirStore:
             "key@with@symbols",
             "key#with#hashes",
             "key with spaces",
-            "key.with.dots"
+            "key.with.dots",
         ]
         for i, key in enumerate(special_keys):
             store.set(key, f"value_{i}")
@@ -247,7 +241,7 @@ class TestDirStore:
             ("delete", "key1", None),
             ("get", "key1", None),
             ("pop", "key2", None),
-            ("clear", None, None)
+            ("clear", None, None),
         ]
         results = []
         for op, key, value in operations:
@@ -269,4 +263,4 @@ class TestDirStore:
         assert results[3] is True
         assert results[5] is True
         assert results[6] is None
-        assert results[7] == "value2" 
+        assert results[7] == "value2"

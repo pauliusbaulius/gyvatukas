@@ -41,6 +41,27 @@ class KeyValueStore(ABC):
 
 
 class DirStore(KeyValueStore):
+    """
+    Simple key-value store that stores data in a directory.
+    Modern unix systems can have hundreds of millions of files in a single directory.
+
+    Data is stored in two files:
+    - <key>.data: data file
+    - <key>.meta: metadata file
+
+    Data is serialized to json or pickle. Deserialization is done based on metadata.
+
+    Usage:
+        store = DirStore(base_dir=Path("someplace"))
+        store.set("key", "value", override=True)
+        value = store.get("key")
+        store.delete("key")
+        value = store.pop("key")
+        exists = store.exists("key")
+        all_keys = store.keys()
+        store.clear()
+    """
+
     def __init__(self, base_dir: Path) -> None:
         self.base_dir = base_dir
         self.base_dir.mkdir(exist_ok=True)

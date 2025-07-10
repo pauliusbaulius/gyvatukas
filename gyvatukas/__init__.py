@@ -27,7 +27,7 @@ from .utils.validators import is_email_valid
 from .utils.sql import get_inline_sql, get_conn_cur, init_db, close_connections
 from .utils.decorators import timer
 from .utils.simplestore import DirStore
-
+from .utils.string_ import human_readable_size, str_remove_except, str_keep_except
 from .services.iptoolkit import IpToolKit
 
 __all__ = [
@@ -82,4 +82,8 @@ __all__ = [
     "timer",
     # simplestore.py
     "DirStore",
+    # string_.py
+    "human_readable_size",
+    "str_remove_except",
+    "str_keep_except",
 ]

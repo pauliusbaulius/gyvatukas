@@ -196,10 +196,42 @@ if __name__ == "__main__":
     iptk = IpToolKit()
     print(iptk.get_country_by_ipv4("8.8.8.8"))
 
-# todo: Add maxmind.com
-# todo: Add ip2location.com
-# todo: Stats: how many rows in total, how many per provider
-# todo: Store downloads in app dir and reuse if they are not outdated.
-# todo: Maybe do class approach to have bit better logic layout.
-# todo: cache/lru cache on get_country_by_ipv4
-# todo: class based. each provider is a class. also store db download urls somewhere in a text file for easy updates? or build a scraper that checks for newest version lol
+"""
+Rewrite current logic to use class based approach
+Each provider is a class.
+
+Here is napkin "code":
+
+IpToolKit
+ init(config: dict, base_dir: pathlib.Path)
+   create provider instances based on config, call their setup methods.
+ get_country_by_ipv4(ipv4: str) -> str | None
+   add lru cache
+ get_stats() -> dict
+   total rows, rows per provider
+
+ AbstractProvider
+  init(config: dict, base_dir: pathlib.Path)
+
+  _current_db_is_up_to_date() -> bool
+    check if downloaded db is up to date (scraping i guess)
+
+  _download_db() -> None
+    download db from provider.
+
+  _insert_into_db(entries: list[dict]) -> None
+    insert into db, should work with same data format so that can be implemented in abstract class.
+
+  setup()
+    check if db is up to date.
+    download db if needed.
+    insert into db.
+
+  get_stats() -> dict
+    path to downloaded data, is_latest...?
+ 
+
+ provider classes to setup: db-ip.com, ipinfo.io, ip2location.com, maxmind.com
+ For now do not implement their methods, just create classes and methods that raise not implemented error.
+
+"""
