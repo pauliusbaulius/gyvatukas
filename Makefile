@@ -3,18 +3,19 @@ VENV = .venv
 VENV_PY = $(VENV)/bin/python
 
 $(VENV):
-	python3 -m venv $(VENV)
-	$(VENV_PY) -m pip install --upgrade pip
-
+	$(POETRY) config virtualenvs.create true
+	$(POETRY) config virtualenvs.in-project true
+	$(POETRY) env use python3
+	$(POETRY) install --with dev
 
 .PHONY: install
 install: $(VENV)
 	@echo "📦 installing dependencies"
-	$(POETRY) export -f requirements.txt --without-hashes --dev > requirements.txt
-	$(VENV_PY) -m pip install -r requirements.txt
+	$(POETRY) install --with dev
 
 .PHONY: clean
 clean:
+	$(POETRY) env remove --all 2>/dev/null || true
 	rm -rf $(VENV)
 	find . -type f -name '*.pyc' -delete
 	find . -type d -name '__pycache__' -delete
@@ -22,31 +23,30 @@ clean:
 .PHONY: test
 test: install
 	@echo "🧪 running tests"
-	$(VENV_PY) -m pytest tests/
+	$(POETRY) run pytest tests/
 
 .PHONY: docs
 docs: install
 	@echo "♻️ generating docs"
-	$(VENV_PY) -m pdoc --html --force --output-dir docs gyvatukas
+	$(POETRY) run pdoc --html --force --output-dir docs gyvatukas
 
 .PHONY: lint
-lint:
+lint: install
 	@echo "🧹 linting"
-	$(VENV_PY) -m ruff check gyvatukas/ tests/
+	$(POETRY) run ruff check gyvatukas/ tests/
 
 .PHONY: format
-format:
+format: install
 	@echo "🧹 formatting"
-	$(VENV_PY) -m ruff check --fix gyvatukas/ tests/
-	$(VENV_PY) -m ruff format gyvatukas/ tests/
+	$(POETRY) run ruff check --fix gyvatukas/ tests/
+	$(POETRY) run ruff format gyvatukas/ tests/
 
-.PHONY: buildpackage
+.PHONY: buildpkg
 buildpkg: lint format test docs
 	@echo "📦 building package"
 	# TODO: Check if version already exists in dist/ and fail if it does.
-
 	$(POETRY) build
 
-.PHONY: publish
+.PHONY: publishpkg
 publishpkg: buildpkg
-	@echo "🚀 publish package with `poetry publish`. this will not be implemented to prevent oopsies."
+	@echo "🚀 publish package with \`poetry publish\`. this will not be implemented to prevent oopsies."
