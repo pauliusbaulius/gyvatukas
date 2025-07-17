@@ -33,6 +33,52 @@ hljs.highlightAll();
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
+<dt id="gyvatukas.utils.dict_.dict_flatten"><code class="name flex">
+<span>def <span class="ident">dict_flatten</span></span>(<span>d: dict, parent_key: str = '', separator: str = '.') ‑> dict</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def dict_flatten(d: dict, parent_key: str = &#34;&#34;, separator: str = &#34;.&#34;) -&gt; dict:
+    if not isinstance(d, dict):
+        raise TypeError(&#34;Input must be a dictionary&#34;)
+
+    items = []
+
+    for key, value in d.items():
+        try:
+            str_key = str(key)
+        except Exception:
+            raise TypeError(f&#34;Dictionary key {key!r} cannot be converted to string&#34;)
+
+        if separator in str_key:
+            raise ValueError(
+                f&#34;Dictionary key &#39;{str_key}&#39; cannot contain separator &#39;{separator}&#39;&#34;
+            )
+
+        new_key = f&#34;{parent_key}{separator}{str_key}&#34; if parent_key else str_key
+
+        if isinstance(value, dict):
+            items.extend(dict_flatten(value, new_key, separator).items())
+        elif isinstance(value, (list, tuple)):
+            for i, item in enumerate(value):
+                if isinstance(item, dict):
+                    items.extend(
+                        dict_flatten(
+                            item, f&#34;{new_key}{separator}{i}&#34;, separator
+                        ).items()
+                    )
+                else:
+                    items.append((f&#34;{new_key}{separator}{i}&#34;, item))
+        else:
+            items.append((new_key, value))
+
+    return dict(items)</code></pre>
+</details>
+</dd>
 <dt id="gyvatukas.utils.dict_.dict_get_by_path"><code class="name flex">
 <span>def <span class="ident">dict_get_by_path</span></span>(<span>d: dict, path: str, separator: str = '.', allow_none: bool = False) ‑> Any</span>
 </code></dt>
@@ -120,6 +166,7 @@ Useful for removing None values from dict or empty strings when working with for
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
+<li><code><a title="gyvatukas.utils.dict_.dict_flatten" href="#gyvatukas.utils.dict_.dict_flatten">dict_flatten</a></code></li>
 <li><code><a title="gyvatukas.utils.dict_.dict_get_by_path" href="#gyvatukas.utils.dict_.dict_get_by_path">dict_get_by_path</a></code></li>
 <li><code><a title="gyvatukas.utils.dict_.dict_remove_matching_values" href="#gyvatukas.utils.dict_.dict_remove_matching_values">dict_remove_matching_values</a></code></li>
 </ul>
