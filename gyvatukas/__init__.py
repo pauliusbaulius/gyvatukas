@@ -29,6 +29,7 @@ from .utils.decorators import timer
 from .utils.simplestore import DirStore
 from .utils.string_ import human_readable_size, str_remove_except, str_keep_except
 from .services.iptoolkit import IpToolKit
+from .utils.image import convert_to_base64, get_image_cropped_to_context, get_optimized_image_as_jpeg, get_image_info
 
 __all__ = [
     # bool.py
@@ -87,4 +88,9 @@ __all__ = [
     "human_readable_size",
     "str_remove_except",
     "str_keep_except",
+    # image.py
+    "convert_to_base64",
+    "get_image_cropped_to_context",
+    "get_optimized_image_as_jpeg",
+    "get_image_info",
 ]
