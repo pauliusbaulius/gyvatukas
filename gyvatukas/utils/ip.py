@@ -1,6 +1,7 @@
 """Bunch of IP related utilities relying on 3rd party."""
 import ipaddress
 import logging
+import random
 
 import httpx
 
@@ -11,16 +12,41 @@ _logger = logging.getLogger("gyvatukas")
 
 @timer()
 def get_my_ipv4() -> str:
-    """Lookup external ipv4 address. Uses https://ifconfig.me or https://wasab.is.
+    """Lookup external ipv4 address. Uses https://ifconfig.me or https://wasab.is or http://checkip.amazonaws.com/.
 
     🚨 Performs external request.
-    """
-    _logger.debug("performing ipv4 lookup.")
-    url = "https://wasab.is/json"
+    """    
+    # List of IP lookup services with their respective endpoints and response parsing
+    ip_services = [
+        {
+            "url": "https://wasab.is/json",
+            "parser": lambda data: data["ip"]
+        },
+        {
+            "url": "https://ifconfig.me/ip",
+            "parser": lambda data: data.text.strip()
+        },
+        {
+            "url": "http://checkip.amazonaws.com",
+            "parser": lambda data: data.text.strip()
+        },
 
-    result = httpx.get(url=url, timeout=5)
-    data = result.json()
-    return data["ip"]
+    ]
+    
+    random.shuffle(ip_services)
+    
+    for service in ip_services:
+        try:
+            result = httpx.get(url=service["url"], timeout=5)
+            result.raise_for_status()            
+            ip = service["parser"](result)
+            return ip
+            
+        except Exception as e:
+            _logger.error(f"Error getting ip: {e}")
+            continue
+    
+    raise RuntimeError("All IP lookup services failed!")
 
 
 @timer()
@@ -44,7 +70,7 @@ def get_ipv4_meta(ip: str) -> dict | None:
 
 @timer()
 def get_ip_country(ip: str) -> str | None:
-    """Get country for given ip address or "Unknown" if not found."""
+    """Get country for given ip address or "Unknown" if not found. Uses https://wasab.is."""
     data = get_ipv4_meta(ip)
     if data is None:
         return None
