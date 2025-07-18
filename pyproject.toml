@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gyvatukas"
-version = "16"
+version = "17"
 authors = ["Paulius <dev@paulius.xyz>"]
 readme = "README.md"
 description = "See README.md"
