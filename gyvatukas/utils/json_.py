@@ -38,7 +38,9 @@ class EnhancedJSONEncoder(json.JSONEncoder):
         return super().default(obj)
 
 
-def json_dumps_safe(obj, **kwargs):
+def json_dumps_safe(obj, **kwargs) -> str:
+    """json.dumps with encoder that 'fixes' the common annoyance of getting exceptions when
+    dict contains datetime or decimal."""
     obj = _convert_keys_to_str(obj)
     return json.dumps(obj, cls=EnhancedJSONEncoder, **kwargs)
 
