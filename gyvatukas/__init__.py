@@ -17,7 +17,7 @@ from .utils.fs import (
 )
 from .utils.generators import get_random_secure_string
 from .utils.ip import get_my_ipv4, get_ipv4_meta, get_ip_country
-from .utils.json_ import get_pretty_json, read_json, write_json
+from .utils.json_ import get_pretty_json, read_json, write_json, json_dumps_safe
 from .utils.lithuania import (
     validate_lt_id,
     validate_lt_tel_nr,
@@ -65,6 +65,7 @@ __all__ = [
     "get_pretty_json",
     "read_json",
     "write_json",
+    "json_dumps_safe",
     # lithuania.py
     "validate_lt_id",
     "validate_lt_tel_nr",
