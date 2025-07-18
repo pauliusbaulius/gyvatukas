@@ -83,7 +83,26 @@ hljs.highlightAll();
 <span>def <span class="ident">dict_get_by_path</span></span>(<span>d: dict, path: str, separator: str = '.', allow_none: bool = False) ‑> Any</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Access a nested value in a dictionary using a string path.
+Less bloated alternative for glom, that just works for this very thing.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>d</code></strong></dt>
+<dd>The dictionary to traverse</dd>
+<dt><strong><code>path</code></strong></dt>
+<dd>String path with parts separated by the separator</dd>
+<dt><strong><code>separator</code></strong></dt>
+<dd>Character that separates parts of the path</dd>
+<dt><strong><code>allow_none</code></strong></dt>
+<dd>If True, return None for invalid paths instead of raising exceptions</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>The value at the specified path or None if allow_none is True and path is invalid</p>
+<h2 id="usage">Usage</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; data = {&quot;a&quot;: {&quot;b&quot;: [1, 2, {&quot;c&quot;: 3}]}}
+&gt;&gt;&gt; dict_get_by_path(data, &quot;a.b.2.c&quot;)
+3
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -91,33 +110,59 @@ hljs.highlightAll();
 <pre><code class="python">def dict_get_by_path(
     d: dict, path: str, separator: str = &#34;.&#34;, allow_none: bool = False
 ) -&gt; Any:
+    &#34;&#34;&#34;
+    Access a nested value in a dictionary using a string path.
+    Less bloated alternative for glom, that just works for this very thing.
+
+    Args:
+        d: The dictionary to traverse
+        path: String path with parts separated by the separator
+        separator: Character that separates parts of the path
+        allow_none: If True, return None for invalid paths instead of raising exceptions
+
+    Returns:
+        The value at the specified path or None if allow_none is True and path is invalid
+
+    Usage:
+        &gt;&gt;&gt; data = {&#34;a&#34;: {&#34;b&#34;: [1, 2, {&#34;c&#34;: 3}]}}
+        &gt;&gt;&gt; dict_get_by_path(data, &#34;a.b.2.c&#34;)
+        3
+    &#34;&#34;&#34;
+    if not path:
+        return d
+
+    # Pre-split the path for better performance with longer paths
+    parts = path.split(separator)
     current = d
 
-    if not path:
-        return current
-
-    for part in path.split(separator):
-        try:
-            if isinstance(current, (list, tuple)):
-                try:
-                    index = int(part)
-                    current = current[index]
-                except (ValueError, IndexError):
-                    if allow_none:
-                        return None
-                    raise GyvatukasException(f&#34;invalid index &#39;{part}&#39; for sequence&#34;)
-            elif isinstance(current, dict):
+    for part in parts:
+        if isinstance(current, dict):
+            try:
                 current = current[part]
-            else:
+                continue
+            except KeyError:
                 if allow_none:
                     return None
-                raise GyvatukasException(
-                    f&#34;cannot index into {type(current)} with &#39;{part}&#39;&#34;
-                )
-        except KeyError:
-            if allow_none:
-                return None
-            raise
+                raise
+
+        if isinstance(current, (list, tuple)):
+            try:
+                idx = int(part)
+                try:
+                    current = current[idx]
+                    continue
+                except IndexError:
+                    if allow_none:
+                        return None
+                    raise IndexError(f&#34;Index {idx} out of range&#34;)
+            except ValueError:
+                if allow_none:
+                    return None
+                raise ValueError(f&#34;&#39;{part}&#39; is not a valid integer index&#34;)
+
+        if allow_none:
+            return None
+        raise TypeError(f&#34;Cannot index into {type(current).__name__} with key &#39;{part}&#39;&#34;)
 
     return current</code></pre>
 </details>

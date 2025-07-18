@@ -33,23 +33,22 @@ hljs.highlightAll();
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt id="gyvatukas.utils.json_.get_pretty_json"><code class="name flex">
-<span>def <span class="ident">get_pretty_json</span></span>(<span>data: dict | list) ‑> str</span>
+<dt id="gyvatukas.utils.json_.json_dumps_safe"><code class="name flex">
+<span>def <span class="ident">json_dumps_safe</span></span>(<span>obj, **kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Return pretty json string.</p></div>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_pretty_json(data: dict | list) -&gt; str:
-    &#34;&#34;&#34;Return pretty json string.&#34;&#34;&#34;
-    result = json.dumps(data, indent=4, default=str, ensure_ascii=False)
-    return result</code></pre>
+<pre><code class="python">def json_dumps_safe(obj, **kwargs):
+    obj = _convert_keys_to_str(obj)
+    return json.dumps(obj, cls=EnhancedJSONEncoder, **kwargs)</code></pre>
 </details>
 </dd>
 <dt id="gyvatukas.utils.json_.read_json"><code class="name flex">
-<span>def <span class="ident">read_json</span></span>(<span>path: pathlib.Path, default: Any = None) ‑> dict | list</span>
+<span>def <span class="ident">read_json</span></span>(<span>path: pathlib.Path, default: typing.Any | None = None) ‑> dict | list</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Read JSON from file. Return empty dict if file not found or JSON is invalid.</p></div>
@@ -57,7 +56,7 @@ hljs.highlightAll();
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def read_json(path: pathlib.Path, default: Any = None) -&gt; dict | list:
+<pre><code class="python">def read_json(path: pathlib.Path, default: Any | None = None) -&gt; dict | list:
     &#34;&#34;&#34;Read JSON from file. Return empty dict if file not found or JSON is invalid.&#34;&#34;&#34;
     data = read_file(path=path)
     if data:
@@ -71,7 +70,7 @@ hljs.highlightAll();
 </details>
 </dd>
 <dt id="gyvatukas.utils.json_.write_json"><code class="name flex">
-<span>def <span class="ident">write_json</span></span>(<span>path: pathlib.Path,<br>data: dict | list,<br>pretty: bool = True,<br>override: bool = False) ‑> bool</span>
+<span>def <span class="ident">write_json</span></span>(<span>path: pathlib.Path,<br>data: dict | list,<br>pretty: bool = False,<br>override: bool = False) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Write JSON to file. Return true if written, false if not.</p></div>
@@ -80,13 +79,13 @@ hljs.highlightAll();
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def write_json(
-    path: pathlib.Path, data: dict | list, pretty: bool = True, override: bool = False
+    path: pathlib.Path, data: dict | list, pretty: bool = False, override: bool = False
 ) -&gt; bool:
     &#34;&#34;&#34;Write JSON to file. Return true if written, false if not.&#34;&#34;&#34;
     if pretty:
-        content = get_pretty_json(data)
+        content = json_dumps_safe(data, indent=4, ensure_ascii=False)
     else:
-        content = json.dumps(data, default=str, ensure_ascii=False)
+        content = json_dumps_safe(data)
 
     result = write_file(path=path, content=content, override=override)
     return result</code></pre>
@@ -95,6 +94,139 @@ hljs.highlightAll();
 </dl>
 </section>
 <section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="gyvatukas.utils.json_.EnhancedJSONEncoder"><code class="flex name class">
+<span>class <span class="ident">EnhancedJSONEncoder</span></span>
+<span>(</span><span>*,<br>skipkeys=False,<br>ensure_ascii=True,<br>check_circular=True,<br>allow_nan=True,<br>sort_keys=False,<br>indent=None,<br>separators=None,<br>default=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Extensible JSON <a href="https://json.org">https://json.org</a> encoder for Python data structures.</p>
+<p>Supports the following objects and types by default:</p>
+<p>+-------------------+---------------+
+| Python
+| JSON
+|
++===================+===============+
+| dict
+| object
+|
++-------------------+---------------+
+| list, tuple
+| array
+|
++-------------------+---------------+
+| str
+| string
+|
++-------------------+---------------+
+| int, float
+| number
+|
++-------------------+---------------+
+| True
+| true
+|
++-------------------+---------------+
+| False
+| false
+|
++-------------------+---------------+
+| None
+| null
+|
++-------------------+---------------+</p>
+<p>To extend this to recognize other objects, subclass and implement a
+<code>.default()</code> method with another method that returns a serializable
+object for <code>o</code> if possible, otherwise it should call the superclass
+implementation (to raise <code>TypeError</code>).</p>
+<p>Constructor for JSONEncoder, with sensible defaults.</p>
+<p>If skipkeys is false, then it is a TypeError to attempt
+encoding of keys that are not str, int, float, bool or None.
+If skipkeys is True, such items are simply skipped.</p>
+<p>If ensure_ascii is true, the output is guaranteed to be str
+objects with all incoming non-ASCII characters escaped.
+If
+ensure_ascii is false, the output can contain non-ASCII characters.</p>
+<p>If check_circular is true, then lists, dicts, and custom encoded
+objects will be checked for circular references during encoding to
+prevent an infinite recursion (which would cause an RecursionError).
+Otherwise, no such check takes place.</p>
+<p>If allow_nan is true, then NaN, Infinity, and -Infinity will be
+encoded as such.
+This behavior is not JSON specification compliant,
+but is consistent with most JavaScript based encoders and decoders.
+Otherwise, it will be a ValueError to encode such floats.</p>
+<p>If sort_keys is true, then the output of dictionaries will be
+sorted by key; this is useful for regression tests to ensure
+that JSON serializations can be compared on a day-to-day basis.</p>
+<p>If indent is a non-negative integer, then JSON array
+elements and object members will be pretty-printed with that
+indent level.
+An indent level of 0 will only insert newlines.
+None is the most compact representation.</p>
+<p>If specified, separators should be an (item_separator, key_separator)
+tuple.
+The default is (', ', ': ') if <em>indent</em> is <code>None</code> and
+(',', ': ') otherwise.
+To get the most compact JSON representation,
+you should specify (',', ':') to eliminate whitespace.</p>
+<p>If specified, default is a function that gets called for objects
+that can't otherwise be serialized.
+It should return a JSON encodable
+version of the object or raise a <code>TypeError</code>.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EnhancedJSONEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, decimal.Decimal):
+            return str(obj)
+        if isinstance(obj, (datetime.datetime, datetime.date)):
+            return obj.isoformat()
+        return super().default(obj)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>json.encoder.JSONEncoder</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="gyvatukas.utils.json_.EnhancedJSONEncoder.default"><code class="name flex">
+<span>def <span class="ident">default</span></span>(<span>self, obj)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Implement this method in a subclass such that it returns
+a serializable object for <code>o</code>, or calls the base implementation
+(to raise a <code>TypeError</code>).</p>
+<p>For example, to support arbitrary iterators, you could
+implement default like this::</p>
+<pre><code>def default(self, o):
+    try:
+        iterable = iter(o)
+    except TypeError:
+        pass
+    else:
+        return list(iterable)
+    # Let the base class default method raise the TypeError
+    return super().default(o)
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def default(self, obj):
+    if isinstance(obj, decimal.Decimal):
+        return str(obj)
+    if isinstance(obj, (datetime.datetime, datetime.date)):
+        return obj.isoformat()
+    return super().default(obj)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -109,9 +241,19 @@ hljs.highlightAll();
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
-<li><code><a title="gyvatukas.utils.json_.get_pretty_json" href="#gyvatukas.utils.json_.get_pretty_json">get_pretty_json</a></code></li>
+<li><code><a title="gyvatukas.utils.json_.json_dumps_safe" href="#gyvatukas.utils.json_.json_dumps_safe">json_dumps_safe</a></code></li>
 <li><code><a title="gyvatukas.utils.json_.read_json" href="#gyvatukas.utils.json_.read_json">read_json</a></code></li>
 <li><code><a title="gyvatukas.utils.json_.write_json" href="#gyvatukas.utils.json_.write_json">write_json</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="gyvatukas.utils.json_.EnhancedJSONEncoder" href="#gyvatukas.utils.json_.EnhancedJSONEncoder">EnhancedJSONEncoder</a></code></h4>
+<ul class="">
+<li><code><a title="gyvatukas.utils.json_.EnhancedJSONEncoder.default" href="#gyvatukas.utils.json_.EnhancedJSONEncoder.default">default</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

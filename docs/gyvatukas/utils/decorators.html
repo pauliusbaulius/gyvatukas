@@ -37,13 +37,28 @@ hljs.highlightAll();
 <span>def <span class="ident">timer</span></span>(<span>logger_name: str = 'timer', min_duration_ms: int = 0)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Log function duration in ms. Specify own logger or use default <code><a title="gyvatukas.utils.decorators.timer" href="#gyvatukas.utils.decorators.timer">timer()</a></code> logger. Can set minimum threshold for logging.</p></div>
+<div class="desc"><p>Log function duration in ms. Specify own logger or use default <code><a title="gyvatukas.utils.decorators.timer" href="#gyvatukas.utils.decorators.timer">timer()</a></code> logger. Can set minimum threshold for logging.</p>
+<h2 id="usage">Usage</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; @timer(min_duration_ms=100)
+&gt;&gt;&gt; def my_function():
+&gt;&gt;&gt;     time.sleep(1)
+&gt;&gt;&gt;     return &quot;Hello, World!&quot;
+&gt;&gt;&gt; print(my_function())
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def timer(logger_name: str = &#34;timer&#34;, min_duration_ms: int = 0):
-    &#34;&#34;&#34;Log function duration in ms. Specify own logger or use default `timer` logger. Can set minimum threshold for logging.&#34;&#34;&#34;
+    &#34;&#34;&#34;Log function duration in ms. Specify own logger or use default `timer` logger. Can set minimum threshold for logging.
+
+    Usage:
+        &gt;&gt;&gt; @timer(min_duration_ms=100)
+        &gt;&gt;&gt; def my_function():
+        &gt;&gt;&gt;     time.sleep(1)
+        &gt;&gt;&gt;     return &#34;Hello, World!&#34;
+        &gt;&gt;&gt; print(my_function())
+    &#34;&#34;&#34;
 
     def decorator(func):
         # Handle both async and sync functions

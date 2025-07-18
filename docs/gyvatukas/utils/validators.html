@@ -39,7 +39,12 @@ hljs.highlightAll();
 <dd>
 <div class="desc"><p>Check if email is valid. If check_deliverability is True, will also check if email is deliverable.
 If email is valid, returns normalized email, otherwise returns the original email.</p>
-<p>Uses <a href="https://github.com/bnkc/emval">https://github.com/bnkc/emval</a> lib.</p></div>
+<p>Uses <a href="https://github.com/bnkc/emval">https://github.com/bnkc/emval</a> lib.</p>
+<h2 id="usage">Usage</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; is_valid, normalized = is_email_valid(&quot;test@example.com&quot;)
+&gt;&gt;&gt; print(f&quot;is valid? {is_valid}&quot;)
+&gt;&gt;&gt; print(f&quot;normalized: {normalized}&quot;)
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -49,6 +54,11 @@ If email is valid, returns normalized email, otherwise returns the original emai
     If email is valid, returns normalized email, otherwise returns the original email.
 
     Uses https://github.com/bnkc/emval lib.
+
+    Usage:
+        &gt;&gt;&gt; is_valid, normalized = is_email_valid(&#34;test@example.com&#34;)
+        &gt;&gt;&gt; print(f&#34;is valid? {is_valid}&#34;)
+        &gt;&gt;&gt; print(f&#34;normalized: {normalized}&#34;)
     &#34;&#34;&#34;
     _logger.debug(&#34;validating email `%s&#34;, email)
 

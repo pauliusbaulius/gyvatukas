@@ -47,7 +47,7 @@ hljs.highlightAll();
 <pre><code class="python">class PowerHitRadioLt:
     URL_CURRENTLY_PLAYING = &#34;https://powerhitradio.tv3.lt/Pwr/lastSong&#34;
 
-    @diskcache.throttle(cache, 1, 1)
+    @diskcache.throttle(cache, 1, 1, name=&#34;www.powerhitradio.lt&#34;)
     def get_currently_playing(self) -&gt; dict:
         &#34;&#34;&#34;Get currently playing song from Power Hit Radio LT.
 
@@ -76,7 +76,7 @@ hljs.highlightAll();
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@diskcache.throttle(cache, 1, 1)
+<pre><code class="python">@diskcache.throttle(cache, 1, 1, name=&#34;www.powerhitradio.lt&#34;)
 def get_currently_playing(self) -&gt; dict:
     &#34;&#34;&#34;Get currently playing song from Power Hit Radio LT.
 

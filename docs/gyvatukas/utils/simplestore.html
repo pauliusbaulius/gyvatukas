@@ -40,14 +40,58 @@ hljs.highlightAll();
 <span>(</span><span>base_dir: pathlib.Path)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Helper class that provides a standard way to create an ABC using
-inheritance.</p></div>
+<div class="desc"><p>Simple key-value store that stores data in a directory.
+Modern unix systems can have hundreds of millions of files in a single directory.</p>
+<p>Data is stored in two files:
+- <key>.data: data file
+- <key>.meta: metadata file</p>
+<p>Data is serialized to json or pickle. Deserialization is done based on metadata.</p>
+<h2 id="usage">Usage</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; store = DirStore(base_dir=Path(&quot;someplace&quot;))
+&gt;&gt;&gt; store.set(&quot;key&quot;, &quot;value&quot;, override=True)
+&gt;&gt;&gt; value = store.get(&quot;key&quot;)
+&gt;&gt;&gt; print(value)
+&gt;&gt;&gt; store.delete(&quot;key&quot;)
+&gt;&gt;&gt; value = store.pop(&quot;key&quot;)
+&gt;&gt;&gt; print(value)
+&gt;&gt;&gt; exists = store.exists(&quot;key&quot;)
+&gt;&gt;&gt; print(f&quot;exists? {exists}&quot;)
+&gt;&gt;&gt; all_keys = store.keys()
+&gt;&gt;&gt; print(len(all_keys))
+&gt;&gt;&gt; store.clear()
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class DirStore(KeyValueStore):
+    &#34;&#34;&#34;
+    Simple key-value store that stores data in a directory.
+    Modern unix systems can have hundreds of millions of files in a single directory.
+
+    Data is stored in two files:
+    - &lt;key&gt;.data: data file
+    - &lt;key&gt;.meta: metadata file
+
+    Data is serialized to json or pickle. Deserialization is done based on metadata.
+
+    Usage:
+        &gt;&gt;&gt; store = DirStore(base_dir=Path(&#34;someplace&#34;))
+        &gt;&gt;&gt; store.set(&#34;key&#34;, &#34;value&#34;, override=True)
+        &gt;&gt;&gt; value = store.get(&#34;key&#34;)
+        &gt;&gt;&gt; print(value)
+        &gt;&gt;&gt; store.delete(&#34;key&#34;)
+        &gt;&gt;&gt; value = store.pop(&#34;key&#34;)
+        &gt;&gt;&gt; print(value)
+        &gt;&gt;&gt; exists = store.exists(&#34;key&#34;)
+        &gt;&gt;&gt; print(f&#34;exists? {exists}&#34;)
+        &gt;&gt;&gt; all_keys = store.keys()
+        &gt;&gt;&gt; print(len(all_keys))
+        &gt;&gt;&gt; store.clear()
+    &#34;&#34;&#34;
+
     def __init__(self, base_dir: Path) -&gt; None:
+        self.base_dir = base_dir
         self.base_dir.mkdir(exist_ok=True)
 
     def _safe_filename(self, key: str) -&gt; str:

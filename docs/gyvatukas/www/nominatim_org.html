@@ -64,7 +64,7 @@ See: <a href="https://operations.osmfoundation.org/policies/nominatim/">https://
             &#34;User-Agent&#34;: self.user_agent,
         }
 
-    @diskcache.throttle(cache, 1, 1, name=&#34;nominatimorg&#34;)
+    @diskcache.throttle(cache, 1, 1, name=&#34;www.nominatim.org&#34;)
     def resolve_coords_to_address(self, lat: float, lon: float) -&gt; str:
         &#34;&#34;&#34;Given lat/lon, return address.&#34;&#34;&#34;
         response = httpx.get(
@@ -84,7 +84,7 @@ See: <a href="https://operations.osmfoundation.org/policies/nominatim/">https://
             )
         return data[&#34;display_name&#34;]
 
-    @diskcache.throttle(cache, 1, 1, name=&#34;nominatimorg&#34;)
+    @diskcache.throttle(cache, 1, 1, name=&#34;www.nominatim.org&#34;)
     def resolve_address_to_coords(self, address: str) -&gt; tuple[float, float]:
         &#34;&#34;&#34;Given address, return coords as lat/lon.
 
@@ -119,7 +119,7 @@ See: <a href="https://operations.osmfoundation.org/policies/nominatim/">https://
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@diskcache.throttle(cache, 1, 1, name=&#34;nominatimorg&#34;)
+<pre><code class="python">@diskcache.throttle(cache, 1, 1, name=&#34;www.nominatim.org&#34;)
 def resolve_address_to_coords(self, address: str) -&gt; tuple[float, float]:
     &#34;&#34;&#34;Given address, return coords as lat/lon.
 
@@ -152,7 +152,7 @@ def resolve_address_to_coords(self, address: str) -&gt; tuple[float, float]:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@diskcache.throttle(cache, 1, 1, name=&#34;nominatimorg&#34;)
+<pre><code class="python">@diskcache.throttle(cache, 1, 1, name=&#34;www.nominatim.org&#34;)
 def resolve_coords_to_address(self, lat: float, lon: float) -&gt; str:
     &#34;&#34;&#34;Given lat/lon, return address.&#34;&#34;&#34;
     response = httpx.get(

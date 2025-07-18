@@ -33,17 +33,67 @@ hljs.highlightAll();
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
+<dt id="gyvatukas.utils.string_.human_readable_size"><code class="name flex">
+<span>def <span class="ident">human_readable_size</span></span>(<span>size: int, decimal_places: int = 2) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Convert a size in bytes to a human-readable string.
+<a href="https://stackoverflow.com/questions/1094841/get-a-human-readable-version-of-a-file-size">https://stackoverflow.com/questions/1094841/get-a-human-readable-version-of-a-file-size</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>size</code></strong></dt>
+<dd>Size in bytes</dd>
+<dt><strong><code>decimal_places</code></strong></dt>
+<dd>Number of decimal places to show (default: 2)</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>Formatted string like "1.5 MiB" or "2.00 GiB"</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def human_readable_size(size: int, decimal_places: int = 2) -&gt; str:
+    &#34;&#34;&#34;Convert a size in bytes to a human-readable string.
+    https://stackoverflow.com/questions/1094841/get-a-human-readable-version-of-a-file-size
+
+    Args:
+        size: Size in bytes
+        decimal_places: Number of decimal places to show (default: 2)
+
+    Returns:
+        Formatted string like &#34;1.5 MiB&#34; or &#34;2.00 GiB&#34;
+    &#34;&#34;&#34;
+    for unit in [&#34;B&#34;, &#34;KiB&#34;, &#34;MiB&#34;, &#34;GiB&#34;, &#34;TiB&#34;, &#34;PiB&#34;]:
+        if size &lt; 1024.0 or unit == &#34;PiB&#34;:
+            break
+        size /= 1024.0
+    return f&#34;{size:.{decimal_places}f} {unit}&#34;</code></pre>
+</details>
+</dd>
 <dt id="gyvatukas.utils.string_.str_keep_except"><code class="name flex">
 <span>def <span class="ident">str_keep_except</span></span>(<span>s: str, allowed: list[str]) ‑> str</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Keep all characters from <code>s</code> except those in <code>allowed</code>.</p></div>
+<div class="desc"><p>Keep all characters from <code>s</code> except those in <code>allowed</code>.</p>
+<h2 id="usage">Usage</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; s = &quot;Hello, World!&quot;
+&gt;&gt;&gt; allowed = [&quot;o&quot;, &quot;l&quot;]
+&gt;&gt;&gt; result = str_keep_except(s, allowed)
+&gt;&gt;&gt; print(result) # &quot;He, Wrd!&quot;
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def str_keep_except(s: str, allowed: list[str]) -&gt; str:
-    &#34;&#34;&#34;Keep all characters from `s` except those in `allowed`.&#34;&#34;&#34;
+    &#34;&#34;&#34;Keep all characters from `s` except those in `allowed`.
+
+    Usage:
+        &gt;&gt;&gt; s = &#34;Hello, World!&#34;
+        &gt;&gt;&gt; allowed = [&#34;o&#34;, &#34;l&#34;]
+        &gt;&gt;&gt; result = str_keep_except(s, allowed)
+        &gt;&gt;&gt; print(result) # &#34;He, Wrd!&#34;
+    &#34;&#34;&#34;
     return &#34;&#34;.join(filter(lambda x: x not in allowed, s))</code></pre>
 </details>
 </dd>
@@ -51,13 +101,26 @@ hljs.highlightAll();
 <span>def <span class="ident">str_remove_except</span></span>(<span>s: str, allowed: list[str]) ‑> str</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Remove all characters from <code>s</code> except those in <code>allowed</code>.</p></div>
+<div class="desc"><p>Remove all characters from <code>s</code> except those in <code>allowed</code>.</p>
+<h2 id="usage">Usage</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; s = &quot;Hello, World!&quot;
+&gt;&gt;&gt; allowed = [&quot;o&quot;, &quot;l&quot;]
+&gt;&gt;&gt; result = str_remove_except(s, allowed)
+&gt;&gt;&gt; print(result) # &quot;lloo&quot;
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def str_remove_except(s: str, allowed: list[str]) -&gt; str:
-    &#34;&#34;&#34;Remove all characters from `s` except those in `allowed`.&#34;&#34;&#34;
+    &#34;&#34;&#34;Remove all characters from `s` except those in `allowed`.
+
+    Usage:
+        &gt;&gt;&gt; s = &#34;Hello, World!&#34;
+        &gt;&gt;&gt; allowed = [&#34;o&#34;, &#34;l&#34;]
+        &gt;&gt;&gt; result = str_remove_except(s, allowed)
+        &gt;&gt;&gt; print(result) # &#34;lloo&#34;
+    &#34;&#34;&#34;
     return &#34;&#34;.join(filter(lambda x: x in allowed, s))</code></pre>
 </details>
 </dd>
@@ -78,6 +141,7 @@ hljs.highlightAll();
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
+<li><code><a title="gyvatukas.utils.string_.human_readable_size" href="#gyvatukas.utils.string_.human_readable_size">human_readable_size</a></code></li>
 <li><code><a title="gyvatukas.utils.string_.str_keep_except" href="#gyvatukas.utils.string_.str_keep_except">str_keep_except</a></code></li>
 <li><code><a title="gyvatukas.utils.string_.str_remove_except" href="#gyvatukas.utils.string_.str_remove_except">str_remove_except</a></code></li>
 </ul>

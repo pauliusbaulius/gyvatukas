@@ -92,6 +92,50 @@ are published from master and are source of truth for the latest pypi release))<
         del _thread_local.connection</code></pre>
 </details>
 </dd>
+<dt id="gyvatukas.convert_to_base64"><code class="name flex">
+<span>def <span class="ident">convert_to_base64</span></span>(<span>image_bytes: bytes, ext: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Convert image bytes to base64 data URL format.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>image_bytes</code></strong></dt>
+<dd>Raw image bytes</dd>
+<dt><strong><code>ext</code></strong></dt>
+<dd>File extension (e.g., "jpg", "png")</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>Base64 encoded data URL string</p>
+<h2 id="usage">Usage</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; with open(&quot;image.jpg&quot;, &quot;rb&quot;) as f:
+...     image_bytes = f.read()
+&gt;&gt;&gt; b64 = convert_to_base64(image_bytes, &quot;jpg&quot;)
+&gt;&gt;&gt; print(b64[:50])  # &quot;data:image/jpg;base64,/9j/4AAQSkZJRgABAQAAAQ...&quot;
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def convert_to_base64(image_bytes: bytes, ext: str) -&gt; str:
+    &#34;&#34;&#34;Convert image bytes to base64 data URL format.
+
+    Args:
+        image_bytes: Raw image bytes
+        ext: File extension (e.g., &#34;jpg&#34;, &#34;png&#34;)
+
+    Returns:
+        Base64 encoded data URL string
+
+    Usage:
+        &gt;&gt;&gt; with open(&#34;image.jpg&#34;, &#34;rb&#34;) as f:
+        ...     image_bytes = f.read()
+        &gt;&gt;&gt; b64 = convert_to_base64(image_bytes, &#34;jpg&#34;)
+        &gt;&gt;&gt; print(b64[:50])  # &#34;data:image/jpg;base64,/9j/4AAQSkZJRgABAQAAAQ...&#34;
+    &#34;&#34;&#34;
+    ext = ext.replace(&#34;.&#34;, &#34;&#34;)
+    return f&#34;data:image/{ext};base64,{base64.b64encode(image_bytes).decode(&#39;utf-8&#39;)}&#34;</code></pre>
+</details>
+</dd>
 <dt id="gyvatukas.dict_flatten"><code class="name flex">
 <span>def <span class="ident">dict_flatten</span></span>(<span>d: dict, parent_key: str = '', separator: str = '.') ‑> dict</span>
 </code></dt>
@@ -142,7 +186,26 @@ are published from master and are source of truth for the latest pypi release))<
 <span>def <span class="ident">dict_get_by_path</span></span>(<span>d: dict, path: str, separator: str = '.', allow_none: bool = False) ‑> Any</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Access a nested value in a dictionary using a string path.
+Less bloated alternative for glom, that just works for this very thing.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>d</code></strong></dt>
+<dd>The dictionary to traverse</dd>
+<dt><strong><code>path</code></strong></dt>
+<dd>String path with parts separated by the separator</dd>
+<dt><strong><code>separator</code></strong></dt>
+<dd>Character that separates parts of the path</dd>
+<dt><strong><code>allow_none</code></strong></dt>
+<dd>If True, return None for invalid paths instead of raising exceptions</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>The value at the specified path or None if allow_none is True and path is invalid</p>
+<h2 id="usage">Usage</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; data = {&quot;a&quot;: {&quot;b&quot;: [1, 2, {&quot;c&quot;: 3}]}}
+&gt;&gt;&gt; dict_get_by_path(data, &quot;a.b.2.c&quot;)
+3
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -150,33 +213,59 @@ are published from master and are source of truth for the latest pypi release))<
 <pre><code class="python">def dict_get_by_path(
     d: dict, path: str, separator: str = &#34;.&#34;, allow_none: bool = False
 ) -&gt; Any:
+    &#34;&#34;&#34;
+    Access a nested value in a dictionary using a string path.
+    Less bloated alternative for glom, that just works for this very thing.
+
+    Args:
+        d: The dictionary to traverse
+        path: String path with parts separated by the separator
+        separator: Character that separates parts of the path
+        allow_none: If True, return None for invalid paths instead of raising exceptions
+
+    Returns:
+        The value at the specified path or None if allow_none is True and path is invalid
+
+    Usage:
+        &gt;&gt;&gt; data = {&#34;a&#34;: {&#34;b&#34;: [1, 2, {&#34;c&#34;: 3}]}}
+        &gt;&gt;&gt; dict_get_by_path(data, &#34;a.b.2.c&#34;)
+        3
+    &#34;&#34;&#34;
+    if not path:
+        return d
+
+    # Pre-split the path for better performance with longer paths
+    parts = path.split(separator)
     current = d
 
-    if not path:
-        return current
-
-    for part in path.split(separator):
-        try:
-            if isinstance(current, (list, tuple)):
-                try:
-                    index = int(part)
-                    current = current[index]
-                except (ValueError, IndexError):
-                    if allow_none:
-                        return None
-                    raise GyvatukasException(f&#34;invalid index &#39;{part}&#39; for sequence&#34;)
-            elif isinstance(current, dict):
+    for part in parts:
+        if isinstance(current, dict):
+            try:
                 current = current[part]
-            else:
+                continue
+            except KeyError:
                 if allow_none:
                     return None
-                raise GyvatukasException(
-                    f&#34;cannot index into {type(current)} with &#39;{part}&#39;&#34;
-                )
-        except KeyError:
-            if allow_none:
-                return None
-            raise
+                raise
+
+        if isinstance(current, (list, tuple)):
+            try:
+                idx = int(part)
+                try:
+                    current = current[idx]
+                    continue
+                except IndexError:
+                    if allow_none:
+                        return None
+                    raise IndexError(f&#34;Index {idx} out of range&#34;)
+            except ValueError:
+                if allow_none:
+                    return None
+                raise ValueError(f&#34;&#39;{part}&#39; is not a valid integer index&#34;)
+
+        if allow_none:
+            return None
+        raise TypeError(f&#34;Cannot index into {type(current).__name__} with key &#39;{part}&#39;&#34;)
 
     return current</code></pre>
 </details>
@@ -297,7 +386,7 @@ def get_conn_cur(path_db: pathlib.Path):
 </details>
 </dd>
 <dt id="gyvatukas.get_env"><code class="name flex">
-<span>def <span class="ident">get_env</span></span>(<span>name: str,<br>type: {<class 'bool'>, <class 'str'>, <class 'float'>, <class 'int'>, <class 'dict'>, <class 'list'>},<br>default: {<class 'bool'>, <class 'str'>, <class 'float'>, <class 'int'>, <class 'dict'>, <class 'list'>} = None,<br>required: bool = False) ‑> {<class 'bool'>, <class 'str'>, <class 'float'>, <class 'int'>, <class 'dict'>, <class 'list'>}</span>
+<span>def <span class="ident">get_env</span></span>(<span>name: str,<br>type: {<class 'str'>, <class 'bool'>, <class 'list'>, <class 'int'>, <class 'dict'>, <class 'float'>},<br>default: {<class 'str'>, <class 'bool'>, <class 'list'>, <class 'int'>, <class 'dict'>, <class 'float'>} = None,<br>required: bool = False) ‑> {<class 'str'>, <class 'bool'>, <class 'list'>, <class 'int'>, <class 'dict'>, <class 'float'>}</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Try to parse environment variable as given type.</p>
@@ -361,6 +450,137 @@ required: Fail if not found in environment? Useful for things like database port
     return str(value)</code></pre>
 </details>
 </dd>
+<dt id="gyvatukas.get_image_cropped_to_context"><code class="name flex">
+<span>def <span class="ident">get_image_cropped_to_context</span></span>(<span>image_bytes: bytes, padding: int = 10) ‑> bytes</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Crop image to content boundaries with padding.</p>
+<p>Uses threshold-based detection to find the bounding box of content
+and crops the image to that area with optional padding.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>image_bytes</code></strong></dt>
+<dd>Raw image bytes</dd>
+<dt><strong><code>padding</code></strong></dt>
+<dd>Padding to add around content (default: 10)</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>Cropped image bytes in JPEG format</p>
+<h2 id="usage">Usage</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; with open(&quot;receipt.jpg&quot;, &quot;rb&quot;) as f:
+...     image_bytes = f.read()
+&gt;&gt;&gt; cropped = get_image_cropped_to_context(image_bytes)
+&gt;&gt;&gt; with open(&quot;cropped.jpg&quot;, &quot;wb&quot;) as f:
+...     f.write(cropped)
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_image_cropped_to_context(image_bytes: bytes, padding: int = 10) -&gt; bytes:
+    &#34;&#34;&#34;Crop image to content boundaries with padding.
+
+    Uses threshold-based detection to find the bounding box of content
+    and crops the image to that area with optional padding.
+
+    Args:
+        image_bytes: Raw image bytes
+        padding: Padding to add around content (default: 10)
+
+    Returns:
+        Cropped image bytes in JPEG format
+
+    Usage:
+        &gt;&gt;&gt; with open(&#34;receipt.jpg&#34;, &#34;rb&#34;) as f:
+        ...     image_bytes = f.read()
+        &gt;&gt;&gt; cropped = get_image_cropped_to_context(image_bytes)
+        &gt;&gt;&gt; with open(&#34;cropped.jpg&#34;, &#34;wb&#34;) as f:
+        ...     f.write(cropped)
+    &#34;&#34;&#34;
+    image = Image.open(io.BytesIO(image_bytes))
+
+    # Convert to RGB if necessary (handles RGBA, P, and other modes)
+    if image.mode != &#34;RGB&#34;:
+        image = image.convert(&#34;RGB&#34;)
+
+    gray = image.convert(&#34;L&#34;)
+
+    # Convert to binary image using threshold
+    threshold = 180
+    binary = gray.point(lambda x: 255 if x &gt; threshold else 0, &#34;1&#34;)
+
+    # Find bounding box of content
+    bbox = binary.getbbox()
+
+    if bbox:
+        # Add padding
+        width, height = image.size
+        bbox = (
+            max(0, bbox[0] - padding),
+            max(0, bbox[1] - padding),
+            min(width, bbox[2] + padding),
+            min(height, bbox[3] + padding),
+        )
+
+        cropped = image.crop(bbox)
+
+        # Convert back to bytes
+        output_buffer = io.BytesIO()
+        cropped.save(output_buffer, format=&#34;JPEG&#34;)
+        return output_buffer.getvalue()
+
+    # Return original image bytes if no content found
+    return image_bytes</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.get_image_info"><code class="name flex">
+<span>def <span class="ident">get_image_info</span></span>(<span>image_bytes: bytes) ‑> dict</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get basic information about an image.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>image_bytes</code></strong></dt>
+<dd>Raw image bytes</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>Dictionary with image information</p>
+<h2 id="usage">Usage</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; with open(&quot;image.jpg&quot;, &quot;rb&quot;) as f:
+...     image_bytes = f.read()
+&gt;&gt;&gt; info = get_image_info(image_bytes)
+&gt;&gt;&gt; print(f&quot;Size: {info['width']}x{info['height']}, Format: {info['format']}&quot;)
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_image_info(image_bytes: bytes) -&gt; dict:
+    &#34;&#34;&#34;Get basic information about an image.
+
+    Args:
+        image_bytes: Raw image bytes
+
+    Returns:
+        Dictionary with image information
+
+    Usage:
+        &gt;&gt;&gt; with open(&#34;image.jpg&#34;, &#34;rb&#34;) as f:
+        ...     image_bytes = f.read()
+        &gt;&gt;&gt; info = get_image_info(image_bytes)
+        &gt;&gt;&gt; print(f&#34;Size: {info[&#39;width&#39;]}x{info[&#39;height&#39;]}, Format: {info[&#39;format&#39;]}&#34;)
+    &#34;&#34;&#34;
+    image = Image.open(io.BytesIO(image_bytes))
+
+    return {
+        &#34;width&#34;: image.width,
+        &#34;height&#34;: image.height,
+        &#34;format&#34;: image.format,
+        &#34;mode&#34;: image.mode,
+        &#34;size_bytes&#34;: len(image_bytes),
+    }</code></pre>
+</details>
+</dd>
 <dt id="gyvatukas.get_inline_sql"><code class="name flex">
 <span>def <span class="ident">get_inline_sql</span></span>(<span>sql: str) ‑> str</span>
 </code></dt>
@@ -391,14 +611,14 @@ required: Fail if not found in environment? Useful for things like database port
 <span>def <span class="ident">get_ip_country</span></span>(<span>ip: str) ‑> str | None</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Get country for given ip address or "Unknown" if not found.</p></div>
+<div class="desc"><p>Get country for given ip address or "Unknown" if not found. Uses <a href="https://wasab.is.">https://wasab.is.</a></p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@timer()
 def get_ip_country(ip: str) -&gt; str | None:
-    &#34;&#34;&#34;Get country for given ip address or &#34;Unknown&#34; if not found.&#34;&#34;&#34;
+    &#34;&#34;&#34;Get country for given ip address or &#34;Unknown&#34; if not found. Uses https://wasab.is.&#34;&#34;&#34;
     data = get_ipv4_meta(ip)
     if data is None:
         return None
@@ -438,7 +658,7 @@ def get_ipv4_meta(ip: str) -&gt; dict | None:
 <span>def <span class="ident">get_my_ipv4</span></span>(<span>) ‑> str</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Lookup external ipv4 address. Uses <a href="https://ifconfig.me">https://ifconfig.me</a> or <a href="https://wasab.is.">https://wasab.is.</a></p>
+<div class="desc"><p>Lookup external ipv4 address. Uses <a href="https://ifconfig.me">https://ifconfig.me</a> or <a href="https://wasab.is">https://wasab.is</a> or <a href="http://checkip.amazonaws.com/.">http://checkip.amazonaws.com/.</a></p>
 <p>🚨 Performs external request.</p></div>
 <details class="source">
 <summary>
@@ -446,16 +666,85 @@ def get_ipv4_meta(ip: str) -&gt; dict | None:
 </summary>
 <pre><code class="python">@timer()
 def get_my_ipv4() -&gt; str:
-    &#34;&#34;&#34;Lookup external ipv4 address. Uses https://ifconfig.me or https://wasab.is.
+    &#34;&#34;&#34;Lookup external ipv4 address. Uses https://ifconfig.me or https://wasab.is or http://checkip.amazonaws.com/.
 
     🚨 Performs external request.
     &#34;&#34;&#34;
-    _logger.debug(&#34;performing ipv4 lookup.&#34;)
-    url = &#34;https://wasab.is/json&#34;
+    # List of IP lookup services with their respective endpoints and response parsing
+    ip_services = [
+        {&#34;url&#34;: &#34;https://wasab.is/json&#34;, &#34;parser&#34;: lambda data: data[&#34;ip&#34;]},
+        {&#34;url&#34;: &#34;https://ifconfig.me/ip&#34;, &#34;parser&#34;: lambda data: data.text.strip()},
+        {
+            &#34;url&#34;: &#34;http://checkip.amazonaws.com&#34;,
+            &#34;parser&#34;: lambda data: data.text.strip(),
+        },
+    ]
 
-    result = httpx.get(url=url, timeout=5)
-    data = result.json()
-    return data[&#34;ip&#34;]</code></pre>
+    random.shuffle(ip_services)
+
+    for service in ip_services:
+        try:
+            result = httpx.get(url=service[&#34;url&#34;], timeout=5)
+            result.raise_for_status()
+            ip = service[&#34;parser&#34;](result)
+            return ip
+
+        except Exception as e:
+            _logger.error(f&#34;Error getting ip: {e}&#34;)
+            continue
+
+    raise RuntimeError(&#34;All IP lookup services failed!&#34;)</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.get_optimized_image_as_jpeg"><code class="name flex">
+<span>def <span class="ident">get_optimized_image_as_jpeg</span></span>(<span>image_bytes: bytes, quality: int = 85) ‑> bytes</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Optimize image and convert to JPEG format.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>image_bytes</code></strong></dt>
+<dd>Raw image bytes</dd>
+<dt><strong><code>quality</code></strong></dt>
+<dd>JPEG quality (1-100, default: 85)</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>Optimized JPEG image bytes</p>
+<h2 id="usage">Usage</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; with open(&quot;large_image.png&quot;, &quot;rb&quot;) as f:
+...     image_bytes = f.read()
+&gt;&gt;&gt; optimized = get_optimized_image_as_jpeg(image_bytes)
+&gt;&gt;&gt; print(f&quot;Original: {len(image_bytes)}, Optimized: {len(optimized)}&quot;)
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_optimized_image_as_jpeg(image_bytes: bytes, quality: int = 85) -&gt; bytes:
+    &#34;&#34;&#34;Optimize image and convert to JPEG format.
+
+    Args:
+        image_bytes: Raw image bytes
+        quality: JPEG quality (1-100, default: 85)
+
+    Returns:
+        Optimized JPEG image bytes
+
+    Usage:
+        &gt;&gt;&gt; with open(&#34;large_image.png&#34;, &#34;rb&#34;) as f:
+        ...     image_bytes = f.read()
+        &gt;&gt;&gt; optimized = get_optimized_image_as_jpeg(image_bytes)
+        &gt;&gt;&gt; print(f&#34;Original: {len(image_bytes)}, Optimized: {len(optimized)}&#34;)
+    &#34;&#34;&#34;
+    image = Image.open(io.BytesIO(image_bytes))
+
+    # Convert to RGB if necessary (handles RGBA, P, and other modes)
+    if image.mode != &#34;RGB&#34;:
+        image = image.convert(&#34;RGB&#34;)
+
+    output_buffer = io.BytesIO()
+    image.save(output_buffer, format=&#34;JPEG&#34;, quality=quality, optimize=True)
+    return output_buffer.getvalue()</code></pre>
 </details>
 </dd>
 <dt id="gyvatukas.get_path_extension"><code class="name flex">
@@ -498,21 +787,6 @@ def get_my_ipv4() -&gt; str:
 <pre><code class="python">def get_path_without_filename(path: pathlib.Path) -&gt; pathlib.Path:
     &#34;&#34;&#34;Return path without filename.&#34;&#34;&#34;
     return path.parent</code></pre>
-</details>
-</dd>
-<dt id="gyvatukas.get_pretty_json"><code class="name flex">
-<span>def <span class="ident">get_pretty_json</span></span>(<span>data: dict | list) ‑> str</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Return pretty json string.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def get_pretty_json(data: dict | list) -&gt; str:
-    &#34;&#34;&#34;Return pretty json string.&#34;&#34;&#34;
-    result = json.dumps(data, indent=4, default=str, ensure_ascii=False)
-    return result</code></pre>
 </details>
 </dd>
 <dt id="gyvatukas.get_random_secure_string"><code class="name flex">
@@ -559,6 +833,43 @@ def get_my_ipv4() -&gt; str:
     return hashed_password.decode(&#34;utf-8&#34;)</code></pre>
 </details>
 </dd>
+<dt id="gyvatukas.human_readable_size"><code class="name flex">
+<span>def <span class="ident">human_readable_size</span></span>(<span>size: int, decimal_places: int = 2) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Convert a size in bytes to a human-readable string.
+<a href="https://stackoverflow.com/questions/1094841/get-a-human-readable-version-of-a-file-size">https://stackoverflow.com/questions/1094841/get-a-human-readable-version-of-a-file-size</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>size</code></strong></dt>
+<dd>Size in bytes</dd>
+<dt><strong><code>decimal_places</code></strong></dt>
+<dd>Number of decimal places to show (default: 2)</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>Formatted string like "1.5 MiB" or "2.00 GiB"</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def human_readable_size(size: int, decimal_places: int = 2) -&gt; str:
+    &#34;&#34;&#34;Convert a size in bytes to a human-readable string.
+    https://stackoverflow.com/questions/1094841/get-a-human-readable-version-of-a-file-size
+
+    Args:
+        size: Size in bytes
+        decimal_places: Number of decimal places to show (default: 2)
+
+    Returns:
+        Formatted string like &#34;1.5 MiB&#34; or &#34;2.00 GiB&#34;
+    &#34;&#34;&#34;
+    for unit in [&#34;B&#34;, &#34;KiB&#34;, &#34;MiB&#34;, &#34;GiB&#34;, &#34;TiB&#34;, &#34;PiB&#34;]:
+        if size &lt; 1024.0 or unit == &#34;PiB&#34;:
+            break
+        size /= 1024.0
+    return f&#34;{size:.{decimal_places}f} {unit}&#34;</code></pre>
+</details>
+</dd>
 <dt id="gyvatukas.init_db"><code class="name flex">
 <span>def <span class="ident">init_db</span></span>(<span>path_db: pathlib.Path, sql_script: str)</span>
 </code></dt>
@@ -580,7 +891,12 @@ def get_my_ipv4() -&gt; str:
 <dd>
 <div class="desc"><p>Check if email is valid. If check_deliverability is True, will also check if email is deliverable.
 If email is valid, returns normalized email, otherwise returns the original email.</p>
-<p>Uses <a href="https://github.com/bnkc/emval">https://github.com/bnkc/emval</a> lib.</p></div>
+<p>Uses <a href="https://github.com/bnkc/emval">https://github.com/bnkc/emval</a> lib.</p>
+<h2 id="usage">Usage</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; is_valid, normalized = is_email_valid(&quot;test@example.com&quot;)
+&gt;&gt;&gt; print(f&quot;is valid? {is_valid}&quot;)
+&gt;&gt;&gt; print(f&quot;normalized: {normalized}&quot;)
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -590,6 +906,11 @@ If email is valid, returns normalized email, otherwise returns the original emai
     If email is valid, returns normalized email, otherwise returns the original email.
 
     Uses https://github.com/bnkc/emval lib.
+
+    Usage:
+        &gt;&gt;&gt; is_valid, normalized = is_email_valid(&#34;test@example.com&#34;)
+        &gt;&gt;&gt; print(f&#34;is valid? {is_valid}&#34;)
+        &gt;&gt;&gt; print(f&#34;normalized: {normalized}&#34;)
     &#34;&#34;&#34;
     _logger.debug(&#34;validating email `%s&#34;, email)
 
@@ -643,6 +964,20 @@ If email is valid, returns normalized email, otherwise returns the original emai
     return bool(value)</code></pre>
 </details>
 </dd>
+<dt id="gyvatukas.json_dumps_safe"><code class="name flex">
+<span>def <span class="ident">json_dumps_safe</span></span>(<span>obj, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def json_dumps_safe(obj, **kwargs):
+    obj = _convert_keys_to_str(obj)
+    return json.dumps(obj, cls=EnhancedJSONEncoder, **kwargs)</code></pre>
+</details>
+</dd>
 <dt id="gyvatukas.read_file"><code class="name flex">
 <span>def <span class="ident">read_file</span></span>(<span>path: pathlib.Path, read_bytes: bool = False) ‑> str | None</span>
 </code></dt>
@@ -662,7 +997,7 @@ If email is valid, returns normalized email, otherwise returns the original emai
 </details>
 </dd>
 <dt id="gyvatukas.read_json"><code class="name flex">
-<span>def <span class="ident">read_json</span></span>(<span>path: pathlib.Path, default: Any = None) ‑> dict | list</span>
+<span>def <span class="ident">read_json</span></span>(<span>path: pathlib.Path, default: typing.Any | None = None) ‑> dict | list</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Read JSON from file. Return empty dict if file not found or JSON is invalid.</p></div>
@@ -670,7 +1005,7 @@ If email is valid, returns normalized email, otherwise returns the original emai
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def read_json(path: pathlib.Path, default: Any = None) -&gt; dict | list:
+<pre><code class="python">def read_json(path: pathlib.Path, default: Any | None = None) -&gt; dict | list:
     &#34;&#34;&#34;Read JSON from file. Return empty dict if file not found or JSON is invalid.&#34;&#34;&#34;
     data = read_file(path=path)
     if data:
@@ -683,17 +1018,86 @@ If email is valid, returns normalized email, otherwise returns the original emai
     return {}</code></pre>
 </details>
 </dd>
+<dt id="gyvatukas.str_keep_except"><code class="name flex">
+<span>def <span class="ident">str_keep_except</span></span>(<span>s: str, allowed: list[str]) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Keep all characters from <code>s</code> except those in <code>allowed</code>.</p>
+<h2 id="usage">Usage</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; s = &quot;Hello, World!&quot;
+&gt;&gt;&gt; allowed = [&quot;o&quot;, &quot;l&quot;]
+&gt;&gt;&gt; result = str_keep_except(s, allowed)
+&gt;&gt;&gt; print(result) # &quot;He, Wrd!&quot;
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def str_keep_except(s: str, allowed: list[str]) -&gt; str:
+    &#34;&#34;&#34;Keep all characters from `s` except those in `allowed`.
+
+    Usage:
+        &gt;&gt;&gt; s = &#34;Hello, World!&#34;
+        &gt;&gt;&gt; allowed = [&#34;o&#34;, &#34;l&#34;]
+        &gt;&gt;&gt; result = str_keep_except(s, allowed)
+        &gt;&gt;&gt; print(result) # &#34;He, Wrd!&#34;
+    &#34;&#34;&#34;
+    return &#34;&#34;.join(filter(lambda x: x not in allowed, s))</code></pre>
+</details>
+</dd>
+<dt id="gyvatukas.str_remove_except"><code class="name flex">
+<span>def <span class="ident">str_remove_except</span></span>(<span>s: str, allowed: list[str]) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Remove all characters from <code>s</code> except those in <code>allowed</code>.</p>
+<h2 id="usage">Usage</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; s = &quot;Hello, World!&quot;
+&gt;&gt;&gt; allowed = [&quot;o&quot;, &quot;l&quot;]
+&gt;&gt;&gt; result = str_remove_except(s, allowed)
+&gt;&gt;&gt; print(result) # &quot;lloo&quot;
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def str_remove_except(s: str, allowed: list[str]) -&gt; str:
+    &#34;&#34;&#34;Remove all characters from `s` except those in `allowed`.
+
+    Usage:
+        &gt;&gt;&gt; s = &#34;Hello, World!&#34;
+        &gt;&gt;&gt; allowed = [&#34;o&#34;, &#34;l&#34;]
+        &gt;&gt;&gt; result = str_remove_except(s, allowed)
+        &gt;&gt;&gt; print(result) # &#34;lloo&#34;
+    &#34;&#34;&#34;
+    return &#34;&#34;.join(filter(lambda x: x in allowed, s))</code></pre>
+</details>
+</dd>
 <dt id="gyvatukas.timer"><code class="name flex">
 <span>def <span class="ident">timer</span></span>(<span>logger_name: str = 'timer', min_duration_ms: int = 0)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Log function duration in ms. Specify own logger or use default <code><a title="gyvatukas.timer" href="#gyvatukas.timer">timer()</a></code> logger. Can set minimum threshold for logging.</p></div>
+<div class="desc"><p>Log function duration in ms. Specify own logger or use default <code><a title="gyvatukas.timer" href="#gyvatukas.timer">timer()</a></code> logger. Can set minimum threshold for logging.</p>
+<h2 id="usage">Usage</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; @timer(min_duration_ms=100)
+&gt;&gt;&gt; def my_function():
+&gt;&gt;&gt;     time.sleep(1)
+&gt;&gt;&gt;     return &quot;Hello, World!&quot;
+&gt;&gt;&gt; print(my_function())
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def timer(logger_name: str = &#34;timer&#34;, min_duration_ms: int = 0):
-    &#34;&#34;&#34;Log function duration in ms. Specify own logger or use default `timer` logger. Can set minimum threshold for logging.&#34;&#34;&#34;
+    &#34;&#34;&#34;Log function duration in ms. Specify own logger or use default `timer` logger. Can set minimum threshold for logging.
+
+    Usage:
+        &gt;&gt;&gt; @timer(min_duration_ms=100)
+        &gt;&gt;&gt; def my_function():
+        &gt;&gt;&gt;     time.sleep(1)
+        &gt;&gt;&gt;     return &#34;Hello, World!&#34;
+        &gt;&gt;&gt; print(my_function())
+    &#34;&#34;&#34;
 
     def decorator(func):
         # Handle both async and sync functions
@@ -899,7 +1303,7 @@ If email is valid, returns normalized email, otherwise returns the original emai
 </details>
 </dd>
 <dt id="gyvatukas.write_json"><code class="name flex">
-<span>def <span class="ident">write_json</span></span>(<span>path: pathlib.Path,<br>data: dict | list,<br>pretty: bool = True,<br>override: bool = False) ‑> bool</span>
+<span>def <span class="ident">write_json</span></span>(<span>path: pathlib.Path,<br>data: dict | list,<br>pretty: bool = False,<br>override: bool = False) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Write JSON to file. Return true if written, false if not.</p></div>
@@ -908,13 +1312,13 @@ If email is valid, returns normalized email, otherwise returns the original emai
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def write_json(
-    path: pathlib.Path, data: dict | list, pretty: bool = True, override: bool = False
+    path: pathlib.Path, data: dict | list, pretty: bool = False, override: bool = False
 ) -&gt; bool:
     &#34;&#34;&#34;Write JSON to file. Return true if written, false if not.&#34;&#34;&#34;
     if pretty:
-        content = get_pretty_json(data)
+        content = json_dumps_safe(data, indent=4, ensure_ascii=False)
     else:
-        content = json.dumps(data, default=str, ensure_ascii=False)
+        content = json_dumps_safe(data)
 
     result = write_file(path=path, content=content, override=override)
     return result</code></pre>
@@ -930,14 +1334,58 @@ If email is valid, returns normalized email, otherwise returns the original emai
 <span>(</span><span>base_dir: pathlib.Path)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Helper class that provides a standard way to create an ABC using
-inheritance.</p></div>
+<div class="desc"><p>Simple key-value store that stores data in a directory.
+Modern unix systems can have hundreds of millions of files in a single directory.</p>
+<p>Data is stored in two files:
+- <key>.data: data file
+- <key>.meta: metadata file</p>
+<p>Data is serialized to json or pickle. Deserialization is done based on metadata.</p>
+<h2 id="usage">Usage</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; store = DirStore(base_dir=Path(&quot;someplace&quot;))
+&gt;&gt;&gt; store.set(&quot;key&quot;, &quot;value&quot;, override=True)
+&gt;&gt;&gt; value = store.get(&quot;key&quot;)
+&gt;&gt;&gt; print(value)
+&gt;&gt;&gt; store.delete(&quot;key&quot;)
+&gt;&gt;&gt; value = store.pop(&quot;key&quot;)
+&gt;&gt;&gt; print(value)
+&gt;&gt;&gt; exists = store.exists(&quot;key&quot;)
+&gt;&gt;&gt; print(f&quot;exists? {exists}&quot;)
+&gt;&gt;&gt; all_keys = store.keys()
+&gt;&gt;&gt; print(len(all_keys))
+&gt;&gt;&gt; store.clear()
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class DirStore(KeyValueStore):
+    &#34;&#34;&#34;
+    Simple key-value store that stores data in a directory.
+    Modern unix systems can have hundreds of millions of files in a single directory.
+
+    Data is stored in two files:
+    - &lt;key&gt;.data: data file
+    - &lt;key&gt;.meta: metadata file
+
+    Data is serialized to json or pickle. Deserialization is done based on metadata.
+
+    Usage:
+        &gt;&gt;&gt; store = DirStore(base_dir=Path(&#34;someplace&#34;))
+        &gt;&gt;&gt; store.set(&#34;key&#34;, &#34;value&#34;, override=True)
+        &gt;&gt;&gt; value = store.get(&#34;key&#34;)
+        &gt;&gt;&gt; print(value)
+        &gt;&gt;&gt; store.delete(&#34;key&#34;)
+        &gt;&gt;&gt; value = store.pop(&#34;key&#34;)
+        &gt;&gt;&gt; print(value)
+        &gt;&gt;&gt; exists = store.exists(&#34;key&#34;)
+        &gt;&gt;&gt; print(f&#34;exists? {exists}&#34;)
+        &gt;&gt;&gt; all_keys = store.keys()
+        &gt;&gt;&gt; print(len(all_keys))
+        &gt;&gt;&gt; store.clear()
+    &#34;&#34;&#34;
+
     def __init__(self, base_dir: Path) -&gt; None:
+        self.base_dir = base_dir
         self.base_dir.mkdir(exist_ok=True)
 
     def _safe_filename(self, key: str) -&gt; str:
@@ -1587,6 +2035,7 @@ inheritance.</p></div>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
 <li><code><a title="gyvatukas.close_connections" href="#gyvatukas.close_connections">close_connections</a></code></li>
+<li><code><a title="gyvatukas.convert_to_base64" href="#gyvatukas.convert_to_base64">convert_to_base64</a></code></li>
 <li><code><a title="gyvatukas.dict_flatten" href="#gyvatukas.dict_flatten">dict_flatten</a></code></li>
 <li><code><a title="gyvatukas.dict_get_by_path" href="#gyvatukas.dict_get_by_path">dict_get_by_path</a></code></li>
 <li><code><a title="gyvatukas.dict_remove_matching_values" href="#gyvatukas.dict_remove_matching_values">dict_remove_matching_values</a></code></li>
@@ -1596,23 +2045,29 @@ inheritance.</p></div>
 <li><code><a title="gyvatukas.get_conn_cur" href="#gyvatukas.get_conn_cur">get_conn_cur</a></code></li>
 <li><code><a title="gyvatukas.get_dt_utc_now" href="#gyvatukas.get_dt_utc_now">get_dt_utc_now</a></code></li>
 <li><code><a title="gyvatukas.get_env" href="#gyvatukas.get_env">get_env</a></code></li>
+<li><code><a title="gyvatukas.get_image_cropped_to_context" href="#gyvatukas.get_image_cropped_to_context">get_image_cropped_to_context</a></code></li>
+<li><code><a title="gyvatukas.get_image_info" href="#gyvatukas.get_image_info">get_image_info</a></code></li>
 <li><code><a title="gyvatukas.get_inline_sql" href="#gyvatukas.get_inline_sql">get_inline_sql</a></code></li>
 <li><code><a title="gyvatukas.get_ip_country" href="#gyvatukas.get_ip_country">get_ip_country</a></code></li>
 <li><code><a title="gyvatukas.get_ipv4_meta" href="#gyvatukas.get_ipv4_meta">get_ipv4_meta</a></code></li>
 <li><code><a title="gyvatukas.get_my_ipv4" href="#gyvatukas.get_my_ipv4">get_my_ipv4</a></code></li>
+<li><code><a title="gyvatukas.get_optimized_image_as_jpeg" href="#gyvatukas.get_optimized_image_as_jpeg">get_optimized_image_as_jpeg</a></code></li>
 <li><code><a title="gyvatukas.get_path_extension" href="#gyvatukas.get_path_extension">get_path_extension</a></code></li>
 <li><code><a title="gyvatukas.get_path_filename" href="#gyvatukas.get_path_filename">get_path_filename</a></code></li>
 <li><code><a title="gyvatukas.get_path_without_filename" href="#gyvatukas.get_path_without_filename">get_path_without_filename</a></code></li>
-<li><code><a title="gyvatukas.get_pretty_json" href="#gyvatukas.get_pretty_json">get_pretty_json</a></code></li>
 <li><code><a title="gyvatukas.get_random_secure_string" href="#gyvatukas.get_random_secure_string">get_random_secure_string</a></code></li>
 <li><code><a title="gyvatukas.get_utc_today" href="#gyvatukas.get_utc_today">get_utc_today</a></code></li>
 <li><code><a title="gyvatukas.hash_password" href="#gyvatukas.hash_password">hash_password</a></code></li>
+<li><code><a title="gyvatukas.human_readable_size" href="#gyvatukas.human_readable_size">human_readable_size</a></code></li>
 <li><code><a title="gyvatukas.init_db" href="#gyvatukas.init_db">init_db</a></code></li>
 <li><code><a title="gyvatukas.is_email_valid" href="#gyvatukas.is_email_valid">is_email_valid</a></code></li>
 <li><code><a title="gyvatukas.is_false" href="#gyvatukas.is_false">is_false</a></code></li>
 <li><code><a title="gyvatukas.is_true" href="#gyvatukas.is_true">is_true</a></code></li>
+<li><code><a title="gyvatukas.json_dumps_safe" href="#gyvatukas.json_dumps_safe">json_dumps_safe</a></code></li>
 <li><code><a title="gyvatukas.read_file" href="#gyvatukas.read_file">read_file</a></code></li>
 <li><code><a title="gyvatukas.read_json" href="#gyvatukas.read_json">read_json</a></code></li>
+<li><code><a title="gyvatukas.str_keep_except" href="#gyvatukas.str_keep_except">str_keep_except</a></code></li>
+<li><code><a title="gyvatukas.str_remove_except" href="#gyvatukas.str_remove_except">str_remove_except</a></code></li>
 <li><code><a title="gyvatukas.timer" href="#gyvatukas.timer">timer</a></code></li>
 <li><code><a title="gyvatukas.validate_lt_id" href="#gyvatukas.validate_lt_id">validate_lt_id</a></code></li>
 <li><code><a title="gyvatukas.validate_lt_tel_nr" href="#gyvatukas.validate_lt_tel_nr">validate_lt_tel_nr</a></code></li>

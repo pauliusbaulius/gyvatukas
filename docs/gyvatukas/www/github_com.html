@@ -35,36 +35,89 @@ hljs.highlightAll();
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="gyvatukas.www.github_com.GithubCom"><code class="flex name class">
-<span>class <span class="ident">GithubCom</span></span>
-<span>(</span><span>api_token: str = None)</span>
+<dt id="gyvatukas.www.github_com.GithubComAuth"><code class="flex name class">
+<span>class <span class="ident">GithubComAuth</span></span>
+<span>(</span><span>api_token: str)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>🚨 Consider passing your api token, otherwise you will be rate limited to 60 requests per hour.
-See: <a href="https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api?apiVersion=2022-11-28#about-primary-rate-limits">https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api?apiVersion=2022-11-28#about-primary-rate-limits</a></p>
-<p>Uses versioned ratio'd GitHub api.
-See: <a href="https://docs.github.com/en/rest?apiVersion=2022-11-28">https://docs.github.com/en/rest?apiVersion=2022-11-28</a></p></div>
+<div class="desc"><p>Authenticated GitHub API client.</p>
+<p>🚨 Rate limited to 5000 requests per hour.
+See: <a href="https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api?apiVersion=2022-11-28#about-primary-rate-limits">https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api?apiVersion=2022-11-28#about-primary-rate-limits</a></p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class GithubCom:
+<pre><code class="python">class GithubComAuth(GithubComBase):
     &#34;&#34;&#34;
-    🚨 Consider passing your api token, otherwise you will be rate limited to 60 requests per hour.
+    Authenticated GitHub API client.
+
+    🚨 Rate limited to 5000 requests per hour.
     See: https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api?apiVersion=2022-11-28#about-primary-rate-limits
-
-    Uses versioned ratio&#39;d GitHub api.
-    See: https://docs.github.com/en/rest?apiVersion=2022-11-28
     &#34;&#34;&#34;
 
-    RATE_LIMIT_PER_SECOND_UNAUTHENTICATED = 60 / 3600  # 60 requests per hour.
-    RATE_LIMIT_PER_SECOND_AUTH = 5000 / 3600  # 5000 requests per hour.
+    RATE_LIMIT_PER_SECOND = 5000 / 3600  # 5000 requests per hour
+
+    def __init__(self, api_token: str):
+        if not api_token:
+            raise ValueError(&#34;API token is required for authenticated GitHub client&#34;)
+        self.api_token = api_token
+        super().__init__()
+
+    def _get_auth_headers(self) -&gt; dict:
+        &#34;&#34;&#34;Return auth headers for GitHub API.&#34;&#34;&#34;
+        return {
+            &#34;Authorization&#34;: f&#34;Bearer {self.api_token}&#34;,
+        }
+
+    @diskcache.throttle(cache, 5000, 3600, name=&#34;github.com (authenticated)&#34;)
+    def convert_md_to_html(self, text: str, fancy_gfm_mode: bool = False) -&gt; str:
+        &#34;&#34;&#34;Rate-limited wrapper for convert_md_to_html.&#34;&#34;&#34;
+        return super().convert_md_to_html(text, fancy_gfm_mode)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="gyvatukas.www.github_com.GithubComBase" href="#gyvatukas.www.github_com.GithubComBase">GithubComBase</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="gyvatukas.www.github_com.GithubComAuth.RATE_LIMIT_PER_SECOND"><code class="name">var <span class="ident">RATE_LIMIT_PER_SECOND</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="gyvatukas.www.github_com.GithubComAuth.convert_md_to_html"><code class="name flex">
+<span>def <span class="ident">convert_md_to_html</span></span>(<span>self, text: str, fancy_gfm_mode: bool = False) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Rate-limited wrapper for convert_md_to_html.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@diskcache.throttle(cache, 5000, 3600, name=&#34;github.com (authenticated)&#34;)
+def convert_md_to_html(self, text: str, fancy_gfm_mode: bool = False) -&gt; str:
+    &#34;&#34;&#34;Rate-limited wrapper for convert_md_to_html.&#34;&#34;&#34;
+    return super().convert_md_to_html(text, fancy_gfm_mode)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="gyvatukas.www.github_com.GithubComBase"><code class="flex name class">
+<span>class <span class="ident">GithubComBase</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Base class for GitHub API clients with rate limiting.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GithubComBase:
+    &#34;&#34;&#34;Base class for GitHub API clients with rate limiting.&#34;&#34;&#34;
 
     GITHUB_API_VERSION = &#34;2022-11-28&#34;  # Latest as of 2024-01.
     URL_API_MARKDOWN_CONVERT = &#34;https://api.github.com/markdown&#34;
-
-    def __init__(self, api_token: str = None):
-        self.api_token = api_token
 
     @staticmethod
     def _get_api_version_header() -&gt; dict:
@@ -73,19 +126,22 @@ See: <a href="https://docs.github.com/en/rest?apiVersion=2022-11-28">https://doc
         See: https://docs.github.com/en/rest/about-the-rest-api/api-versions?apiVersion=2022-11-28
         &#34;&#34;&#34;
         return {
-            &#34;X-GitHub-Api-Version&#34;: GithubCom.GITHUB_API_VERSION,
+            &#34;X-GitHub-Api-Version&#34;: GithubComBase.GITHUB_API_VERSION,
         }
 
-    def _get_api_auth_header(self) -&gt; dict:
-        &#34;&#34;&#34;Return auth header for GitHub API if api_token is set.&#34;&#34;&#34;
-        if self.api_token:
-            return {
-                &#34;Authorization&#34;: f&#34;Bearer {self.api_token}&#34;,
-            }
+    def _get_base_headers(self) -&gt; dict:
+        &#34;&#34;&#34;Return base headers for GitHub API requests.&#34;&#34;&#34;
+        return {
+            &#34;Accept&#34;: &#34;application/vnd.github+json&#34;,
+            **self._get_api_version_header(),
+        }
+
+    def _get_auth_headers(self) -&gt; dict:
+        &#34;&#34;&#34;Return auth headers for GitHub API requests. Override in subclasses.&#34;&#34;&#34;
         return {}
 
     def convert_md_to_html(self, text: str, fancy_gfm_mode: bool = False) -&gt; str:
-        &#34;&#34;&#34;Convert markdown to HTML using Github API.
+        &#34;&#34;&#34;Convert markdown to HTML using GitHub API.
         Extremely inefficient, but hey, no need to install markdown parsing library and internet is already
         mostly bot traffic anyway.
 
@@ -98,9 +154,8 @@ See: <a href="https://docs.github.com/en/rest?apiVersion=2022-11-28">https://doc
                 &#34;text&#34;: text,
             },
             headers={
-                &#34;Accept&#34;: &#34;application/vnd.github+json&#34;,
-                **self._get_api_version_header(),
-                **self._get_api_auth_header(),
+                **self._get_base_headers(),
+                **self._get_auth_headers(),
             },
             timeout=15,
         )
@@ -118,32 +173,29 @@ See: <a href="https://docs.github.com/en/rest?apiVersion=2022-11-28">https://doc
         )
         raise GyvatukasException(&#34;Failed to convert markdown to HTML!&#34;)</code></pre>
 </details>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="gyvatukas.www.github_com.GithubComAuth" href="#gyvatukas.www.github_com.GithubComAuth">GithubComAuth</a></li>
+<li><a title="gyvatukas.www.github_com.GithubComNoAuth" href="#gyvatukas.www.github_com.GithubComNoAuth">GithubComNoAuth</a></li>
+</ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="gyvatukas.www.github_com.GithubCom.GITHUB_API_VERSION"><code class="name">var <span class="ident">GITHUB_API_VERSION</span></code></dt>
+<dt id="gyvatukas.www.github_com.GithubComBase.GITHUB_API_VERSION"><code class="name">var <span class="ident">GITHUB_API_VERSION</span></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="gyvatukas.www.github_com.GithubCom.RATE_LIMIT_PER_SECOND_AUTH"><code class="name">var <span class="ident">RATE_LIMIT_PER_SECOND_AUTH</span></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="gyvatukas.www.github_com.GithubCom.RATE_LIMIT_PER_SECOND_UNAUTHENTICATED"><code class="name">var <span class="ident">RATE_LIMIT_PER_SECOND_UNAUTHENTICATED</span></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="gyvatukas.www.github_com.GithubCom.URL_API_MARKDOWN_CONVERT"><code class="name">var <span class="ident">URL_API_MARKDOWN_CONVERT</span></code></dt>
+<dt id="gyvatukas.www.github_com.GithubComBase.URL_API_MARKDOWN_CONVERT"><code class="name">var <span class="ident">URL_API_MARKDOWN_CONVERT</span></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
 </dl>
 <h3>Methods</h3>
 <dl>
-<dt id="gyvatukas.www.github_com.GithubCom.convert_md_to_html"><code class="name flex">
+<dt id="gyvatukas.www.github_com.GithubComBase.convert_md_to_html"><code class="name flex">
 <span>def <span class="ident">convert_md_to_html</span></span>(<span>self, text: str, fancy_gfm_mode: bool = False) ‑> str</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Convert markdown to HTML using Github API.
+<div class="desc"><p>Convert markdown to HTML using GitHub API.
 Extremely inefficient, but hey, no need to install markdown parsing library and internet is already
 mostly bot traffic anyway.</p>
 <p>See: <a href="https://docs.github.com/en/rest/reference/markdown">https://docs.github.com/en/rest/reference/markdown</a></p></div>
@@ -152,7 +204,7 @@ mostly bot traffic anyway.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def convert_md_to_html(self, text: str, fancy_gfm_mode: bool = False) -&gt; str:
-    &#34;&#34;&#34;Convert markdown to HTML using Github API.
+    &#34;&#34;&#34;Convert markdown to HTML using GitHub API.
     Extremely inefficient, but hey, no need to install markdown parsing library and internet is already
     mostly bot traffic anyway.
 
@@ -165,9 +217,8 @@ mostly bot traffic anyway.</p>
             &#34;text&#34;: text,
         },
         headers={
-            &#34;Accept&#34;: &#34;application/vnd.github+json&#34;,
-            **self._get_api_version_header(),
-            **self._get_api_auth_header(),
+            **self._get_base_headers(),
+            **self._get_auth_headers(),
         },
         timeout=15,
     )
@@ -188,6 +239,65 @@ mostly bot traffic anyway.</p>
 </dd>
 </dl>
 </dd>
+<dt id="gyvatukas.www.github_com.GithubComNoAuth"><code class="flex name class">
+<span>class <span class="ident">GithubComNoAuth</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Unauthenticated GitHub API client.</p>
+<p>🚨 Rate limited to 60 requests per hour.
+See: <a href="https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api?apiVersion=2022-11-28#about-primary-rate-limits">https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api?apiVersion=2022-11-28#about-primary-rate-limits</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GithubComNoAuth(GithubComBase):
+    &#34;&#34;&#34;
+    Unauthenticated GitHub API client.
+
+    🚨 Rate limited to 60 requests per hour.
+    See: https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api?apiVersion=2022-11-28#about-primary-rate-limits
+    &#34;&#34;&#34;
+
+    RATE_LIMIT_PER_SECOND = 60 / 3600  # 60 requests per hour
+
+    def __init__(self):
+        super().__init__()
+
+    @diskcache.throttle(cache, 60, 3600, name=&#34;github.com (unauthenticated)&#34;)
+    def convert_md_to_html(self, text: str, fancy_gfm_mode: bool = False) -&gt; str:
+        &#34;&#34;&#34;Rate-limited wrapper for convert_md_to_html.&#34;&#34;&#34;
+        return super().convert_md_to_html(text, fancy_gfm_mode)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="gyvatukas.www.github_com.GithubComBase" href="#gyvatukas.www.github_com.GithubComBase">GithubComBase</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="gyvatukas.www.github_com.GithubComNoAuth.RATE_LIMIT_PER_SECOND"><code class="name">var <span class="ident">RATE_LIMIT_PER_SECOND</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="gyvatukas.www.github_com.GithubComNoAuth.convert_md_to_html"><code class="name flex">
+<span>def <span class="ident">convert_md_to_html</span></span>(<span>self, text: str, fancy_gfm_mode: bool = False) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Rate-limited wrapper for convert_md_to_html.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@diskcache.throttle(cache, 60, 3600, name=&#34;github.com (unauthenticated)&#34;)
+def convert_md_to_html(self, text: str, fancy_gfm_mode: bool = False) -&gt; str:
+    &#34;&#34;&#34;Rate-limited wrapper for convert_md_to_html.&#34;&#34;&#34;
+    return super().convert_md_to_html(text, fancy_gfm_mode)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 </article>
@@ -204,13 +314,25 @@ mostly bot traffic anyway.</p>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="gyvatukas.www.github_com.GithubCom" href="#gyvatukas.www.github_com.GithubCom">GithubCom</a></code></h4>
+<h4><code><a title="gyvatukas.www.github_com.GithubComAuth" href="#gyvatukas.www.github_com.GithubComAuth">GithubComAuth</a></code></h4>
 <ul class="">
-<li><code><a title="gyvatukas.www.github_com.GithubCom.GITHUB_API_VERSION" href="#gyvatukas.www.github_com.GithubCom.GITHUB_API_VERSION">GITHUB_API_VERSION</a></code></li>
-<li><code><a title="gyvatukas.www.github_com.GithubCom.RATE_LIMIT_PER_SECOND_AUTH" href="#gyvatukas.www.github_com.GithubCom.RATE_LIMIT_PER_SECOND_AUTH">RATE_LIMIT_PER_SECOND_AUTH</a></code></li>
-<li><code><a title="gyvatukas.www.github_com.GithubCom.RATE_LIMIT_PER_SECOND_UNAUTHENTICATED" href="#gyvatukas.www.github_com.GithubCom.RATE_LIMIT_PER_SECOND_UNAUTHENTICATED">RATE_LIMIT_PER_SECOND_UNAUTHENTICATED</a></code></li>
-<li><code><a title="gyvatukas.www.github_com.GithubCom.URL_API_MARKDOWN_CONVERT" href="#gyvatukas.www.github_com.GithubCom.URL_API_MARKDOWN_CONVERT">URL_API_MARKDOWN_CONVERT</a></code></li>
-<li><code><a title="gyvatukas.www.github_com.GithubCom.convert_md_to_html" href="#gyvatukas.www.github_com.GithubCom.convert_md_to_html">convert_md_to_html</a></code></li>
+<li><code><a title="gyvatukas.www.github_com.GithubComAuth.RATE_LIMIT_PER_SECOND" href="#gyvatukas.www.github_com.GithubComAuth.RATE_LIMIT_PER_SECOND">RATE_LIMIT_PER_SECOND</a></code></li>
+<li><code><a title="gyvatukas.www.github_com.GithubComAuth.convert_md_to_html" href="#gyvatukas.www.github_com.GithubComAuth.convert_md_to_html">convert_md_to_html</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="gyvatukas.www.github_com.GithubComBase" href="#gyvatukas.www.github_com.GithubComBase">GithubComBase</a></code></h4>
+<ul class="">
+<li><code><a title="gyvatukas.www.github_com.GithubComBase.GITHUB_API_VERSION" href="#gyvatukas.www.github_com.GithubComBase.GITHUB_API_VERSION">GITHUB_API_VERSION</a></code></li>
+<li><code><a title="gyvatukas.www.github_com.GithubComBase.URL_API_MARKDOWN_CONVERT" href="#gyvatukas.www.github_com.GithubComBase.URL_API_MARKDOWN_CONVERT">URL_API_MARKDOWN_CONVERT</a></code></li>
+<li><code><a title="gyvatukas.www.github_com.GithubComBase.convert_md_to_html" href="#gyvatukas.www.github_com.GithubComBase.convert_md_to_html">convert_md_to_html</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="gyvatukas.www.github_com.GithubComNoAuth" href="#gyvatukas.www.github_com.GithubComNoAuth">GithubComNoAuth</a></code></h4>
+<ul class="">
+<li><code><a title="gyvatukas.www.github_com.GithubComNoAuth.RATE_LIMIT_PER_SECOND" href="#gyvatukas.www.github_com.GithubComNoAuth.RATE_LIMIT_PER_SECOND">RATE_LIMIT_PER_SECOND</a></code></li>
+<li><code><a title="gyvatukas.www.github_com.GithubComNoAuth.convert_md_to_html" href="#gyvatukas.www.github_com.GithubComNoAuth.convert_md_to_html">convert_md_to_html</a></code></li>
 </ul>
 </li>
 </ul>
