@@ -10,15 +10,6 @@ from gyvatukas.utils.fs import read_file, write_file
 _logger = logging.getLogger("gyvatukas")
 
 
-def _convert_keys_to_str(obj):
-    if isinstance(obj, dict):
-        return {_convert_key_to_str(k): _convert_keys_to_str(v) for k, v in obj.items()}
-    elif isinstance(obj, list):
-        return [_convert_keys_to_str(i) for i in obj]
-    else:
-        return obj
-
-
 def _convert_key_to_str(key):
     """Convert a key to string, handling special types consistently with EnhancedJSONEncoder."""
     if isinstance(key, (datetime.datetime, datetime.date)):
@@ -27,6 +18,15 @@ def _convert_key_to_str(key):
         return str(key)
     else:
         return str(key)
+
+
+def _convert_keys_to_str(obj):
+    if isinstance(obj, dict):
+        return {_convert_key_to_str(k): _convert_keys_to_str(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [_convert_keys_to_str(i) for i in obj]
+    else:
+        return obj
 
 
 class EnhancedJSONEncoder(json.JSONEncoder):
