@@ -73,7 +73,7 @@ class GithubComBase:
 class GithubComNoAuth(GithubComBase):
     """
     Unauthenticated GitHub API client.
-    
+
     🚨 Rate limited to 60 requests per hour.
     See: https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api?apiVersion=2022-11-28#about-primary-rate-limits
     """
@@ -92,7 +92,7 @@ class GithubComNoAuth(GithubComBase):
 class GithubComAuth(GithubComBase):
     """
     Authenticated GitHub API client.
-    
+
     🚨 Rate limited to 5000 requests per hour.
     See: https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api?apiVersion=2022-11-28#about-primary-rate-limits
     """

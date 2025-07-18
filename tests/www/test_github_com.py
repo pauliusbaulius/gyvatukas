@@ -14,7 +14,7 @@ class TestGithubComNoAuth:
         """Test markdown to HTML conversion returns valid HTML."""
         client = GithubComNoAuth()
         result = client.convert_md_to_html("# Hello, world!")
-        
+
         # Check that we got HTML output
         assert result.startswith("<")
         assert "h1" in result
@@ -30,7 +30,7 @@ class TestGithubComNoAuth:
         """Test base headers generation."""
         client = GithubComNoAuth()
         headers = client._get_base_headers()
-        
+
         assert "Accept" in headers
         assert "X-GitHub-Api-Version" in headers
         assert headers["Accept"] == "application/vnd.github+json"

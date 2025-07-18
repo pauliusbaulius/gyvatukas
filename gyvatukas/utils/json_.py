@@ -66,7 +66,7 @@ def read_json(path: pathlib.Path, default: Any | None = None) -> dict | list:
 def write_json(
     path: pathlib.Path, data: dict | list, pretty: bool = False, override: bool = False
 ) -> bool:
-    """Write JSON to file. Return true if written, false if not."""    
+    """Write JSON to file. Return true if written, false if not."""
     if pretty:
         content = json_dumps_safe(data, indent=4, ensure_ascii=False)
     else:

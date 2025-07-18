@@ -15,7 +15,7 @@ class TestNominatimOrg:
         """Test request headers generation."""
         client = NominatimOrg("test-user-agent")
         headers = client._get_request_headers()
-        
+
         assert "User-Agent" in headers
         assert headers["User-Agent"] == "test-user-agent"
 
@@ -25,7 +25,7 @@ class TestNominatimOrg:
         client = NominatimOrg("gyvatukas-test")
         # Test with Vilnius coordinates
         result = client.resolve_coords_to_address(lat=54.6872, lon=25.2797)
-        
+
         # Check that we got a string response
         assert isinstance(result, str)
         # Check that the response has some content
@@ -39,7 +39,7 @@ class TestNominatimOrg:
         client = NominatimOrg("gyvatukas-test")
         # Test with Vilnius address
         result = client.resolve_address_to_coords("Vilnius, Lithuania")
-        
+
         # Check that we got a tuple response
         assert isinstance(result, tuple)
         assert len(result) == 2

@@ -8,14 +8,14 @@ _logger = logging.getLogger(__name__)
 
 def convert_to_base64(image_bytes: bytes, ext: str) -> str:
     """Convert image bytes to base64 data URL format.
-    
+
     Args:
         image_bytes: Raw image bytes
         ext: File extension (e.g., "jpg", "png")
-        
+
     Returns:
         Base64 encoded data URL string
-        
+
     Usage:
         >>> with open("image.jpg", "rb") as f:
         ...     image_bytes = f.read()
@@ -28,17 +28,17 @@ def convert_to_base64(image_bytes: bytes, ext: str) -> str:
 
 def get_image_cropped_to_context(image_bytes: bytes, padding: int = 10) -> bytes:
     """Crop image to content boundaries with padding.
-    
+
     Uses threshold-based detection to find the bounding box of content
     and crops the image to that area with optional padding.
-    
+
     Args:
         image_bytes: Raw image bytes
         padding: Padding to add around content (default: 10)
-        
+
     Returns:
         Cropped image bytes in JPEG format
-        
+
     Usage:
         >>> with open("receipt.jpg", "rb") as f:
         ...     image_bytes = f.read()
@@ -84,14 +84,14 @@ def get_image_cropped_to_context(image_bytes: bytes, padding: int = 10) -> bytes
 
 def get_optimized_image_as_jpeg(image_bytes: bytes, quality: int = 85) -> bytes:
     """Optimize image and convert to JPEG format.
-    
+
     Args:
         image_bytes: Raw image bytes
         quality: JPEG quality (1-100, default: 85)
-        
+
     Returns:
         Optimized JPEG image bytes
-        
+
     Usage:
         >>> with open("large_image.png", "rb") as f:
         ...     image_bytes = f.read()
@@ -111,13 +111,13 @@ def get_optimized_image_as_jpeg(image_bytes: bytes, quality: int = 85) -> bytes:
 
 def get_image_info(image_bytes: bytes) -> dict:
     """Get basic information about an image.
-    
+
     Args:
         image_bytes: Raw image bytes
-        
+
     Returns:
         Dictionary with image information
-        
+
     Usage:
         >>> with open("image.jpg", "rb") as f:
         ...     image_bytes = f.read()
@@ -125,11 +125,11 @@ def get_image_info(image_bytes: bytes) -> dict:
         >>> print(f"Size: {info['width']}x{info['height']}, Format: {info['format']}")
     """
     image = Image.open(io.BytesIO(image_bytes))
-    
+
     return {
         "width": image.width,
         "height": image.height,
         "format": image.format,
         "mode": image.mode,
-        "size_bytes": len(image_bytes)
+        "size_bytes": len(image_bytes),
     }

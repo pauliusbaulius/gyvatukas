@@ -6,7 +6,7 @@ import logging
 
 def timer(logger_name: str = "timer", min_duration_ms: int = 0):
     """Log function duration in ms. Specify own logger or use default `timer` logger. Can set minimum threshold for logging.
-    
+
     Usage:
         >>> @timer(min_duration_ms=100)
         >>> def my_function():

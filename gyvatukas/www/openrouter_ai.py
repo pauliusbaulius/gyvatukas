@@ -78,6 +78,9 @@ class OpenrouterAi:
         return response.json()
 
 
+# TODO: get_image_description -> padaryt prompta per kuri aprasytu perduota img.
+
+
 if __name__ == "__main__":
     token = "YOUR_OPENAPI_API_KEY"
     model = "google/gemini-2.5-flash"

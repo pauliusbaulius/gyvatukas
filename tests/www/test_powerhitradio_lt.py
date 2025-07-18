@@ -15,6 +15,6 @@ class TestPowerHitRadioLt:
         """Test getting currently playing song returns valid data."""
         client = PowerHitRadioLt()
         result = client.get_currently_playing()
-        
+
         assert isinstance(result, dict)
         assert len(result) > 0
