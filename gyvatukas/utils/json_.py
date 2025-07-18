@@ -31,6 +31,9 @@ def write_json(
     path: pathlib.Path, data: dict | list, pretty: bool = True, override: bool = False
 ) -> bool:
     """Write JSON to file. Return true if written, false if not."""
+    # TODO: Support all types of data, not just dict and list.
+    # TODO: Dumping date, decimal, etc.
+    
     if pretty:
         content = get_pretty_json(data)
     else:
