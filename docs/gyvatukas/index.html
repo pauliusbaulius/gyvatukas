@@ -386,7 +386,7 @@ def get_conn_cur(path_db: pathlib.Path):
 </details>
 </dd>
 <dt id="gyvatukas.get_env"><code class="name flex">
-<span>def <span class="ident">get_env</span></span>(<span>name: str,<br>type: {<class 'str'>, <class 'bool'>, <class 'list'>, <class 'int'>, <class 'dict'>, <class 'float'>},<br>default: {<class 'str'>, <class 'bool'>, <class 'list'>, <class 'int'>, <class 'dict'>, <class 'float'>} = None,<br>required: bool = False) ‑> {<class 'str'>, <class 'bool'>, <class 'list'>, <class 'int'>, <class 'dict'>, <class 'float'>}</span>
+<span>def <span class="ident">get_env</span></span>(<span>name: str,<br>type: {<class 'bool'>, <class 'str'>, <class 'float'>, <class 'int'>, <class 'dict'>, <class 'list'>},<br>default: {<class 'bool'>, <class 'str'>, <class 'float'>, <class 'int'>, <class 'dict'>, <class 'list'>} = None,<br>required: bool = False) ‑> {<class 'bool'>, <class 'str'>, <class 'float'>, <class 'int'>, <class 'dict'>, <class 'list'>}</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Try to parse environment variable as given type.</p>
@@ -965,15 +965,18 @@ If email is valid, returns normalized email, otherwise returns the original emai
 </details>
 </dd>
 <dt id="gyvatukas.json_dumps_safe"><code class="name flex">
-<span>def <span class="ident">json_dumps_safe</span></span>(<span>obj, **kwargs)</span>
+<span>def <span class="ident">json_dumps_safe</span></span>(<span>obj, **kwargs) ‑> str</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>json.dumps with encoder that 'fixes' the common annoyance of getting exceptions when
+dict contains datetime or decimal.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def json_dumps_safe(obj, **kwargs):
+<pre><code class="python">def json_dumps_safe(obj, **kwargs) -&gt; str:
+    &#34;&#34;&#34;json.dumps with encoder that &#39;fixes&#39; the common annoyance of getting exceptions when
+    dict contains datetime or decimal.&#34;&#34;&#34;
     obj = _convert_keys_to_str(obj)
     return json.dumps(obj, cls=EnhancedJSONEncoder, **kwargs)</code></pre>
 </details>

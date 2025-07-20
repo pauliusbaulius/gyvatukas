@@ -94,7 +94,12 @@ from gyvatukas.utils.json_ import json_dumps_safe
                 ),
                 # pathlib.Path in nested structure
                 (
-                    {"files": [__import__("pathlib").Path("/tmp/a.txt"), __import__("pathlib").Path("/tmp/b.txt")]},
+                    {
+                        "files": [
+                            __import__("pathlib").Path("/tmp/a.txt"),
+                            __import__("pathlib").Path("/tmp/b.txt"),
+                        ]
+                    },
                     '{"files": ["/tmp/a.txt", "/tmp/b.txt"]}',
                 ),
             ]
