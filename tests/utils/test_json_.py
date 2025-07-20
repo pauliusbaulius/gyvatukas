@@ -82,6 +82,21 @@ from gyvatukas.utils.json_ import json_dumps_safe
                     },
                     '{"dict_of_lists": {"numbers": ["1.1", "2.2"], "dates": ["2023-01-01", "2023-12-31"]}}',
                 ),
+                # pathlib.Path as value
+                (
+                    {"path": __import__("pathlib").Path("/tmp/test.txt")},
+                    '{"path": "/tmp/test.txt"}',
+                ),
+                # pathlib.Path as key
+                (
+                    {__import__("pathlib").Path("/tmp/test.txt"): "file"},
+                    '{"/tmp/test.txt": "file"}',
+                ),
+                # pathlib.Path in nested structure
+                (
+                    {"files": [__import__("pathlib").Path("/tmp/a.txt"), __import__("pathlib").Path("/tmp/b.txt")]},
+                    '{"files": ["/tmp/a.txt", "/tmp/b.txt"]}',
+                ),
             ]
         )
     ],

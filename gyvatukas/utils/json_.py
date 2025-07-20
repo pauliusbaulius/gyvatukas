@@ -16,6 +16,8 @@ def _convert_key_to_str(key):
         return key.isoformat()
     elif isinstance(key, decimal.Decimal):
         return str(key)
+    elif isinstance(key, pathlib.Path):
+        return str(key)
     else:
         return str(key)
 
@@ -35,6 +37,8 @@ class EnhancedJSONEncoder(json.JSONEncoder):
             return str(obj)
         if isinstance(obj, (datetime.datetime, datetime.date)):
             return obj.isoformat()
+        if isinstance(obj, pathlib.Path):
+            return str(obj)
         return super().default(obj)
 
 
