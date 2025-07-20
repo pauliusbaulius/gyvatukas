@@ -18,9 +18,7 @@ class OpenrouterAi:
         return headers
 
     def get_credits(self) -> dict[str, Any]:
-        response = httpx.get(
-            f"{self.BASE_URL}/credits", headers=self._auth_headers()
-        )
+        response = httpx.get(f"{self.BASE_URL}/credits", headers=self._auth_headers())
         response.raise_for_status()
         return response.json()
 
