@@ -16,6 +16,7 @@ platformdirs = "^4"
 diskcache = "^5"
 emval = "^0.1.5"
 Pillow = "^10"
+pydantic = "^2"
 
 
 [tool.poetry.group.dev.dependencies]
