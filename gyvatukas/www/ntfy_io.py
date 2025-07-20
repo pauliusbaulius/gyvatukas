@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field
 
 cache = get_app_cache()
 
+
 class NtfyIOParams(BaseModel):
     # See: https://docs.ntfy.sh/publish/#publish-as-json
     topic: str
@@ -16,6 +17,7 @@ class NtfyIOParams(BaseModel):
     tags: list[str] | None = None
     priority: int | None = Field(3, ge=1, le=5)
 
+
 class NtfyIO:
     """ntfy.sh API client.
 
@@ -23,7 +25,7 @@ class NtfyIO:
     See: https://docs.ntfy.sh/publish/
     """
 
-    def __init__(self,base_url: str = "https://ntfy.sh/"):
+    def __init__(self, base_url: str = "https://ntfy.sh/"):
         self.base_url = base_url
         super().__init__()
 

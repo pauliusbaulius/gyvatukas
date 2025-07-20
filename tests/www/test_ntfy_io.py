@@ -1,5 +1,6 @@
 from gyvatukas.www.ntfy_io import NtfyIO, NtfyIOParams
 
+
 def test_ntfyio_post():
     client = NtfyIO()
     payload = NtfyIOParams(
