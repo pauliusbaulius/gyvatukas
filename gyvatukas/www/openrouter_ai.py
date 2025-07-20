@@ -1,4 +1,4 @@
-import requests
+import httpx
 from typing import Any, Optional
 
 
@@ -18,14 +18,14 @@ class OpenrouterAi:
         return headers
 
     def get_credits(self) -> dict[str, Any]:
-        response = requests.get(
+        response = httpx.get(
             f"{self.BASE_URL}/credits", headers=self._auth_headers()
         )
         response.raise_for_status()
         return response.json()
 
     def get_models(self) -> dict[str, Any]:
-        response = requests.get(f"{self.BASE_URL}/models", headers=self._auth_headers())
+        response = httpx.get(f"{self.BASE_URL}/models", headers=self._auth_headers())
         response.raise_for_status()
         return response.json()
 
@@ -50,7 +50,7 @@ class OpenrouterAi:
         data = {"model": model, "messages": messages}
         if max_tokens is not None:
             data["max_tokens"] = max_tokens
-        response = requests.post(
+        response = httpx.post(
             f"{self.BASE_URL}/chat/completions",
             headers=self._auth_headers(),
             json=data,
@@ -69,7 +69,7 @@ class OpenrouterAi:
         Only model and prompt are supported.
         """
         data = {"model": model, "prompt": prompt}
-        response = requests.post(
+        response = httpx.post(
             f"{self.BASE_URL}/completions",
             headers=self._auth_headers(),
             json=data,
