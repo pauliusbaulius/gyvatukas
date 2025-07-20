@@ -3,20 +3,31 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<meta name="generator" content="pdoc3 0.11.4">
+<meta name="generator" content="pdoc3 0.11.6">
 <title>gyvatukas API documentation</title>
 <meta name="description" content="gyvatukas
 collection of python utils and prototypes. feel free to open mrs and send hate mail to dev@paulius.xyz …">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
 <style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
 <script>window.addEventListener('DOMContentLoaded', () => {
 hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
 hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
 })</script>
 </head>
 <body>
@@ -80,7 +91,6 @@ are published from master and are source of truth for the latest pypi release))<
 <span>def <span class="ident">close_connections</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Close thread's database connection.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -91,27 +101,12 @@ are published from master and are source of truth for the latest pypi release))<
         _thread_local.connection.close()
         del _thread_local.connection</code></pre>
 </details>
+<div class="desc"><p>Close thread's database connection.</p></div>
 </dd>
 <dt id="gyvatukas.convert_to_base64"><code class="name flex">
 <span>def <span class="ident">convert_to_base64</span></span>(<span>image_bytes: bytes, ext: str) ‑> str</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Convert image bytes to base64 data URL format.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>image_bytes</code></strong></dt>
-<dd>Raw image bytes</dd>
-<dt><strong><code>ext</code></strong></dt>
-<dd>File extension (e.g., "jpg", "png")</dd>
-</dl>
-<h2 id="returns">Returns</h2>
-<p>Base64 encoded data URL string</p>
-<h2 id="usage">Usage</h2>
-<pre><code class="language-python-repl">&gt;&gt;&gt; with open(&quot;image.jpg&quot;, &quot;rb&quot;) as f:
-...     image_bytes = f.read()
-&gt;&gt;&gt; b64 = convert_to_base64(image_bytes, &quot;jpg&quot;)
-&gt;&gt;&gt; print(b64[:50])  # &quot;data:image/jpg;base64,/9j/4AAQSkZJRgABAQAAAQ...&quot;
-</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -135,12 +130,27 @@ are published from master and are source of truth for the latest pypi release))<
     ext = ext.replace(&#34;.&#34;, &#34;&#34;)
     return f&#34;data:image/{ext};base64,{base64.b64encode(image_bytes).decode(&#39;utf-8&#39;)}&#34;</code></pre>
 </details>
+<div class="desc"><p>Convert image bytes to base64 data URL format.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>image_bytes</code></strong></dt>
+<dd>Raw image bytes</dd>
+<dt><strong><code>ext</code></strong></dt>
+<dd>File extension (e.g., "jpg", "png")</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>Base64 encoded data URL string</p>
+<h2 id="usage">Usage</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; with open(&quot;image.jpg&quot;, &quot;rb&quot;) as f:
+...     image_bytes = f.read()
+&gt;&gt;&gt; b64 = convert_to_base64(image_bytes, &quot;jpg&quot;)
+&gt;&gt;&gt; print(b64[:50])  # &quot;data:image/jpg;base64,/9j/4AAQSkZJRgABAQAAAQ...&quot;
+</code></pre></div>
 </dd>
 <dt id="gyvatukas.dict_flatten"><code class="name flex">
 <span>def <span class="ident">dict_flatten</span></span>(<span>d: dict, parent_key: str = '', separator: str = '.') ‑> dict</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -181,31 +191,12 @@ are published from master and are source of truth for the latest pypi release))<
 
     return dict(items)</code></pre>
 </details>
+<div class="desc"></div>
 </dd>
 <dt id="gyvatukas.dict_get_by_path"><code class="name flex">
 <span>def <span class="ident">dict_get_by_path</span></span>(<span>d: dict, path: str, separator: str = '.', allow_none: bool = False) ‑> Any</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Access a nested value in a dictionary using a string path.
-Less bloated alternative for glom, that just works for this very thing.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>d</code></strong></dt>
-<dd>The dictionary to traverse</dd>
-<dt><strong><code>path</code></strong></dt>
-<dd>String path with parts separated by the separator</dd>
-<dt><strong><code>separator</code></strong></dt>
-<dd>Character that separates parts of the path</dd>
-<dt><strong><code>allow_none</code></strong></dt>
-<dd>If True, return None for invalid paths instead of raising exceptions</dd>
-</dl>
-<h2 id="returns">Returns</h2>
-<p>The value at the specified path or None if allow_none is True and path is invalid</p>
-<h2 id="usage">Usage</h2>
-<pre><code class="language-python-repl">&gt;&gt;&gt; data = {&quot;a&quot;: {&quot;b&quot;: [1, 2, {&quot;c&quot;: 3}]}}
-&gt;&gt;&gt; dict_get_by_path(data, &quot;a.b.2.c&quot;)
-3
-</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -269,15 +260,31 @@ Less bloated alternative for glom, that just works for this very thing.</p>
 
     return current</code></pre>
 </details>
+<div class="desc"><p>Access a nested value in a dictionary using a string path.
+Less bloated alternative for glom, that just works for this very thing.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>d</code></strong></dt>
+<dd>The dictionary to traverse</dd>
+<dt><strong><code>path</code></strong></dt>
+<dd>String path with parts separated by the separator</dd>
+<dt><strong><code>separator</code></strong></dt>
+<dd>Character that separates parts of the path</dd>
+<dt><strong><code>allow_none</code></strong></dt>
+<dd>If True, return None for invalid paths instead of raising exceptions</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>The value at the specified path or None if allow_none is True and path is invalid</p>
+<h2 id="usage">Usage</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; data = {&quot;a&quot;: {&quot;b&quot;: [1, 2, {&quot;c&quot;: 3}]}}
+&gt;&gt;&gt; dict_get_by_path(data, &quot;a.b.2.c&quot;)
+3
+</code></pre></div>
 </dd>
 <dt id="gyvatukas.dict_remove_matching_values"><code class="name flex">
 <span>def <span class="ident">dict_remove_matching_values</span></span>(<span>d: dict, values: list) ‑> dict</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Remove all key-value pairs from dict where value is in values.
-Useful for removing None values from dict or empty strings when working with form data.</p>
-<p>Returns new dict.
-🐌 Creates a new dict, not recommended for large dicts.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -296,12 +303,15 @@ Useful for removing None values from dict or empty strings when working with for
 
     return new_d</code></pre>
 </details>
+<div class="desc"><p>Remove all key-value pairs from dict where value is in values.
+Useful for removing None values from dict or empty strings when working with form data.</p>
+<p>Returns new dict.
+🐌 Creates a new dict, not recommended for large dicts.</p></div>
 </dd>
 <dt id="gyvatukas.dir_exists"><code class="name flex">
 <span>def <span class="ident">dir_exists</span></span>(<span>path: pathlib.Path) ‑> bool</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Check if directory exists.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -310,12 +320,12 @@ Useful for removing None values from dict or empty strings when working with for
     &#34;&#34;&#34;Check if directory exists.&#34;&#34;&#34;
     return path.exists() and path.is_dir()</code></pre>
 </details>
+<div class="desc"><p>Check if directory exists.</p></div>
 </dd>
 <dt id="gyvatukas.file_exists"><code class="name flex">
 <span>def <span class="ident">file_exists</span></span>(<span>path: pathlib.Path) ‑> bool</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Check if file exists.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -324,12 +334,12 @@ Useful for removing None values from dict or empty strings when working with for
     &#34;&#34;&#34;Check if file exists.&#34;&#34;&#34;
     return path.exists()</code></pre>
 </details>
+<div class="desc"><p>Check if file exists.</p></div>
 </dd>
 <dt id="gyvatukas.get_clean_tel_nr"><code class="name flex">
 <span>def <span class="ident">get_clean_tel_nr</span></span>(<span>tel_nr: str) ‑> str | None</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Return mobile phone number with +370 prefix. Return None if invalid.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -341,13 +351,12 @@ Useful for removing None values from dict or empty strings when working with for
         return None
     return clean_tel_nr</code></pre>
 </details>
+<div class="desc"><p>Return mobile phone number with +370 prefix. Return None if invalid.</p></div>
 </dd>
 <dt id="gyvatukas.get_conn_cur"><code class="name flex">
 <span>def <span class="ident">get_conn_cur</span></span>(<span>path_db: pathlib.Path)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Thread-safe context manager that yields SQLite connection and cursor.
-Reuses connection within same thread.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -369,12 +378,13 @@ def get_conn_cur(path_db: pathlib.Path):
     finally:
         cursor.close()</code></pre>
 </details>
+<div class="desc"><p>Thread-safe context manager that yields SQLite connection and cursor.
+Reuses connection within same thread.</p></div>
 </dd>
 <dt id="gyvatukas.get_dt_utc_now"><code class="name flex">
 <span>def <span class="ident">get_dt_utc_now</span></span>(<span>) ‑> datetime.datetime</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -384,16 +394,12 @@ def get_conn_cur(path_db: pathlib.Path):
     # https://blog.miguelgrinberg.com/post/it-s-time-for-a-change-datetime-utcnow-is-now-deprecated
     return datetime.datetime.now(tz=datetime.timezone.utc)</code></pre>
 </details>
+<div class="desc"></div>
 </dd>
 <dt id="gyvatukas.get_env"><code class="name flex">
 <span>def <span class="ident">get_env</span></span>(<span>name: str,<br>type: {<class 'bool'>, <class 'str'>, <class 'float'>, <class 'int'>, <class 'dict'>, <class 'list'>},<br>default: {<class 'bool'>, <class 'str'>, <class 'float'>, <class 'int'>, <class 'dict'>, <class 'list'>} = None,<br>required: bool = False) ‑> {<class 'bool'>, <class 'str'>, <class 'float'>, <class 'int'>, <class 'dict'>, <class 'list'>}</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Try to parse environment variable as given type.</p>
-<p>🚩 Does not load environment variables. Use <code>python-dotenv</code> for that.</p>
-<p>type: Output type, will split "a,b,c" into ["a", "b", "c"] if type=list.
-default: Default value if given name does not exist in environ
-required: Fail if not found in environment? Useful for things like database port :)</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -449,30 +455,16 @@ required: Fail if not found in environment? Useful for things like database port
 
     return str(value)</code></pre>
 </details>
+<div class="desc"><p>Try to parse environment variable as given type.</p>
+<p>🚩 Does not load environment variables. Use <code>python-dotenv</code> for that.</p>
+<p>type: Output type, will split "a,b,c" into ["a", "b", "c"] if type=list.
+default: Default value if given name does not exist in environ
+required: Fail if not found in environment? Useful for things like database port :)</p></div>
 </dd>
 <dt id="gyvatukas.get_image_cropped_to_context"><code class="name flex">
 <span>def <span class="ident">get_image_cropped_to_context</span></span>(<span>image_bytes: bytes, padding: int = 10) ‑> bytes</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Crop image to content boundaries with padding.</p>
-<p>Uses threshold-based detection to find the bounding box of content
-and crops the image to that area with optional padding.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>image_bytes</code></strong></dt>
-<dd>Raw image bytes</dd>
-<dt><strong><code>padding</code></strong></dt>
-<dd>Padding to add around content (default: 10)</dd>
-</dl>
-<h2 id="returns">Returns</h2>
-<p>Cropped image bytes in JPEG format</p>
-<h2 id="usage">Usage</h2>
-<pre><code class="language-python-repl">&gt;&gt;&gt; with open(&quot;receipt.jpg&quot;, &quot;rb&quot;) as f:
-...     image_bytes = f.read()
-&gt;&gt;&gt; cropped = get_image_cropped_to_context(image_bytes)
-&gt;&gt;&gt; with open(&quot;cropped.jpg&quot;, &quot;wb&quot;) as f:
-...     f.write(cropped)
-</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -532,25 +524,30 @@ and crops the image to that area with optional padding.</p>
     # Return original image bytes if no content found
     return image_bytes</code></pre>
 </details>
+<div class="desc"><p>Crop image to content boundaries with padding.</p>
+<p>Uses threshold-based detection to find the bounding box of content
+and crops the image to that area with optional padding.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>image_bytes</code></strong></dt>
+<dd>Raw image bytes</dd>
+<dt><strong><code>padding</code></strong></dt>
+<dd>Padding to add around content (default: 10)</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>Cropped image bytes in JPEG format</p>
+<h2 id="usage">Usage</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; with open(&quot;receipt.jpg&quot;, &quot;rb&quot;) as f:
+...     image_bytes = f.read()
+&gt;&gt;&gt; cropped = get_image_cropped_to_context(image_bytes)
+&gt;&gt;&gt; with open(&quot;cropped.jpg&quot;, &quot;wb&quot;) as f:
+...     f.write(cropped)
+</code></pre></div>
 </dd>
 <dt id="gyvatukas.get_image_info"><code class="name flex">
 <span>def <span class="ident">get_image_info</span></span>(<span>image_bytes: bytes) ‑> dict</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Get basic information about an image.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>image_bytes</code></strong></dt>
-<dd>Raw image bytes</dd>
-</dl>
-<h2 id="returns">Returns</h2>
-<p>Dictionary with image information</p>
-<h2 id="usage">Usage</h2>
-<pre><code class="language-python-repl">&gt;&gt;&gt; with open(&quot;image.jpg&quot;, &quot;rb&quot;) as f:
-...     image_bytes = f.read()
-&gt;&gt;&gt; info = get_image_info(image_bytes)
-&gt;&gt;&gt; print(f&quot;Size: {info['width']}x{info['height']}, Format: {info['format']}&quot;)
-</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -580,15 +577,25 @@ and crops the image to that area with optional padding.</p>
         &#34;size_bytes&#34;: len(image_bytes),
     }</code></pre>
 </details>
+<div class="desc"><p>Get basic information about an image.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>image_bytes</code></strong></dt>
+<dd>Raw image bytes</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>Dictionary with image information</p>
+<h2 id="usage">Usage</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; with open(&quot;image.jpg&quot;, &quot;rb&quot;) as f:
+...     image_bytes = f.read()
+&gt;&gt;&gt; info = get_image_info(image_bytes)
+&gt;&gt;&gt; print(f&quot;Size: {info['width']}x{info['height']}, Format: {info['format']}&quot;)
+</code></pre></div>
 </dd>
 <dt id="gyvatukas.get_inline_sql"><code class="name flex">
 <span>def <span class="ident">get_inline_sql</span></span>(<span>sql: str) ‑> str</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Convert pretty SQL statement in docstring to something that looks good in console output or logs.</p>
-<ul>
-<li>Cleanup PII if you are going to log all SQL queries 🤠</li>
-</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -606,12 +613,15 @@ and crops the image to that area with optional padding.</p>
     sql = sql.strip()
     return sql</code></pre>
 </details>
+<div class="desc"><p>Convert pretty SQL statement in docstring to something that looks good in console output or logs.</p>
+<ul>
+<li>Cleanup PII if you are going to log all SQL queries 🤠</li>
+</ul></div>
 </dd>
 <dt id="gyvatukas.get_ip_country"><code class="name flex">
 <span>def <span class="ident">get_ip_country</span></span>(<span>ip: str) ‑> str | None</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Get country for given ip address or "Unknown" if not found. Uses <a href="https://wasab.is.">https://wasab.is.</a></p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -624,13 +634,12 @@ def get_ip_country(ip: str) -&gt; str | None:
         return None
     return data.get(&#34;country&#34;, &#34;Unknown&#34;)</code></pre>
 </details>
+<div class="desc"><p>Get country for given ip address or "Unknown" if not found. Uses <a href="https://wasab.is.">https://wasab.is.</a></p></div>
 </dd>
 <dt id="gyvatukas.get_ipv4_meta"><code class="name flex">
 <span>def <span class="ident">get_ipv4_meta</span></span>(<span>ip: str) ‑> dict | None</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Lookup ipv4 information. Uses <a href="https://wasab.is.">https://wasab.is.</a></p>
-<p>🚨 Performs external request.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -653,13 +662,13 @@ def get_ipv4_meta(ip: str) -&gt; dict | None:
 
     return result</code></pre>
 </details>
+<div class="desc"><p>Lookup ipv4 information. Uses <a href="https://wasab.is.">https://wasab.is.</a></p>
+<p>🚨 Performs external request.</p></div>
 </dd>
 <dt id="gyvatukas.get_my_ipv4"><code class="name flex">
 <span>def <span class="ident">get_my_ipv4</span></span>(<span>) ‑> str</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Lookup external ipv4 address. Uses <a href="https://ifconfig.me">https://ifconfig.me</a> or <a href="https://wasab.is">https://wasab.is</a> or <a href="http://checkip.amazonaws.com/.">http://checkip.amazonaws.com/.</a></p>
-<p>🚨 Performs external request.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -695,27 +704,13 @@ def get_my_ipv4() -&gt; str:
 
     raise RuntimeError(&#34;All IP lookup services failed!&#34;)</code></pre>
 </details>
+<div class="desc"><p>Lookup external ipv4 address. Uses <a href="https://ifconfig.me">https://ifconfig.me</a> or <a href="https://wasab.is">https://wasab.is</a> or <a href="http://checkip.amazonaws.com/.">http://checkip.amazonaws.com/.</a></p>
+<p>🚨 Performs external request.</p></div>
 </dd>
 <dt id="gyvatukas.get_optimized_image_as_jpeg"><code class="name flex">
 <span>def <span class="ident">get_optimized_image_as_jpeg</span></span>(<span>image_bytes: bytes, quality: int = 85) ‑> bytes</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Optimize image and convert to JPEG format.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>image_bytes</code></strong></dt>
-<dd>Raw image bytes</dd>
-<dt><strong><code>quality</code></strong></dt>
-<dd>JPEG quality (1-100, default: 85)</dd>
-</dl>
-<h2 id="returns">Returns</h2>
-<p>Optimized JPEG image bytes</p>
-<h2 id="usage">Usage</h2>
-<pre><code class="language-python-repl">&gt;&gt;&gt; with open(&quot;large_image.png&quot;, &quot;rb&quot;) as f:
-...     image_bytes = f.read()
-&gt;&gt;&gt; optimized = get_optimized_image_as_jpeg(image_bytes)
-&gt;&gt;&gt; print(f&quot;Original: {len(image_bytes)}, Optimized: {len(optimized)}&quot;)
-</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -746,12 +741,27 @@ def get_my_ipv4() -&gt; str:
     image.save(output_buffer, format=&#34;JPEG&#34;, quality=quality, optimize=True)
     return output_buffer.getvalue()</code></pre>
 </details>
+<div class="desc"><p>Optimize image and convert to JPEG format.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>image_bytes</code></strong></dt>
+<dd>Raw image bytes</dd>
+<dt><strong><code>quality</code></strong></dt>
+<dd>JPEG quality (1-100, default: 85)</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>Optimized JPEG image bytes</p>
+<h2 id="usage">Usage</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; with open(&quot;large_image.png&quot;, &quot;rb&quot;) as f:
+...     image_bytes = f.read()
+&gt;&gt;&gt; optimized = get_optimized_image_as_jpeg(image_bytes)
+&gt;&gt;&gt; print(f&quot;Original: {len(image_bytes)}, Optimized: {len(optimized)}&quot;)
+</code></pre></div>
 </dd>
 <dt id="gyvatukas.get_path_extension"><code class="name flex">
 <span>def <span class="ident">get_path_extension</span></span>(<span>path: pathlib.Path) ‑> str</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Return file extension from path.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -760,12 +770,12 @@ def get_my_ipv4() -&gt; str:
     &#34;&#34;&#34;Return file extension from path.&#34;&#34;&#34;
     return path.suffix</code></pre>
 </details>
+<div class="desc"><p>Return file extension from path.</p></div>
 </dd>
 <dt id="gyvatukas.get_path_filename"><code class="name flex">
 <span>def <span class="ident">get_path_filename</span></span>(<span>path: pathlib.Path) ‑> str</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Return filename from path.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -774,12 +784,12 @@ def get_my_ipv4() -&gt; str:
     &#34;&#34;&#34;Return filename from path.&#34;&#34;&#34;
     return path.name</code></pre>
 </details>
+<div class="desc"><p>Return filename from path.</p></div>
 </dd>
 <dt id="gyvatukas.get_path_without_filename"><code class="name flex">
 <span>def <span class="ident">get_path_without_filename</span></span>(<span>path: pathlib.Path) ‑> pathlib.Path</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Return path without filename.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -788,12 +798,12 @@ def get_my_ipv4() -&gt; str:
     &#34;&#34;&#34;Return path without filename.&#34;&#34;&#34;
     return path.parent</code></pre>
 </details>
+<div class="desc"><p>Return path without filename.</p></div>
 </dd>
 <dt id="gyvatukas.get_random_secure_string"><code class="name flex">
 <span>def <span class="ident">get_random_secure_string</span></span>(<span>length: int) ‑> str</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Get random secure string generated by <code>secrets</code> module.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -802,12 +812,12 @@ def get_my_ipv4() -&gt; str:
     &#34;&#34;&#34;Get random secure string generated by `secrets` module.&#34;&#34;&#34;
     return secrets.token_urlsafe(length)</code></pre>
 </details>
+<div class="desc"><p>Get random secure string generated by <code>secrets</code> module.</p></div>
 </dd>
 <dt id="gyvatukas.get_utc_today"><code class="name flex">
 <span>def <span class="ident">get_utc_today</span></span>(<span>) ‑> datetime.date</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -815,12 +825,12 @@ def get_my_ipv4() -&gt; str:
 <pre><code class="python">def get_utc_today() -&gt; datetime.date:
     return get_dt_utc_now().date()</code></pre>
 </details>
+<div class="desc"></div>
 </dd>
 <dt id="gyvatukas.hash_password"><code class="name flex">
 <span>def <span class="ident">hash_password</span></span>(<span>password: str) ‑> str</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Return hashed password using <code>bcrypt</code>.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -832,22 +842,12 @@ def get_my_ipv4() -&gt; str:
     )
     return hashed_password.decode(&#34;utf-8&#34;)</code></pre>
 </details>
+<div class="desc"><p>Return hashed password using <code>bcrypt</code>.</p></div>
 </dd>
 <dt id="gyvatukas.human_readable_size"><code class="name flex">
 <span>def <span class="ident">human_readable_size</span></span>(<span>size: int, decimal_places: int = 2) ‑> str</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Convert a size in bytes to a human-readable string.
-<a href="https://stackoverflow.com/questions/1094841/get-a-human-readable-version-of-a-file-size">https://stackoverflow.com/questions/1094841/get-a-human-readable-version-of-a-file-size</a></p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>size</code></strong></dt>
-<dd>Size in bytes</dd>
-<dt><strong><code>decimal_places</code></strong></dt>
-<dd>Number of decimal places to show (default: 2)</dd>
-</dl>
-<h2 id="returns">Returns</h2>
-<p>Formatted string like "1.5 MiB" or "2.00 GiB"</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -869,12 +869,22 @@ def get_my_ipv4() -&gt; str:
         size /= 1024.0
     return f&#34;{size:.{decimal_places}f} {unit}&#34;</code></pre>
 </details>
+<div class="desc"><p>Convert a size in bytes to a human-readable string.
+<a href="https://stackoverflow.com/questions/1094841/get-a-human-readable-version-of-a-file-size">https://stackoverflow.com/questions/1094841/get-a-human-readable-version-of-a-file-size</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>size</code></strong></dt>
+<dd>Size in bytes</dd>
+<dt><strong><code>decimal_places</code></strong></dt>
+<dd>Number of decimal places to show (default: 2)</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>Formatted string like "1.5 MiB" or "2.00 GiB"</p></div>
 </dd>
 <dt id="gyvatukas.init_db"><code class="name flex">
 <span>def <span class="ident">init_db</span></span>(<span>path_db: pathlib.Path, sql_script: str)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Initialize database with SQL script.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -884,19 +894,12 @@ def get_my_ipv4() -&gt; str:
     with get_conn_cur(path_db) as (conn, cur):
         cur.executescript(sql_script)</code></pre>
 </details>
+<div class="desc"><p>Initialize database with SQL script.</p></div>
 </dd>
 <dt id="gyvatukas.is_email_valid"><code class="name flex">
 <span>def <span class="ident">is_email_valid</span></span>(<span>email: str, perform_dns_check: bool = False) ‑> tuple[bool, str]</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Check if email is valid. If check_deliverability is True, will also check if email is deliverable.
-If email is valid, returns normalized email, otherwise returns the original email.</p>
-<p>Uses <a href="https://github.com/bnkc/emval">https://github.com/bnkc/emval</a> lib.</p>
-<h2 id="usage">Usage</h2>
-<pre><code class="language-python-repl">&gt;&gt;&gt; is_valid, normalized = is_email_valid(&quot;test@example.com&quot;)
-&gt;&gt;&gt; print(f&quot;is valid? {is_valid}&quot;)
-&gt;&gt;&gt; print(f&quot;normalized: {normalized}&quot;)
-</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -925,12 +928,19 @@ If email is valid, returns normalized email, otherwise returns the original emai
 
     return True, validated.normalized</code></pre>
 </details>
+<div class="desc"><p>Check if email is valid. If check_deliverability is True, will also check if email is deliverable.
+If email is valid, returns normalized email, otherwise returns the original email.</p>
+<p>Uses <a href="https://github.com/bnkc/emval">https://github.com/bnkc/emval</a> lib.</p>
+<h2 id="usage">Usage</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; is_valid, normalized = is_email_valid(&quot;test@example.com&quot;)
+&gt;&gt;&gt; print(f&quot;is valid? {is_valid}&quot;)
+&gt;&gt;&gt; print(f&quot;normalized: {normalized}&quot;)
+</code></pre></div>
 </dd>
 <dt id="gyvatukas.is_false"><code class="name flex">
 <span>def <span class="ident">is_false</span></span>(<span>value: Any) ‑> bool</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -944,12 +954,12 @@ If email is valid, returns normalized email, otherwise returns the original emai
         return value.lower().strip() in FALSE_VALUES
     return not bool(value)</code></pre>
 </details>
+<div class="desc"></div>
 </dd>
 <dt id="gyvatukas.is_true"><code class="name flex">
 <span>def <span class="ident">is_true</span></span>(<span>value: Any) ‑> bool</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -963,13 +973,12 @@ If email is valid, returns normalized email, otherwise returns the original emai
         return value.lower().strip() in TRUE_VALUES
     return bool(value)</code></pre>
 </details>
+<div class="desc"></div>
 </dd>
 <dt id="gyvatukas.json_dumps_safe"><code class="name flex">
 <span>def <span class="ident">json_dumps_safe</span></span>(<span>obj, **kwargs) ‑> str</span>
 </code></dt>
 <dd>
-<div class="desc"><p>json.dumps with encoder that 'fixes' the common annoyance of getting exceptions when
-dict contains datetime or decimal.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -980,12 +989,13 @@ dict contains datetime or decimal.</p></div>
     obj = _convert_keys_to_str(obj)
     return json.dumps(obj, cls=EnhancedJSONEncoder, **kwargs)</code></pre>
 </details>
+<div class="desc"><p>json.dumps with encoder that 'fixes' the common annoyance of getting exceptions when
+dict contains datetime or decimal.</p></div>
 </dd>
 <dt id="gyvatukas.read_file"><code class="name flex">
 <span>def <span class="ident">read_file</span></span>(<span>path: pathlib.Path, read_bytes: bool = False) ‑> str | None</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Read file contents. Return None if file does not exist or content is empty.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -998,12 +1008,12 @@ dict contains datetime or decimal.</p></div>
 
     return None</code></pre>
 </details>
+<div class="desc"><p>Read file contents. Return None if file does not exist or content is empty.</p></div>
 </dd>
 <dt id="gyvatukas.read_json"><code class="name flex">
 <span>def <span class="ident">read_json</span></span>(<span>path: pathlib.Path, default: typing.Any | None = None) ‑> dict | list</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Read JSON from file. Return empty dict if file not found or JSON is invalid.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1020,18 +1030,12 @@ dict contains datetime or decimal.</p></div>
         return default
     return {}</code></pre>
 </details>
+<div class="desc"><p>Read JSON from file. Return empty dict if file not found or JSON is invalid.</p></div>
 </dd>
 <dt id="gyvatukas.str_keep_except"><code class="name flex">
 <span>def <span class="ident">str_keep_except</span></span>(<span>s: str, allowed: list[str]) ‑> str</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Keep all characters from <code>s</code> except those in <code>allowed</code>.</p>
-<h2 id="usage">Usage</h2>
-<pre><code class="language-python-repl">&gt;&gt;&gt; s = &quot;Hello, World!&quot;
-&gt;&gt;&gt; allowed = [&quot;o&quot;, &quot;l&quot;]
-&gt;&gt;&gt; result = str_keep_except(s, allowed)
-&gt;&gt;&gt; print(result) # &quot;He, Wrd!&quot;
-</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1047,18 +1051,18 @@ dict contains datetime or decimal.</p></div>
     &#34;&#34;&#34;
     return &#34;&#34;.join(filter(lambda x: x not in allowed, s))</code></pre>
 </details>
+<div class="desc"><p>Keep all characters from <code>s</code> except those in <code>allowed</code>.</p>
+<h2 id="usage">Usage</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; s = &quot;Hello, World!&quot;
+&gt;&gt;&gt; allowed = [&quot;o&quot;, &quot;l&quot;]
+&gt;&gt;&gt; result = str_keep_except(s, allowed)
+&gt;&gt;&gt; print(result) # &quot;He, Wrd!&quot;
+</code></pre></div>
 </dd>
 <dt id="gyvatukas.str_remove_except"><code class="name flex">
 <span>def <span class="ident">str_remove_except</span></span>(<span>s: str, allowed: list[str]) ‑> str</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Remove all characters from <code>s</code> except those in <code>allowed</code>.</p>
-<h2 id="usage">Usage</h2>
-<pre><code class="language-python-repl">&gt;&gt;&gt; s = &quot;Hello, World!&quot;
-&gt;&gt;&gt; allowed = [&quot;o&quot;, &quot;l&quot;]
-&gt;&gt;&gt; result = str_remove_except(s, allowed)
-&gt;&gt;&gt; print(result) # &quot;lloo&quot;
-</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1074,19 +1078,18 @@ dict contains datetime or decimal.</p></div>
     &#34;&#34;&#34;
     return &#34;&#34;.join(filter(lambda x: x in allowed, s))</code></pre>
 </details>
+<div class="desc"><p>Remove all characters from <code>s</code> except those in <code>allowed</code>.</p>
+<h2 id="usage">Usage</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; s = &quot;Hello, World!&quot;
+&gt;&gt;&gt; allowed = [&quot;o&quot;, &quot;l&quot;]
+&gt;&gt;&gt; result = str_remove_except(s, allowed)
+&gt;&gt;&gt; print(result) # &quot;lloo&quot;
+</code></pre></div>
 </dd>
 <dt id="gyvatukas.timer"><code class="name flex">
 <span>def <span class="ident">timer</span></span>(<span>logger_name: str = 'timer', min_duration_ms: int = 0)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Log function duration in ms. Specify own logger or use default <code><a title="gyvatukas.timer" href="#gyvatukas.timer">timer()</a></code> logger. Can set minimum threshold for logging.</p>
-<h2 id="usage">Usage</h2>
-<pre><code class="language-python-repl">&gt;&gt;&gt; @timer(min_duration_ms=100)
-&gt;&gt;&gt; def my_function():
-&gt;&gt;&gt;     time.sleep(1)
-&gt;&gt;&gt;     return &quot;Hello, World!&quot;
-&gt;&gt;&gt; print(my_function())
-</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1145,12 +1148,19 @@ dict contains datetime or decimal.</p></div>
 
     return decorator</code></pre>
 </details>
+<div class="desc"><p>Log function duration in ms. Specify own logger or use default <code><a title="gyvatukas.timer" href="#gyvatukas.timer">timer()</a></code> logger. Can set minimum threshold for logging.</p>
+<h2 id="usage">Usage</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; @timer(min_duration_ms=100)
+&gt;&gt;&gt; def my_function():
+&gt;&gt;&gt;     time.sleep(1)
+&gt;&gt;&gt;     return &quot;Hello, World!&quot;
+&gt;&gt;&gt; print(my_function())
+</code></pre></div>
 </dd>
 <dt id="gyvatukas.validate_lt_id"><code class="name flex">
 <span>def <span class="ident">validate_lt_id</span></span>(<span>pid: str) ‑> <a title="gyvatukas.utils.lithuania.LithuanianPersonalCode" href="utils/lithuania.html#gyvatukas.utils.lithuania.LithuanianPersonalCode">LithuanianPersonalCode</a></span>
 </code></dt>
 <dd>
-<div class="desc"><p>Validate Lithuanian personal identification code.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1210,15 +1220,12 @@ dict contains datetime or decimal.</p></div>
         checksum=control_number if not is_edge_case else None,
     )</code></pre>
 </details>
+<div class="desc"><p>Validate Lithuanian personal identification code.</p></div>
 </dd>
 <dt id="gyvatukas.validate_lt_tel_nr"><code class="name flex">
 <span>def <span class="ident">validate_lt_tel_nr</span></span>(<span>tel_nr: str, format_370: bool = True) ‑> tuple[bool, str]</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Validate Lithuanian phone number. Return if is valid and formatted number.</p>
-<p>Lithuanian number may start with +370, 8 or 0, followed by 8 digits.</p>
-<p>🚨 Does not check if it exists lol.
-❗ Does not validate short numbers like 112, 1848, etc.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1249,12 +1256,15 @@ dict contains datetime or decimal.</p></div>
 
     return is_valid, clean_tel_nr if is_valid else tel_nr</code></pre>
 </details>
+<div class="desc"><p>Validate Lithuanian phone number. Return if is valid and formatted number.</p>
+<p>Lithuanian number may start with +370, 8 or 0, followed by 8 digits.</p>
+<p>🚨 Does not check if it exists lol.
+❗ Does not validate short numbers like 112, 1848, etc.</p></div>
 </dd>
 <dt id="gyvatukas.validate_password"><code class="name flex">
 <span>def <span class="ident">validate_password</span></span>(<span>password: str, hashed_password: str) ‑> bool</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Verify password against hashed password using <code>bcrypt</code>.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1266,12 +1276,12 @@ dict contains datetime or decimal.</p></div>
         hashed_password=hashed_password.encode(&#34;utf-8&#34;),
     )</code></pre>
 </details>
+<div class="desc"><p>Verify password against hashed password using <code>bcrypt</code>.</p></div>
 </dd>
 <dt id="gyvatukas.value_to_bool"><code class="name flex">
 <span>def <span class="ident">value_to_bool</span></span>(<span>value: Any) ‑> bool | None</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1283,12 +1293,12 @@ dict contains datetime or decimal.</p></div>
         return False
     return None</code></pre>
 </details>
+<div class="desc"></div>
 </dd>
 <dt id="gyvatukas.write_file"><code class="name flex">
 <span>def <span class="ident">write_file</span></span>(<span>path: pathlib.Path, content: str | bytes, override: bool = False) ‑> bool</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Write content to file. Return True if file was written, False otherwise.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1304,12 +1314,12 @@ dict contains datetime or decimal.</p></div>
 
     return True</code></pre>
 </details>
+<div class="desc"><p>Write content to file. Return True if file was written, False otherwise.</p></div>
 </dd>
 <dt id="gyvatukas.write_json"><code class="name flex">
 <span>def <span class="ident">write_json</span></span>(<span>path: pathlib.Path,<br>data: dict | list,<br>pretty: bool = False,<br>override: bool = False) ‑> bool</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Write JSON to file. Return true if written, false if not.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1326,6 +1336,7 @@ dict contains datetime or decimal.</p></div>
     result = write_file(path=path, content=content, override=override)
     return result</code></pre>
 </details>
+<div class="desc"><p>Write JSON to file. Return true if written, false if not.</p></div>
 </dd>
 </dl>
 </section>
@@ -1337,26 +1348,6 @@ dict contains datetime or decimal.</p></div>
 <span>(</span><span>base_dir: pathlib.Path)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Simple key-value store that stores data in a directory.
-Modern unix systems can have hundreds of millions of files in a single directory.</p>
-<p>Data is stored in two files:
-- <key>.data: data file
-- <key>.meta: metadata file</p>
-<p>Data is serialized to json or pickle. Deserialization is done based on metadata.</p>
-<h2 id="usage">Usage</h2>
-<pre><code class="language-python-repl">&gt;&gt;&gt; store = DirStore(base_dir=Path(&quot;someplace&quot;))
-&gt;&gt;&gt; store.set(&quot;key&quot;, &quot;value&quot;, override=True)
-&gt;&gt;&gt; value = store.get(&quot;key&quot;)
-&gt;&gt;&gt; print(value)
-&gt;&gt;&gt; store.delete(&quot;key&quot;)
-&gt;&gt;&gt; value = store.pop(&quot;key&quot;)
-&gt;&gt;&gt; print(value)
-&gt;&gt;&gt; exists = store.exists(&quot;key&quot;)
-&gt;&gt;&gt; print(f&quot;exists? {exists}&quot;)
-&gt;&gt;&gt; all_keys = store.keys()
-&gt;&gt;&gt; print(len(all_keys))
-&gt;&gt;&gt; store.clear()
-</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1555,6 +1546,26 @@ Modern unix systems can have hundreds of millions of files in a single directory
         else:
             return data</code></pre>
 </details>
+<div class="desc"><p>Simple key-value store that stores data in a directory.
+Modern unix systems can have hundreds of millions of files in a single directory.</p>
+<p>Data is stored in two files:
+- <key>.data: data file
+- <key>.meta: metadata file</p>
+<p>Data is serialized to json or pickle. Deserialization is done based on metadata.</p>
+<h2 id="usage">Usage</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; store = DirStore(base_dir=Path(&quot;someplace&quot;))
+&gt;&gt;&gt; store.set(&quot;key&quot;, &quot;value&quot;, override=True)
+&gt;&gt;&gt; value = store.get(&quot;key&quot;)
+&gt;&gt;&gt; print(value)
+&gt;&gt;&gt; store.delete(&quot;key&quot;)
+&gt;&gt;&gt; value = store.pop(&quot;key&quot;)
+&gt;&gt;&gt; print(value)
+&gt;&gt;&gt; exists = store.exists(&quot;key&quot;)
+&gt;&gt;&gt; print(f&quot;exists? {exists}&quot;)
+&gt;&gt;&gt; all_keys = store.keys()
+&gt;&gt;&gt; print(len(all_keys))
+&gt;&gt;&gt; store.clear()
+</code></pre></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="gyvatukas.utils.simplestore.KeyValueStore" href="utils/simplestore.html#gyvatukas.utils.simplestore.KeyValueStore">KeyValueStore</a></li>
@@ -1566,7 +1577,6 @@ Modern unix systems can have hundreds of millions of files in a single directory
 <span>def <span class="ident">clear</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1577,12 +1587,12 @@ Modern unix systems can have hundreds of millions of files in a single directory
     for file_path in self.base_dir.glob(&#34;*.meta&#34;):
         file_path.unlink()</code></pre>
 </details>
+<div class="desc"></div>
 </dd>
 <dt id="gyvatukas.DirStore.delete"><code class="name flex">
 <span>def <span class="ident">delete</span></span>(<span>self, key: str) ‑> bool</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1605,12 +1615,12 @@ Modern unix systems can have hundreds of millions of files in a single directory
 
     return deleted</code></pre>
 </details>
+<div class="desc"></div>
 </dd>
 <dt id="gyvatukas.DirStore.exists"><code class="name flex">
 <span>def <span class="ident">exists</span></span>(<span>self, key: str) ‑> bool</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1619,12 +1629,12 @@ Modern unix systems can have hundreds of millions of files in a single directory
     data_file, meta_file = self._get_file_paths(key)
     return data_file.exists() and meta_file.exists()</code></pre>
 </details>
+<div class="desc"></div>
 </dd>
 <dt id="gyvatukas.DirStore.get"><code class="name flex">
 <span>def <span class="ident">get</span></span>(<span>self, key: str) ‑> <built-in function any></span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1654,12 +1664,12 @@ Modern unix systems can have hundreds of millions of files in a single directory
         _logger.error(f&#34;Could not read file @ {key}: {e}&#34;)
         return None</code></pre>
 </details>
+<div class="desc"></div>
 </dd>
 <dt id="gyvatukas.DirStore.get_info"><code class="name flex">
 <span>def <span class="ident">get_info</span></span>(<span>self, key: str) ‑> dict | None</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1678,12 +1688,12 @@ Modern unix systems can have hundreds of millions of files in a single directory
     except FileNotFoundError:
         return None</code></pre>
 </details>
+<div class="desc"></div>
 </dd>
 <dt id="gyvatukas.DirStore.keys"><code class="name flex">
 <span>def <span class="ident">keys</span></span>(<span>self) ‑> list[str]</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1695,12 +1705,12 @@ Modern unix systems can have hundreds of millions of files in a single directory
         keys.append(key)
     return keys</code></pre>
 </details>
+<div class="desc"></div>
 </dd>
 <dt id="gyvatukas.DirStore.pop"><code class="name flex">
 <span>def <span class="ident">pop</span></span>(<span>self, key: str) ‑> <built-in function any></span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1711,12 +1721,12 @@ Modern unix systems can have hundreds of millions of files in a single directory
         self.delete(key)
     return value</code></pre>
 </details>
+<div class="desc"></div>
 </dd>
 <dt id="gyvatukas.DirStore.set"><code class="name flex">
 <span>def <span class="ident">set</span></span>(<span>self, key: str, value: <built-in function any>, override: bool = False) ‑> None</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1747,6 +1757,7 @@ Modern unix systems can have hundreds of millions of files in a single directory
     with open(meta_file, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
         json.dump(metadata, f, indent=2)</code></pre>
 </details>
+<div class="desc"></div>
 </dd>
 </dl>
 </dd>
@@ -1755,19 +1766,6 @@ Modern unix systems can have hundreds of millions of files in a single directory
 <span>(</span><span>provider_config: dict | None = None, db_path: pathlib.Path | None = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Simple ip to country lookup tool based on free ip databases.</p>
-<ul>
-<li>If provider config is not passed, only db-ip.com database will be used.</li>
-<li>Currently supported providers: db-ip.com, ipinfo.io.</li>
-<li>Do not forget to run setup_db() when changing provider config to get new data.</li>
-</ul>
-<p>Provider configuration:</p>
-<h1 id="todo-document-ant-validate-if-key-matches-validate-that-all-info-passed">TODO: Document ant validate. If key matches, validate that all info passed.</h1>
-<p>{
-"ipinfo.io": {
-"token": "<your_token>",
-}
-}</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1949,6 +1947,19 @@ Modern unix systems can have hundreds of millions of files in a single directory
             result = cur.fetchone()
             return result[&#34;cc&#34;] if result else None</code></pre>
 </details>
+<div class="desc"><p>Simple ip to country lookup tool based on free ip databases.</p>
+<ul>
+<li>If provider config is not passed, only db-ip.com database will be used.</li>
+<li>Currently supported providers: db-ip.com, ipinfo.io.</li>
+<li>Do not forget to run setup_db() when changing provider config to get new data.</li>
+</ul>
+<p>Provider configuration:</p>
+<h1 id="todo-document-ant-validate-if-key-matches-validate-that-all-info-passed">TODO: Document ant validate. If key matches, validate that all info passed.</h1>
+<p>{
+"ipinfo.io": {
+"token": "<your_token>",
+}
+}</p></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="gyvatukas.IpToolKit.DB_SCHEMA"><code class="name">var <span class="ident">DB_SCHEMA</span></code></dt>
@@ -1962,7 +1973,6 @@ Modern unix systems can have hundreds of millions of files in a single directory
 <span>def <span class="ident">db_exists</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1970,12 +1980,12 @@ Modern unix systems can have hundreds of millions of files in a single directory
 <pre><code class="python">def db_exists(self) -&gt; bool:
     return self.path_db.exists()</code></pre>
 </details>
+<div class="desc"></div>
 </dd>
 <dt id="gyvatukas.IpToolKit.get_country_by_ipv4"><code class="name flex">
 <span>def <span class="ident">get_country_by_ipv4</span></span>(<span>self, ipv4: str) ‑> str | None</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Given ipv4 address, return best matched country code or None.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1992,12 +2002,12 @@ Modern unix systems can have hundreds of millions of files in a single directory
         result = cur.fetchone()
         return result[&#34;cc&#34;] if result else None</code></pre>
 </details>
+<div class="desc"><p>Given ipv4 address, return best matched country code or None.</p></div>
 </dd>
 <dt id="gyvatukas.IpToolKit.setup_db"><code class="name flex">
 <span>def <span class="ident">setup_db</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2009,6 +2019,7 @@ Modern unix systems can have hundreds of millions of files in a single directory
 
     self._setup_dbipcom()</code></pre>
 </details>
+<div class="desc"></div>
 </dd>
 </dl>
 </dd>
@@ -2110,7 +2121,7 @@ Modern unix systems can have hundreds of millions of files in a single directory
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.4</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
 </footer>
 </body>
 </html>
